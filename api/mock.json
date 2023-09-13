@@ -1,0 +1,56 @@
+{
+	"collections": [
+		{
+			"id": 1,
+			"name": "Collection",
+			"isLocked": false,
+			"color": "orange",
+			"created": 1694616798608,
+			"lastUpdate": 1694616798608,
+			"meta": {
+				"wordsCount": 3,
+				"repetitionsCount": 0
+			},
+			"phrases": [1, 2, 3],
+			"repetitions": []
+		}
+	],
+	"phrases": [
+		{
+			"id": 1,
+			"value": "Apple",
+			"translation": "Яблоко",
+			"created": 1694616798608,
+			"lastUpdate": 1694616798608,
+			"meta": {
+				"repeated": 0,
+				"guessed": 0,
+				"forgotten": 0
+			}
+		},
+		{
+			"id": 2,
+			"value": "Pineapple",
+			"translation": "Ананас",
+			"created": 1694616798608,
+			"lastUpdate": 1694616798608,
+			"meta": {
+				"repeated": 0,
+				"guessed": 0,
+				"forgotten": 0
+			}
+		},
+		{
+			"id": 3,
+			"value": "Orange",
+			"translation": "Апельсин",
+			"created": 1694616798608,
+			"lastUpdate": 1694616798608,
+			"meta": {
+				"repeated": 0,
+				"guessed": 0,
+				"forgotten": 0
+			}
+		}
+	]
+}
