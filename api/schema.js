@@ -2,17 +2,24 @@ const { buildSchema } = require("graphql");
 
 const schema = buildSchema(`
 
+	type PhraseMeta {
+		repeated: Int,
+		guessed: Int,
+		forgotten: Int
+	}
+
 	type Phrase {
 		id: ID,
 		value: String,
 		translation: String,
-		created: Int,
-		lastUpdate: Int,
-		meta: {
-			repeated: Int,
-			guessed: Int,
-			forgotten: Int
-		}
+		created: Float,
+		lastUpdate: Float,
+		meta: PhraseMeta
+	}
+
+	type CollectionMeta {
+		phrasesCount: Int,
+		repetitionsCount: Int
 	}
 
 	type Collection {
@@ -20,23 +27,24 @@ const schema = buildSchema(`
 		name: String,
 		isLocked: Boolean,
 		color: String,
-		created: Int,
-		lastUpdate: Int,
+		created: Float,
+		lastUpdate: Float,
 		phrases: [ID],
 		repetitions: [ID],
-		meta: {
-			phrasesCount: Int,
-			repetitionsCount: Int
-		}
+		meta: CollectionMeta
 	}
 
 	type Repetition {
 		id: ID,
 		phrasesCount: Int,
 		guessed: Int,
-		forgotten: Int
+		forgotten: Int,
+		created: Float
 	}
 
+	type Query {
+		getCollections: [Collection]
+	}
 `);
 
 module.exports = schema;
