@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons'; 
@@ -7,7 +8,7 @@ import Settings from "./src/components/Settings";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: "http://192.168.0.100:4500/graphql",
+  uri: "http://192.168.100.6:4500/graphql",
   cache: new InMemoryCache()
 });
 
