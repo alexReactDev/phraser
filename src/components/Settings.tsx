@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 
-function Add() {
+function Settings() {
 	return (
 		<View>
 			<Text>
@@ -10,4 +10,4 @@ function Add() {
 	)
 }
 
-export default Add;
+export default Settings;
