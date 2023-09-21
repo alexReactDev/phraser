@@ -53,11 +53,18 @@ const schema = buildSchema(`
 		translation: String!
 	}
 
+	input CollectionInput {
+		name: String,
+		isLocked: Boolean,
+		color: String,
+	}
+
 	type Mutation {
 		deletePhrase(id: ID): [Phrase],
 		deleteCollection(id: ID): [Collection],
 		createPhrase(input: PhraseInput, collection: ID): Phrase,
-		mutatePhrase(id: ID, input: PhraseInput, collection: ID): Phrase
+		mutatePhrase(id: ID, input: PhraseInput, collection: ID): Phrase,
+		mutateCollection(id: ID, input: CollectionInput): Collection
 	}
 `);
 

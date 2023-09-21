@@ -13,6 +13,18 @@ const root = {
 		return mock.phrases.filter((phrase) => mock.collections[id].phrases.includes(phrase.id));
 	},
 
+	mutateCollection({ id, input }) {
+		const colIdx = mock.collections.findIndex((item) => item.id == id);
+		console.log(input);
+
+		mock.collections[colIdx] = {
+			...mock.collections[colIdx],
+			...input
+		};
+
+		return mock.collections[colIdx];
+	},
+
 	createPhrase({ input, collection }) {
 		const timestamp = new Date().getTime();
 
