@@ -46,6 +46,18 @@ const schema = buildSchema(`
 		getCollections: [Collection],
 		getCollectionPhrases(id: ID): [Phrase]
 	}
+
+	input PhraseInput {
+		value: String!,
+		translation: String!
+	}
+
+	type Mutation {
+		deletePhrase(id: ID): [Phrase],
+		deleteCollection(id: ID): [Collection],
+		createPhrase(input: PhraseInput, collection: ID): Phrase,
+		mutatePhrase(id: ID, input: PhraseInput, collection: ID): Phrase
+	}
 `);
 
 module.exports = schema;
