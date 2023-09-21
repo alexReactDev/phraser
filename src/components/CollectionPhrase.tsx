@@ -2,12 +2,24 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { IPhrase } from "../types/phrases";
 import { Ionicons } from "@expo/vector-icons";
 import { fontColorFaint } from "../styles/variables";
+import { useMutation } from "@apollo/client";
+import { DELETE_PHRASE, GET_COLLECTION_PHRASES } from "../query/phrases";
 
 interface IProps {
 	phrase: IPhrase
 }
 
 function CollectionPhrase({ phrase }: IProps) {
+
+	const [ deletePhrase ] = useMutation(DELETE_PHRASE);
+	
+	function deleteHandler() {
+		deletePhrase({
+			variables: { id: phrase.id },
+			refetchQueries: [GET_COLLECTION_PHRASES]
+		})
+	}
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.info}>
@@ -26,6 +38,7 @@ function CollectionPhrase({ phrase }: IProps) {
 				</TouchableOpacity>
 				<TouchableOpacity
 					activeOpacity={0.5}
+					onLongPress={deleteHandler}
 				>
 					<Ionicons name="trash-outline" size={24} color={"gray"} />
 				</TouchableOpacity>

@@ -14,3 +14,11 @@ export const GET_COLLECTION_PHRASES = gql`
 		}
 	}
 `;
+
+export const DELETE_PHRASE = gql`
+	mutation deletePhrase($id: ID) {
+		deletePhrase(id: $id) {
+			id
+		}
+	}
+`;
