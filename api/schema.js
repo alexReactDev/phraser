@@ -43,7 +43,8 @@ const schema = buildSchema(`
 	}
 
 	type Query {
-		getCollections: [Collection]
+		getCollections: [Collection],
+		getCollectionPhrases(id: ID): [Phrase]
 	}
 `);
 
