@@ -4,11 +4,11 @@
 			"id": 1,
 			"name": "Collection",
 			"isLocked": false,
-			"color": "orange",
+			"color": "#4a6bff",
 			"created": 1694616798608,
 			"lastUpdate": 1694616798608,
 			"meta": {
-				"wordsCount": 3,
+				"phrasesCount": 3,
 				"repetitionsCount": 0
 			},
 			"phrases": [1, 2, 3],
@@ -18,11 +18,11 @@
 			"id": 2,
 			"name": "Collection 2",
 			"isLocked": false,
-			"color": "green",
+			"color": "#e78747",
 			"created": 1694616798608,
 			"lastUpdate": 1694616798608,
 			"meta": {
-				"wordsCount": 3,
+				"phrasesCount": 3,
 				"repetitionsCount": 0
 			},
 			"phrases": [1, 2, 3],
@@ -32,11 +32,11 @@
 			"id": 3,
 			"name": "Collection 3",
 			"isLocked": false,
-			"color": "blue",
+			"color": "#41c948",
 			"created": 1694616798608,
 			"lastUpdate": 1694616798608,
 			"meta": {
-				"wordsCount": 3,
+				"phrasesCount": 3,
 				"repetitionsCount": 0
 			},
 			"phrases": [1, 2, 3],
