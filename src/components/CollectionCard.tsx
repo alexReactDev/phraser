@@ -18,7 +18,7 @@ function CollectionCard({ collection, navigation }: IProps) {
 			activeOpacity={0.8}
 			style={{backgroundColor: collection.color, ...styles.container}}
 		>
-			<View key={collection.id}>
+			<View>
 				<View>
 					<Text style={styles.title}>
 						{collection.name}

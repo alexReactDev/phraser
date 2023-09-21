@@ -30,7 +30,7 @@ function Collections({ navigation }: any) {
 
 		<View style={styles.container}>
 			{
-				data.getCollections.map((col: ICollection) => <CollectionCard collection={col} navigation={navigation} />)
+				data.getCollections.map((col: ICollection) => <CollectionCard key={col.id} collection={col} navigation={navigation} />)
 			}
 		</View>
 	)

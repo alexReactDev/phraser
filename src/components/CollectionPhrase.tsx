@@ -9,7 +9,7 @@ interface IProps {
 
 function CollectionPhrase({ phrase }: IProps) {
 	return (
-		<View key={phrase.id} style={styles.container}>
+		<View style={styles.container}>
 			<View style={styles.info}>
 				<Text style={styles.title}>
 					{phrase.value}
