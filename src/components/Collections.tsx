@@ -7,6 +7,7 @@ import { ICollection } from "../types/collections";
 import CollectionCard from "./CollectionCard";
 import { createStackNavigator } from "@react-navigation/stack";
 import CollectionScreen from "./CollectionScreen";
+import CollectionHeaderButtons from "./CollectionHeaderButtons";
 
 const StackNavigator = createStackNavigator();
 
@@ -14,7 +15,9 @@ function CollectionsNavigation() {
 	return (
 		<StackNavigator.Navigator>
 			<StackNavigator.Screen name="Collections" component={Collections} />
-			<StackNavigator.Screen name="Collection" component={CollectionScreen} />
+			<StackNavigator.Screen name="Collection" component={CollectionScreen} options={(props) => ({
+				headerRight: () => <CollectionHeaderButtons {...props} />
+			})} />
 		</StackNavigator.Navigator>
 	)
 }

@@ -37,3 +37,19 @@ export const GET_COLLECTIONS_ALL = gql`
 		}
 	}
 `;
+
+export const MUTATE_COLLECTION = gql`
+	mutation mutateCollection($id: ID, $input: CollectionInput) {
+		mutateCollection(id: $id, input: $input) {
+			id
+		}
+	}
+`;
+
+export const DELETE_COLLECTION = gql`
+	mutation deleteCollection($id: ID) {
+		deleteCollection(id: $id) {
+			id
+		}
+	}
+`;
