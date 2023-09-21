@@ -1,6 +1,10 @@
 const mock = require("../mock.json");
 
 const root = {
+	getCollection({ id }) {
+		return mock.collections.find((item) => item.id == id)
+	},
+
 	getCollections() {
 		return mock.collections;
 	},
