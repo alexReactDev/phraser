@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView, TouchableOpacity, Modal } from "react-native";
 import { useQuery } from "@apollo/client/react";
 import { GET_COLLECTIONS_ALL } from "../query/collections";
 import ErrorComponent from "./Error";
@@ -8,6 +8,9 @@ import CollectionCard from "./CollectionCard";
 import { createStackNavigator } from "@react-navigation/stack";
 import CollectionScreen from "./CollectionScreen";
 import CollectionHeaderButtons from "./CollectionHeaderButtons";
+import { Ionicons } from '@expo/vector-icons';
+import { useState } from "react";
+import EditCollection from "./EditCollection";
 
 const StackNavigator = createStackNavigator();
 
@@ -24,17 +27,50 @@ function CollectionsNavigation() {
 
 function Collections({ navigation }: any) {
 	const { data = [], loading, error } = useQuery(GET_COLLECTIONS_ALL);
+	const [ displayModal, setDisplayModal ] = useState(false);
 
 	if(loading) return <Loader />
 
 	if(error) return <ErrorComponent />
 
 	return (
-
 		<View style={styles.container}>
-			{
-				data.getCollections.map((col: ICollection) => <CollectionCard key={col.id} collection={col} navigation={navigation} />)
-			}
+			<Modal
+				visible={displayModal}
+				animationType="slide"
+				transparent={true}
+			>
+				<View
+					style={styles.modalContainer}
+				>
+					<View
+						style={styles.modal}
+					>
+						<TouchableOpacity
+							onPress={() => setDisplayModal(false)}
+							style={styles.modalBtn}
+						>
+							<Ionicons name="close" color="gray" size={24} />
+						</TouchableOpacity>
+						<EditCollection onReady={() => setDisplayModal(false)} />
+					</View>
+				</View>
+			</Modal>
+			<ScrollView>
+				<View
+					style={styles.list}
+				>
+					{
+						data.getCollections.map((col: ICollection) => <CollectionCard key={col.id} collection={col} navigation={navigation} />)
+					}
+				</View>
+			</ScrollView>
+			<TouchableOpacity
+				onPress={() => setDisplayModal(true)}
+				style={styles.button}
+			>
+				<Ionicons name="add" size={24} color="gray" />
+			</TouchableOpacity>
 		</View>
 	)
 }
@@ -42,11 +78,50 @@ function Collections({ navigation }: any) {
 const styles = StyleSheet.create({
 	container: {
 		padding: 10,
+		height: "100%",
+		position: "relative"
+	},
+	list: {
 		flexDirection: "row",
 		flexWrap: "wrap",
 		rowGap: 15,
 		gap: 15,
-		justifyContent: "space-between",
+		justifyContent: "space-between"
+	},
+	button: {
+		position: "absolute",
+		bottom: 10,
+		right: 10,
+		borderRadius: 50,
+		backgroundColor: "white",
+		width: 45,
+		height: 45,
+		justifyContent: "center",
+		alignItems: "center",
+		borderStyle: "solid",
+		borderColor: "gray",
+		borderWidth: 1
+	},
+	modalContainer: {
+		width: "100%",
+		height: "100%",
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "#ffffff88"
+	},
+	modal: {
+		width: 300,
+		borderWidth: 1,
+		borderColor: "gray",
+		borderStyle: "solid",
+		padding: 20,
+		position: "relative",
+		backgroundColor: "white"
+	},
+	modalBtn: {
+		position: "absolute",
+		top: 5,
+		right: 5
 	}
 })
 

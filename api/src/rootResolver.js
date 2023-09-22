@@ -1,6 +1,27 @@
 const mock = require("../mock.json");
 
 const root = {
+	createCollection({ input }) {		
+		mock.collections.push({
+			...input,
+			id: new Date().getTime(),
+			isLocked: false,
+			created: new Date().getTime(),
+			lastUpdate: new Date().getTime(),
+			meta: {
+				phrasesCount: 0,
+				repetitionsCount: 0
+			},
+			phrases: [],
+			repetitions: []
+		});
+
+		console.log(input);
+
+		return mock.collections[mock.collections.length - 1];
+
+	},
+
 	getCollection({ id }) {
 		return mock.collections.find((item) => item.id == id)
 	},
@@ -8,6 +29,7 @@ const root = {
 	getCollections() {
 		return mock.collections;
 	},
+
 	getCollectionPhrases({ id }) {
 		const collection = mock.collections.find((col) => col.id == id);
 		const phrases = mock.phrases.filter((phrase) => collection.phrases.includes(phrase.id));
@@ -23,6 +45,10 @@ const root = {
 	},
 
 	mutateCollection({ id, input }) {
+
+		console.log(input);
+		console.log(id);
+
 		const colIdx = mock.collections.findIndex((item) => item.id == id);
 		console.log(input);
 
