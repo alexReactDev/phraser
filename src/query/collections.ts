@@ -38,6 +38,15 @@ export const GET_COLLECTIONS_ALL = gql`
 	}
 `;
 
+export const GET_COLLECTIONS_NAMEID_ALL = gql`
+	query GetCollectionsNameId {
+		getCollections {
+			id,
+			name
+		}
+	}
+`;
+
 export const MUTATE_COLLECTION = gql`
 	mutation mutateCollection($id: ID, $input: CollectionInput) {
 		mutateCollection(id: $id, input: $input) {
