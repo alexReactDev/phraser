@@ -1,13 +1,27 @@
-import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Alert, Modal, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { useMutation, useQuery } from "@apollo/client";
 import { DELETE_COLLECTION, GET_COLLECTION, GET_COLLECTIONS_ALL, MUTATE_COLLECTION } from "../query/collections";
+import EditCollection from "./EditCollection";
 
 function CollectionHeaderButtons({ route, navigation }: any) {
 	const colId = route.params.colId;
 	const { data, refetch } = useQuery(GET_COLLECTION, { variables: { id: colId } });
+	const [ displayModal, setDisplayModal ] = useState(false);
 	const [ deleteCollection ] = useMutation(DELETE_COLLECTION);
 	const [ mutateCollection ] = useMutation(MUTATE_COLLECTION);
+
+	useEffect(() => {
+		if(!data) return;
+
+		navigation.setOptions({
+			headerStyle: {
+				backgroundColor: data.getCollection.color
+			},
+			headerTintColor: "white"
+		})
+	}, [data])
 
 	if(!data) return null;
 
@@ -46,27 +60,44 @@ function CollectionHeaderButtons({ route, navigation }: any) {
 
 	return (
 		<View style={styles.container}>
+			<Modal
+				visible={displayModal}
+				transparent={true}
+				animationType="slide"
+			>
+				<View
+					style={styles.modalContainer}
+				>
+					<View
+						style={styles.modal}
+					>
+						<TouchableOpacity
+							onPress={() => setDisplayModal(false)}
+							style={styles.modalBtn}
+						>
+							<Ionicons name="close" color="gray" size={24} />
+						</TouchableOpacity>
+						<EditCollection mutateId={data.getCollection.id} onReady={() => setDisplayModal(false)} />
+					</View>
+				</View>
+			</Modal>
 			<TouchableOpacity
 				activeOpacity={0.5}
 				onPress={setLockHandler}
 			>
-				<Ionicons name={data.getCollection.isLocked ? "lock-closed" : "lock-open"} size={24} color="gray" />
+				<Ionicons name={data.getCollection.isLocked ? "lock-closed" : "lock-open"} size={24} color="#eee" />
 			</TouchableOpacity>
 			<TouchableOpacity
 				activeOpacity={0.5}
+				onPress={() => setDisplayModal(true)}
 			>
-				<Ionicons name="pencil" size={24} color="gray" />
+				<Ionicons name="pencil" size={24} color="#eee" />
 			</TouchableOpacity>
 			<TouchableOpacity
 				activeOpacity={0.5}
 				onPress={deleteHandler}
 			>
-				<Ionicons name="trash-outline" size={24} color="gray" />
-			</TouchableOpacity>
-			<TouchableOpacity
-				activeOpacity={0.5}
-			>
-				<View style={{...styles.color, backgroundColor: data.getCollection.color}} />
+				<Ionicons name="trash-outline" size={24} color="#eee" />
 			</TouchableOpacity>
 		</View>
 	)
@@ -78,12 +109,26 @@ const styles = StyleSheet.create({
 		gap: 15,
 		paddingHorizontal: 15
 	},
-	color: {
+	modalContainer: {
+		width: "100%",
+		height: "100%",
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "#ffffff88"
+	},
+	modal: {
+		width: 300,
 		borderWidth: 1,
 		borderColor: "gray",
-		width: 23,
-		height: 23,
-		borderRadius: 50
+		borderStyle: "solid",
+		padding: 20,
+		position: "relative",
+		backgroundColor: "white"
+	},
+	modalBtn: {
+		position: "absolute",
+		top: 5,
+		right: 5
 	}
 })
 

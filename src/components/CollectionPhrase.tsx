@@ -52,6 +52,7 @@ function CollectionPhrase({ phrase, navigation }: IProps) {
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: "row",
+		marginBottom: 12,
 		borderWidth: 1,
 		borderColor: "gray",
 		borderStyle: "solid",

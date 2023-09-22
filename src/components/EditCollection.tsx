@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import SelectDropdown from "react-native-select-dropdown";
 import colors from "../Colors";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_COLLECTION, GET_COLLECTION, GET_COLLECTIONS_ALL, GET_COLLECTIONS_NAMEID_ALL, MUTATE_COLLECTION } from "../query/collections";
 
 interface IProps {
@@ -15,8 +15,19 @@ function EditCollection({ mutateId, onReady }: IProps) {
 	const [ name, setName ] = useState("");
 	const [ color, setColor ] = useState("");
 
+	const { data } = useQuery(GET_COLLECTION, { variables: { id: mutateId }, skip: !mutateId});
 	const [ createCollection ] = useMutation(CREATE_COLLECTION);
 	const [ mutateCollection ] = useMutation(MUTATE_COLLECTION);
+
+	const selectRef = useRef<any>({});
+
+	useEffect(() => {
+		if(!data) return;
+
+		setName(data.getCollection.name);
+		setColor(data.getCollection.color);
+		selectRef.current?.selectIndex(colors.findIndex((item) => item.value === data.getCollection.color));
+	}, [data])
 
 	function pressHandler() {
 		if(mutateId) {
@@ -28,7 +39,7 @@ function EditCollection({ mutateId, onReady }: IProps) {
 						color
 					}
 				},
-				refetchQueries: [GET_COLLECTIONS_ALL, GET_COLLECTIONS_NAMEID_ALL]
+				refetchQueries: [GET_COLLECTION, GET_COLLECTIONS_ALL, GET_COLLECTIONS_NAMEID_ALL]
 			})
 		} else {
 			if(!name || !color) return;
@@ -40,7 +51,7 @@ function EditCollection({ mutateId, onReady }: IProps) {
 						color
 					}
 				},
-				refetchQueries: [GET_COLLECTION, GET_COLLECTIONS_ALL, GET_COLLECTIONS_NAMEID_ALL]
+				refetchQueries: [GET_COLLECTIONS_ALL, GET_COLLECTIONS_NAMEID_ALL]
 			})
 		}
 
@@ -57,10 +68,12 @@ function EditCollection({ mutateId, onReady }: IProps) {
 			<TextInput
 				style={styles.input}
 				onChangeText={setName}
+				value={name}
 				placeholder="Collection name..."
 			></TextInput>
 			<SelectDropdown
 				data={colors}
+				ref={selectRef as any}
 				onSelect={(selectedItem) => setColor(selectedItem.value)}
 				buttonStyle={styles.select}
 				defaultButtonText="Pick color"
@@ -140,7 +153,7 @@ function EditCollection({ mutateId, onReady }: IProps) {
 				style={styles.button}
 			>
 				<Button
-					title="Add"
+					title={mutateId ? "Edit" : "Add"}
 					onPress={pressHandler}
 				></Button>
 			</View>
