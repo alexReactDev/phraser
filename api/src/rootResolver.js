@@ -9,8 +9,17 @@ const root = {
 		return mock.collections;
 	},
 	getCollectionPhrases({ id }) {
-		console.log(id);
-		return mock.phrases.filter((phrase) => mock.collections[id].phrases.includes(phrase.id));
+		const collection = mock.collections.find((col) => col.id == id);
+		const phrases = mock.phrases.filter((phrase) => collection.phrases.includes(phrase.id));
+		return phrases;
+	},
+
+	getPhrase({ id }) {
+		return mock.phrases.find((phrase) => phrase.id == id);
+	},
+	
+	getPhraseCollection({ id }) {
+		return mock.collections.find((col) => col.phrases.includes(+id));
 	},
 
 	mutateCollection({ id, input }) {

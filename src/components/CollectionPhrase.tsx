@@ -6,10 +6,11 @@ import { useMutation } from "@apollo/client";
 import { DELETE_PHRASE, GET_COLLECTION_PHRASES } from "../query/phrases";
 
 interface IProps {
-	phrase: IPhrase
+	phrase: IPhrase,
+	navigation: any
 }
 
-function CollectionPhrase({ phrase }: IProps) {
+function CollectionPhrase({ phrase, navigation }: IProps) {
 
 	const [ deletePhrase ] = useMutation(DELETE_PHRASE);
 	
@@ -33,6 +34,7 @@ function CollectionPhrase({ phrase }: IProps) {
 			<View style={styles.controls}>
 				<TouchableOpacity
 					activeOpacity={0.5}
+					onLongPress={() => navigation.navigate("Add", { mutateId: phrase.id })}
 				>
 					<Ionicons name="pencil" size={24} color={"gray"} />
 				</TouchableOpacity>

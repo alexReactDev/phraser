@@ -45,7 +45,9 @@ const schema = buildSchema(`
 	type Query {
 		getCollection(id: ID): Collection,
 		getCollections: [Collection],
-		getCollectionPhrases(id: ID): [Phrase]
+		getCollectionPhrases(id: ID): [Phrase],
+		getPhrase(id: ID): Phrase,
+		getPhraseCollection(id: ID): Collection
 	}
 
 	input PhraseInput {

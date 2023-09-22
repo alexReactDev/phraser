@@ -25,7 +25,7 @@
 				"phrasesCount": 3,
 				"repetitionsCount": 0
 			},
-			"phrases": [1, 2, 3],
+			"phrases": [4, 5, 6],
 			"repetitions": []
 		},
 		{
@@ -39,7 +39,7 @@
 				"phrasesCount": 3,
 				"repetitionsCount": 0
 			},
-			"phrases": [1, 2, 3],
+			"phrases": [7, 8, 9],
 			"repetitions": []
 		}
 	],
@@ -71,6 +71,78 @@
 		{
 			"id": 3,
 			"value": "Orange",
+			"translation": "Апельсин",
+			"created": 1694616798608,
+			"lastUpdate": 1694616798608,
+			"meta": {
+				"repeated": 0,
+				"guessed": 0,
+				"forgotten": 0
+			}
+		},
+		{
+			"id": 4,
+			"value": "Apple 2",
+			"translation": "Яблоко",
+			"created": 1694616798608,
+			"lastUpdate": 1694616798608,
+			"meta": {
+				"repeated": 0,
+				"guessed": 0,
+				"forgotten": 0
+			}
+		},
+		{
+			"id": 5,
+			"value": "Pineapple 2",
+			"translation": "Ананас",
+			"created": 1694616798608,
+			"lastUpdate": 1694616798608,
+			"meta": {
+				"repeated": 0,
+				"guessed": 0,
+				"forgotten": 0
+			}
+		},
+		{
+			"id": 6,
+			"value": "Orange 2",
+			"translation": "Апельсин",
+			"created": 1694616798608,
+			"lastUpdate": 1694616798608,
+			"meta": {
+				"repeated": 0,
+				"guessed": 0,
+				"forgotten": 0
+			}
+		},
+		{
+			"id": 7,
+			"value": "Apple 3",
+			"translation": "Яблоко",
+			"created": 1694616798608,
+			"lastUpdate": 1694616798608,
+			"meta": {
+				"repeated": 0,
+				"guessed": 0,
+				"forgotten": 0
+			}
+		},
+		{
+			"id": 8,
+			"value": "Pineapple 3",
+			"translation": "Ананас",
+			"created": 1694616798608,
+			"lastUpdate": 1694616798608,
+			"meta": {
+				"repeated": 0,
+				"guessed": 0,
+				"forgotten": 0
+			}
+		},
+		{
+			"id": 9,
+			"value": "Orange 3",
 			"translation": "Апельсин",
 			"created": 1694616798608,
 			"lastUpdate": 1694616798608,

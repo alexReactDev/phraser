@@ -24,7 +24,7 @@ function CollectionScreen({ route, navigation }: any) {
 	return (
 		<View style={styles.container}>
 			{
-				data.getCollectionPhrases.map((phrase: IPhrase) => <CollectionPhrase key={phrase.id} phrase={phrase} />)
+				data.getCollectionPhrases.map((phrase: IPhrase) => <CollectionPhrase key={phrase.id} phrase={phrase} navigation={navigation} />)
 			}
 		</View>
 	)

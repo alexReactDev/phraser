@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import { TouchableOpacity, View, TextInput, StyleSheet } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
@@ -5,12 +6,24 @@ import { fontColor } from "../styles/variables";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_COLLECTIONS_NAMEID_ALL } from "../query/collections";
 import SelectDropdown from "react-native-select-dropdown";
-import { CREATE_PHRASE, GET_COLLECTION_PHRASES, MUTATE_PHRASE } from "../query/phrases";
+import { CREATE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION, MUTATE_PHRASE } from "../query/phrases";
+import { ICollection } from "../types/collections";
 
 function Add({ route }: any) {
 	const { data: { getCollections: collections = [] } = {} } = useQuery(GET_COLLECTIONS_NAMEID_ALL);
+	const { data: { getPhrase: phraseData, getPhraseCollection: phraseCollection } = {} } = useQuery(GET_PHRASE_WITH_COLLECTION, { variables: { id: route.params?.mutateId }, skip: !route.params?.mutateId });
 	const [ createPhrase ] = useMutation(CREATE_PHRASE);
 	const [ mutatePhrase ] = useMutation(MUTATE_PHRASE);
+	const selectRef = useRef<any>({});
+
+	useEffect(() => {
+		if(phraseData && phraseCollection) {
+			formik.setFieldValue("value", phraseData.value);
+			formik.setFieldValue("translation", phraseData.translation);
+			formik.setFieldValue("collection", phraseCollection.id);
+			selectRef.current?.selectIndex(collections.findIndex((col: ICollection) => col.id == phraseCollection.id))
+		}
+	}, [phraseData]);
 
 	const formik = useFormik({
 		initialValues: {
@@ -41,7 +54,7 @@ function Add({ route }: any) {
 			}
 		}
 	})
-
+	
 	return (
 		<View
 			style={styles.container}
@@ -65,6 +78,7 @@ function Add({ route }: any) {
 			/>
 			<SelectDropdown
 				data={collections}
+				ref={selectRef as any}
 				onSelect={(selectedItem) => formik.setFieldValue("collection", selectedItem.id)}
 				rowTextForSelection={(item) => item.name}
 				buttonTextAfterSelection={(item) => item.name}
@@ -72,6 +86,7 @@ function Add({ route }: any) {
 				buttonStyle={styles.select}
 				buttonTextStyle={styles.selectText}
 				renderDropdownIcon={() => <Ionicons name="caret-down" size={20} color="gray" />}
+
 			></SelectDropdown>
 			<TouchableOpacity
 				onPress={() => formik.handleSubmit()}
