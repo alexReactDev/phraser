@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Alert, Modal, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useMutation, useQuery } from "@apollo/client";
 import { DELETE_COLLECTION, GET_COLLECTION, GET_COLLECTIONS_ALL, MUTATE_COLLECTION } from "../query/collections";
 import EditCollection from "./EditCollection";
@@ -83,6 +84,13 @@ function CollectionHeaderButtons({ route, navigation }: any) {
 			</Modal>
 			<TouchableOpacity
 				activeOpacity={0.5}
+				onPress={() => navigation.navigate("Learn", { colId })}
+				style={{marginTop: 5, marginRight: 4}}
+			>
+				<Ionicons name="book" size={24} color="#eee" />
+			</TouchableOpacity>
+			<TouchableOpacity
+				activeOpacity={0.5}
 				onPress={setLockHandler}
 			>
 				<Ionicons name={data.getCollection.isLocked ? "lock-closed" : "lock-open"} size={24} color="#eee" />
@@ -107,7 +115,8 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: "row",
 		gap: 15,
-		paddingHorizontal: 15
+		paddingHorizontal: 15,
+		alignItems: "center"
 	},
 	modalContainer: {
 		width: "100%",

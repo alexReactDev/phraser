@@ -100,6 +100,11 @@ const root = {
 		return mock.phrases[phraseIdx];
 	},
 
+	mutatePhrasesMeta({ input }) {
+		console.log(input);
+		return mock.phrases;
+	},
+
 	deletePhrase({ id }) {
 		mock.phrases = mock.phrases.filter((item) => item.id != id);
 
@@ -110,6 +115,10 @@ const root = {
 		mock.collections = mock.collections.filter((item) => item.id != id);
 
 		return mock.collections;
+	},
+
+	createCollectionRepetition({ id, input }) {
+		return mock.collections.find((col) => col.id === id);
 	}
 }
 

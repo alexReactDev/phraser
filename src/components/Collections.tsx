@@ -11,6 +11,7 @@ import CollectionHeaderButtons from "./CollectionHeaderButtons";
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
 import EditCollection from "./EditCollection";
+import Learn from "./Learn";
 
 const StackNavigator = createStackNavigator();
 
@@ -21,6 +22,7 @@ function CollectionsNavigation() {
 			<StackNavigator.Screen name="Collection" component={CollectionScreen} options={(props) => ({
 				headerRight: () => <CollectionHeaderButtons {...props} />
 			})} />
+			<StackNavigator.Screen name="Learn" component={Learn} />
 		</StackNavigator.Navigator>
 	)
 }

@@ -37,9 +37,18 @@ const schema = buildSchema(`
 	type Repetition {
 		id: ID,
 		phrasesCount: Int,
+		totalGuessed: Int,
+		totalForgotten: Int,
+		totalRepeated: Int,
+		phrasesRepetitions: [PhraseRepetition]
+		created: Float
+	}
+
+	type PhraseRepetition {
+		id: ID,
 		guessed: Int,
 		forgotten: Int,
-		created: Float
+		repeated: Int
 	}
 
 	type Query {
@@ -66,13 +75,31 @@ const schema = buildSchema(`
 		color: String,
 	}
 
+	input PhraseRepetitionInput {
+		id: ID,
+		guessed: Int,
+		forgotten: Int,
+		repeated: Int
+	}
+
+	input RepetitionInput {
+		phrasesCount: Int,
+		totalGuessed: Int,
+		totalForgotten: Int,
+		totalRepeated: Int,
+		phrasesRepetitions: [PhraseRepetitionInput]
+		created: Float
+	}
+
 	type Mutation {
 		deletePhrase(id: ID): [Phrase],
 		deleteCollection(id: ID): [Collection],
 		mutatePhrase(id: ID, input: PhraseInput, collection: ID): Phrase,
+		mutatePhrasesMeta(input: [PhraseRepetitionInput]): [Phrase],
 		mutateCollection(id: ID, input: MutateCollectionInput): Collection,
 		createPhrase(input: PhraseInput, collection: ID): Phrase,
-		createCollection(input: CollectionInput): Collection
+		createCollection(input: CollectionInput): Collection,
+		createCollectionRepetition(id: ID, input: RepetitionInput): Collection
 	}
 `);
 
