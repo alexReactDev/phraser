@@ -65,12 +65,17 @@ export const CREATE_COLLECTION = gql`
 `;
 
 export const MUTATE_COLLECTION = gql`
-	mutation mutateCollection($id: ID, $input: MutateCollectionInput) {
-		mutateCollection(id: $id, input: $input) {
-			id
-		}
+	mutation mutateCollection($id: ID, $input: CollectionInput) {
+		mutateCollection(id: $id, input: $input) 
 	}
 `;
+
+export const CHANGE_COLLECTION_LOCK = gql`
+	mutation changeCollectionLock($id: ID, $input: ChangeCollectionLockInput) {
+		changeCollectionLock(id: $id, input: $input)
+	}
+`;
+
 
 export const DELETE_COLLECTION = gql`
 	mutation deleteCollection($id: ID) {

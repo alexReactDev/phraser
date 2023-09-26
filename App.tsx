@@ -8,7 +8,7 @@ import Settings from "./src/components/Settings";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: "http://192.168.100.13:4500/graphql",
+  uri: "http://192.168.100.5:4500/graphql",
   cache: new InMemoryCache()
 });
 

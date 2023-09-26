@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Alert, Modal, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useMutation, useQuery } from "@apollo/client";
-import { DELETE_COLLECTION, GET_COLLECTION, GET_COLLECTIONS_ALL, MUTATE_COLLECTION } from "../query/collections";
+import { CHANGE_COLLECTION_LOCK, DELETE_COLLECTION, GET_COLLECTION, GET_COLLECTIONS_ALL, MUTATE_COLLECTION } from "../query/collections";
 import EditCollection from "./EditCollection";
 
 function CollectionHeaderButtons({ route, navigation }: any) {
@@ -11,6 +10,7 @@ function CollectionHeaderButtons({ route, navigation }: any) {
 	const { data, refetch } = useQuery(GET_COLLECTION, { variables: { id: colId } });
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const [ deleteCollection ] = useMutation(DELETE_COLLECTION);
+	const [ changeCollectionLock ] = useMutation(CHANGE_COLLECTION_LOCK);
 	const [ mutateCollection ] = useMutation(MUTATE_COLLECTION);
 
 	useEffect(() => {
@@ -45,10 +45,8 @@ function CollectionHeaderButtons({ route, navigation }: any) {
 		])
 	}
 
-	console.log(data.getCollection.isLocked);
-
 	function setLockHandler() {
-		mutateCollection({
+		changeCollectionLock({
 			variables: { 
 				id: colId,
 				input: {
