@@ -8,7 +8,7 @@ import Settings from "./src/components/Settings";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: "http://192.168.100.7:4500/graphql",
+  uri: "http://192.168.100.13:4500/graphql",
   cache: new InMemoryCache()
 });
 
@@ -26,7 +26,8 @@ export default function App() {
             tabBarIcon: ({ focused }) => <Ionicons name="language" size={24} color={focused ? "black" : "gray"} />
           }}></Navigator.Screen>
           <Navigator.Screen name="Collections" component={Collections} options={{
-            tabBarIcon: ({ focused }) => <Ionicons name="copy" size={24} color={focused ? "black" : "gray"} />
+            tabBarIcon: ({ focused }) => <Ionicons name="copy" size={24} color={focused ? "black" : "gray"} />,
+            headerShown: false
           }}></Navigator.Screen>
           <Navigator.Screen name="Settings" component={Settings} options={{
             tabBarIcon: ({ focused }) => <Ionicons name="settings-sharp" size={24} color={focused ? "black" : "gray"}  />

@@ -38,6 +38,15 @@ export const GET_COLLECTIONS_ALL = gql`
 	}
 `;
 
+export const GET_COLLECTION_NAMEID = gql`
+	query getCollection($id: ID) {
+		getCollection(id: $id) {
+			id,
+			name
+		}
+	}
+`;
+
 export const GET_COLLECTIONS_NAMEID_ALL = gql`
 	query GetCollectionsNameId {
 		getCollections {

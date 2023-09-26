@@ -8,12 +8,15 @@ import { IPhrase } from "../types/phrases";
 import { Ionicons } from '@expo/vector-icons';
 import { borderColor, fontColor, fontColorFaint } from "../styles/variables";
 import { CREATE_COLLECTION_REPETITION, MUTATE_PHRASES_META } from "../query/repetitions";
+import { GET_COLLECTION_NAMEID } from "../query/collections";
 
-function Learn({ route }: any) {
+function Learn({ route, navigation }: any) {
 	const colId = route.params.colId;
 
 	const { data, loading, error } = useQuery(GET_COLLECTION_PHRASES, { variables: { id: colId }});
 	const phrasesData = data?.getCollectionPhrases;
+
+	const { data: colData } = useQuery(GET_COLLECTION_NAMEID, { variables: { id: colId }});
 
 	const [ mutatePhrasesMeta ] = useMutation(MUTATE_PHRASES_META);
 	const [ createCollectionRepetition ] = useMutation(CREATE_COLLECTION_REPETITION);
@@ -31,6 +34,10 @@ function Learn({ route }: any) {
 	useEffect(() => {
 		if(finished) finishHandler();
 	}, [finished]);
+
+	useEffect(() => {
+		if(colData) navigation.setOptions({ title: "Learn " + colData.getCollection.name });
+	}, [colData])
 
 	function startHandler() {
 		const phrases = phrasesData.map((phrase: IPhrase) => phrase.id);

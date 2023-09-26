@@ -1,7 +1,7 @@
 export const fontColor = "#222222";
-export const fontColorLight = "#eeeeee";
+export const fontColorLight = "#f0f0f0";
 export const fontColorFaint = "#555555a0";
-export const fontColorFaintLight = "#cccccccc";
+export const fontColorFaintLight = "#dddddd";
 
 export const borderColor = "#dddddd";
 
