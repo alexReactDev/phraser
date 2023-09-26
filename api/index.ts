@@ -4,8 +4,8 @@ const { graphqlHTTP } = require("express-graphql");
 
 dotenv.config();
 
-const schema = require("./schema.js");
-const rootResolver =  require("./src/rootResolver.js");
+const rootSchema = require("./schema.ts");
+const rootResolver =  require("./src/rootResolver.ts");
 const throttleMiddleware = require("./src/middleware/throttleMiddleware.js");
 
 const PORT = 4500;
@@ -14,7 +14,7 @@ const app = express();
 
 app.use(throttleMiddleware);
 app.use("/graphql", graphqlHTTP({
-	schema,
+	schema: rootSchema,
 	rootValue: rootResolver
 }))
 

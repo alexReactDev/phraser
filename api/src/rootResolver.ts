@@ -1,7 +1,8 @@
 const mock = require("../mock.json");
+const collectionsController = require("./controller/Collections");
 
 const root = {
-	createCollection({ input }) {		
+	createCollection({ input }: any) {		
 		mock.collections.push({
 			...input,
 			id: new Date().getTime(),
@@ -22,34 +23,38 @@ const root = {
 
 	},
 
-	getCollection({ id }) {
-		return mock.collections.find((item) => item.id == id)
-	},
+	getCollection: collectionsController.getCollection,
 
-	getCollections() {
-		return mock.collections;
-	},
+	// getCollection({ id }) {
+	// 	return mock.collections.find((item) => item.id == id)
+	// },
 
-	getCollectionPhrases({ id }) {
-		const collection = mock.collections.find((col) => col.id == id);
-		const phrases = mock.phrases.filter((phrase) => collection.phrases.includes(phrase.id));
+	// getCollections() {
+	// 	return mock.collections;
+	// },
+
+	getCollections: collectionsController.getCollectionsAll,
+
+	getCollectionPhrases({ id }: any) {
+		const collection = mock.collections.find((col: any) => col.id == id);
+		const phrases = mock.phrases.filter((phrase: any) => collection.phrases.includes(phrase.id));
 		return phrases;
 	},
 
-	getPhrase({ id }) {
-		return mock.phrases.find((phrase) => phrase.id == id);
+	getPhrase({ id }: any) {
+		return mock.phrases.find((phrase: any) => phrase.id == id);
 	},
 	
-	getPhraseCollection({ id }) {
-		return mock.collections.find((col) => col.phrases.includes(+id));
+	getPhraseCollection({ id }: any) {
+		return mock.collections.find((col: any) => col.phrases.includes(+id));
 	},
 
-	mutateCollection({ id, input }) {
+	mutateCollection({ id, input }: any) {
 
 		console.log(input);
 		console.log(id);
 
-		const colIdx = mock.collections.findIndex((item) => item.id == id);
+		const colIdx = mock.collections.findIndex((item: any) => item.id == id);
 		console.log(input);
 
 		mock.collections[colIdx] = {
@@ -60,7 +65,7 @@ const root = {
 		return mock.collections[colIdx];
 	},
 
-	createPhrase({ input, collection }) {
+	createPhrase({ input, collection }: any) {
 		const timestamp = new Date().getTime();
 
 		//move to controller
@@ -84,9 +89,9 @@ const root = {
 		return phrase;
 	},
 
-	mutatePhrase({ id, input, collection }) {
+	mutatePhrase({ id, input, collection }: any) {
 		//add existence check
-		const phraseIdx = mock.phrases.findIndex((item) => item.id == id);
+		const phraseIdx = mock.phrases.findIndex((item: any) => item.id == id);
 
 		mock.phrases[phraseIdx] = {
 			...mock.phrases[phraseIdx],
@@ -100,25 +105,25 @@ const root = {
 		return mock.phrases[phraseIdx];
 	},
 
-	mutatePhrasesMeta({ input }) {
+	mutatePhrasesMeta({ input }: any) {
 		console.log(input);
 		return mock.phrases;
 	},
 
-	deletePhrase({ id }) {
-		mock.phrases = mock.phrases.filter((item) => item.id != id);
+	deletePhrase({ id }: any) {
+		mock.phrases = mock.phrases.filter((item: any) => item.id != id);
 
 		return mock.phrases;
 	},
 
-	deleteCollection({ id }) {
-		mock.collections = mock.collections.filter((item) => item.id != id);
+	deleteCollection({ id }: any) {
+		mock.collections = mock.collections.filter((item: any) => item.id != id);
 
 		return mock.collections;
 	},
 
-	createCollectionRepetition({ id, input }) {
-		return mock.collections.find((col) => col.id === id);
+	createCollectionRepetition({ id, input }: any) {
+		return mock.collections.find((col: any) => col.id === id);
 	}
 }
 
