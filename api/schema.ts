@@ -69,10 +69,8 @@ const schema = buildSchema(`
 		color: String!,
 	}
 
-	input MutateCollectionInput {
-		name: String,
-		isLocked: Boolean,
-		color: String,
+	input ChangeCollectionLockInput {
+		isLocked: Boolean
 	}
 
 	input PhraseRepetitionInput {
@@ -93,12 +91,13 @@ const schema = buildSchema(`
 
 	type Mutation {
 		deletePhrase(id: ID): [Phrase],
-		deleteCollection(id: ID): [Collection],
+		deleteCollection(id: ID): String,
 		mutatePhrase(id: ID, input: PhraseInput, collection: ID): Phrase,
 		mutatePhrasesMeta(input: [PhraseRepetitionInput]): [Phrase],
-		mutateCollection(id: ID, input: MutateCollectionInput): Collection,
+		mutateCollection(id: ID, input: CollectionInput): String,
+		changeCollectionLock(id: ID, input: ChangeCollectionLockInput): String,
 		createPhrase(input: PhraseInput, collection: ID): Phrase,
-		createCollection(input: CollectionInput): Collection,
+		createCollection(input: CollectionInput): String,
 		createCollectionRepetition(id: ID, input: RepetitionInput): Collection
 	}
 `);
