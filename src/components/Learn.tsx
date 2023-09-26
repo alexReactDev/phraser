@@ -9,8 +9,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { borderColor, fontColor, fontColorFaint } from "../styles/variables";
 import { CREATE_COLLECTION_REPETITION, MUTATE_PHRASES_META } from "../query/repetitions";
 import { GET_COLLECTION_NAMEID } from "../query/collections";
+import { StackScreenProps } from "@react-navigation/stack";
+import { StackNavigatorParams } from "./Collections";
 
-function Learn({ route, navigation }: any) {
+type Props = StackScreenProps<StackNavigatorParams, "Learn", "collectionsNavigator">;
+
+function Learn({ route, navigation }: Props) {
 	const colId = route.params.colId;
 
 	const { data, loading, error } = useQuery(GET_COLLECTION_PHRASES, { variables: { id: colId }});

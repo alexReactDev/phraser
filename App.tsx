@@ -12,13 +12,19 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-const Navigator = createBottomTabNavigator();
+export type NavigatorParams = {
+  Add: { mutateId: number | undefined } | undefined,
+  Collections: undefined,
+  Settings: undefined
+}
+
+const Navigator = createBottomTabNavigator<NavigatorParams>();
 
 export default function App() {
   return (
     <ApolloProvider client={client}>
       <NavigationContainer>
-        <Navigator.Navigator screenOptions={{
+        <Navigator.Navigator id="MainNavigator" screenOptions={{
           tabBarActiveTintColor: "black",
           tabBarInactiveTintColor: "gray"
         }}>

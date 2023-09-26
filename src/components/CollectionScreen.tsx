@@ -8,8 +8,12 @@ import { IPhrase } from "../types/phrases";
 import CollectionPhrase from "./CollectionPhrase";
 import { GET_COLLECTION } from "../query/collections";
 import { FlatList } from "react-native-gesture-handler";
+import { StackScreenProps } from "@react-navigation/stack";
+import { StackNavigatorParams } from "./Collections";
 
-function CollectionScreen({ route, navigation }: any) {
+type Props = StackScreenProps<StackNavigatorParams, "Collection", "collectionsNavigator">;
+
+function CollectionScreen({ route, navigation }: Props) {
 	const colId = route.params.colId;
 
 	const { data, loading, error } = useQuery(GET_COLLECTION_PHRASES, { variables: { id: colId } });

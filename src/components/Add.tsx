@@ -8,8 +8,12 @@ import { GET_COLLECTIONS_NAMEID_ALL } from "../query/collections";
 import SelectDropdown from "react-native-select-dropdown";
 import { CREATE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION, MUTATE_PHRASE } from "../query/phrases";
 import { ICollection } from "../types/collections";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { NavigatorParams } from "../../App";
 
-function Add({ route }: any) {
+type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
+
+function Add({ route }: Props) {
 	const { data: { getCollections: collections = [] } = {} } = useQuery(GET_COLLECTIONS_NAMEID_ALL);
 	const { data: { getPhrase: phraseData, getPhraseCollection: phraseCollection } = {} } = useQuery(GET_PHRASE_WITH_COLLECTION, { variables: { id: route.params?.mutateId }, skip: !route.params?.mutateId });
 	const [ createPhrase ] = useMutation(CREATE_PHRASE);

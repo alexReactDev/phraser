@@ -5,7 +5,7 @@ import ErrorComponent from "./Error";
 import Loader from "./Loader";
 import { ICollection } from "../types/collections";
 import CollectionCard from "./CollectionCard";
-import { createStackNavigator } from "@react-navigation/stack";
+import { StackScreenProps, createStackNavigator } from "@react-navigation/stack";
 import CollectionScreen from "./CollectionScreen";
 import CollectionHeaderButtons from "./CollectionHeaderButtons";
 import { Ionicons } from '@expo/vector-icons';
@@ -13,11 +13,19 @@ import { useState } from "react";
 import EditCollection from "./EditCollection";
 import Learn from "./Learn";
 
-const StackNavigator = createStackNavigator();
+export type StackNavigatorParams = {
+	Collections: undefined,
+	Collection: { colId: number },
+	Learn: { colId: number }
+}
+
+const StackNavigator = createStackNavigator<StackNavigatorParams>();
 
 function CollectionsNavigation() {
 	return (
-		<StackNavigator.Navigator>
+		<StackNavigator.Navigator
+			id="collectionsNavigator"
+		>
 			<StackNavigator.Screen name="Collections" component={Collections} />
 			<StackNavigator.Screen name="Collection" component={CollectionScreen} options={(props) => ({
 				headerRight: () => <CollectionHeaderButtons {...props} />
@@ -27,7 +35,9 @@ function CollectionsNavigation() {
 	)
 }
 
-function Collections({ navigation }: any) {
+type Props = StackScreenProps<StackNavigatorParams, "Collections", "collectionsNavigator">;
+
+function Collections({ navigation }: Props) {
 	const { data = [], loading, error } = useQuery(GET_COLLECTIONS_ALL);
 	const [ displayModal, setDisplayModal ] = useState(false);
 
