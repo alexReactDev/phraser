@@ -90,9 +90,9 @@ const schema = buildSchema(`
 	}
 
 	type Mutation {
-		deletePhrase(id: ID): [Phrase],
+		deletePhrase(id: ID): String,
 		deleteCollection(id: ID): String,
-		mutatePhrase(id: ID, input: PhraseInput, collection: ID): Phrase,
+		mutatePhrase(id: ID, input: PhraseInput, collection: ID): String,
 		mutatePhrasesMeta(input: [PhraseRepetitionInput]): [Phrase],
 		mutateCollection(id: ID, input: CollectionInput): String,
 		changeCollectionLock(id: ID, input: ChangeCollectionLockInput): String,
