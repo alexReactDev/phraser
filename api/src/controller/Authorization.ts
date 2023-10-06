@@ -21,7 +21,7 @@ class AuthorizationController {
 
 		const token = signJWT({ login: user.login });
 
-		return token;
+		return {...token};
 	}
 
 	async logout({}, context: { auth: IJWT }) {
@@ -49,7 +49,13 @@ class AuthorizationController {
 
 		const token = signJWT({ login: input.login });
 
-		return token;
+		return {...token};
+	}
+
+	async getSession({}, context: { auth: IJWT }) {
+		if(context?.auth?.sid) return { sid: context.auth.sid };
+
+		return "";
 	}
 }
 

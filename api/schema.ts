@@ -70,13 +70,23 @@ const schema = buildSchema(`
 		settings: Settings
 	}
 
+	type Token {
+		token: String,
+		sid: Float
+	}
+
+	type Session {
+		sid: Float
+	}
+
 	type Query {
 		getCollection(id: ID): Collection,
 		getProfileCollections(id: ID): [Collection],
 		getCollectionPhrases(id: ID): [Phrase],
 		getPhrase(id: ID): Phrase,
 		getPhraseCollection(id: ID): Collection,
-		getUserProfiles(id: ID): [Profile]
+		getUserProfiles(id: ID): [Profile],
+		getSession: Session
 	}
 
 	input ProfileInput {
@@ -150,8 +160,8 @@ const schema = buildSchema(`
 		createUser(input: UserInput): String,
 		createProfile(input: ProfileInput): String,
 		updateUserSettings(id: ID, input: SettingsInput): Settings,
-		login(input: LoginInput): String,
-		signUp(input: SignUpInput): String,
+		login(input: LoginInput): Token,
+		signUp(input: SignUpInput): Token,
 		logout: String
 	}
 `);

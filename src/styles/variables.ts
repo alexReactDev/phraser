@@ -10,3 +10,5 @@ export const green = "#41c948";
 export const yellow = "#e2d847";
 export const red = "#e74747";
 export const orange = "#e78747";
+
+export const faintBlue = "#71bfff"

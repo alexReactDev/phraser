@@ -9,6 +9,7 @@ const root = {
 	login: authController.login,
 	signUp: authController.signUp,
 	logout: authController.logout,
+	getSession: authController.getSession,
 
 	createProfile: profilesController.createProfile,
 	getUserProfiles: profilesController.getUserProfiles,

@@ -2,8 +2,14 @@ const jwt = require("jsonwebtoken");
 const generateId = require("./generateId");
 
 export function signJWT(data: any) {
-	return jwt.sign({
-		sid: generateId(),
+	const sid = generateId();
+	const token = jwt.sign({
+		sid,
 		...data
-	}, process.env.JWT_SECRET)
+	}, process.env.JWT_SECRET);
+
+	return ({
+		token,
+		sid
+	})
 }
