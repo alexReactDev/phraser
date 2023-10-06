@@ -1,11 +1,16 @@
 const mock = require("../mock.json");
 const collectionsController = require("./controller/Collections");
 const phrasesController = require("./controller/Phrases");
+const profilesController = require("./controller/Profiles");
+const usersController = require("./controller/Users");
 
 const root = {
+	createProfile: profilesController.createProfile,
+	getUserProfiles: profilesController.getUserProfiles,
+
 	createCollection: collectionsController.createCollection,
 	getCollection: collectionsController.getCollection,
-	getCollections: collectionsController.getCollectionsAll,
+	getCollections: collectionsController.getCollectionsByProfile,
 	deleteCollection: collectionsController.deleteCollection,
 	mutateCollection: collectionsController.mutateCollection,
 	changeCollectionLock: collectionsController.changeCollectionLock,

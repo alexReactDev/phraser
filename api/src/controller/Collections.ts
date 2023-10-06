@@ -17,11 +17,13 @@ class CollectionsController {
 		return result;
 	}
 
-	async getCollectionsAll() {
+	async getCollectionsByProfile({ id }: { id: string | number }) {
 		let result;
 
 		try {
-			let cursor = await db.collection("collections").find({});
+			let cursor = await db.collection("collections").find({
+				id: +id
+			});
 			result = await cursor.toArray();
 		}
 		catch(e: any) {
