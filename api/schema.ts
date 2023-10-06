@@ -31,7 +31,8 @@ const schema = buildSchema(`
 		lastUpdate: Float,
 		phrases: [ID],
 		repetitions: [ID],
-		meta: CollectionMeta
+		meta: CollectionMeta,
+		profile: ID
 	}
 
 	type Repetition {
@@ -51,12 +52,42 @@ const schema = buildSchema(`
 		repeated: Int
 	}
 
+	type Profile {
+		id: ID,
+		name: String,
+		userId: ID
+	}
+
+	type Settings {
+		theme: String,
+		phrasesOrder: String,
+		repetitionsAmount: String
+	}
+
+	type UserSettings {
+		id: ID,
+		userId: ID,
+		settings: Settings
+	}
+
 	type Query {
 		getCollection(id: ID): Collection,
-		getCollections: [Collection],
+		getProfileCollections(id: ID): [Collection],
 		getCollectionPhrases(id: ID): [Phrase],
 		getPhrase(id: ID): Phrase,
-		getPhraseCollection(id: ID): Collection
+		getPhraseCollection(id: ID): Collection,
+		getUserProfiles(id: ID): [Profile]
+	}
+
+	input ProfileInput {
+		name: String!,
+		userId: ID!
+	}
+
+	input UserInput {
+		name: String!,
+		login: String!,
+		password: String!,
 	}
 
 	input PhraseInput {
@@ -89,6 +120,12 @@ const schema = buildSchema(`
 		created: Float
 	}
 
+	input SettingsInput {
+		theme: String,
+		phrasesOrder: String,
+		repetitionsAmount: String
+	}
+
 	type Mutation {
 		deletePhrase(id: ID): String,
 		deleteCollection(id: ID): String,
@@ -98,7 +135,10 @@ const schema = buildSchema(`
 		changeCollectionLock(id: ID, input: ChangeCollectionLockInput): String,
 		createPhrase(input: PhraseInput, collection: ID): Phrase,
 		createCollection(input: CollectionInput): String,
-		createCollectionRepetition(id: ID, input: RepetitionInput): Collection
+		createCollectionRepetition(id: ID, input: RepetitionInput): Collection,
+		createUser(input: UserInput): String,
+		createProfile(input: ProfileInput): String,
+		updateUserSettings(id: ID, input: SettingsInput): Settings
 	}
 `);
 
