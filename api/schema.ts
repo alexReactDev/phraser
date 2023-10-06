@@ -126,6 +126,17 @@ const schema = buildSchema(`
 		repetitionsAmount: String
 	}
 
+	input LoginInput {
+		login: String!,
+		password: String!
+	}
+
+	input SignUpInput {
+		name: String!,
+		login: String!,
+		password: String!
+	}
+
 	type Mutation {
 		deletePhrase(id: ID): String,
 		deleteCollection(id: ID): String,
@@ -138,7 +149,10 @@ const schema = buildSchema(`
 		createCollectionRepetition(id: ID, input: RepetitionInput): Collection,
 		createUser(input: UserInput): String,
 		createProfile(input: ProfileInput): String,
-		updateUserSettings(id: ID, input: SettingsInput): Settings
+		updateUserSettings(id: ID, input: SettingsInput): Settings,
+		login(input: LoginInput): String,
+		signUp(input: SignUpInput): String,
+		logout: String
 	}
 `);
 

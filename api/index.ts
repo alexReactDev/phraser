@@ -1,6 +1,10 @@
+import { Request } from "express";
+import { isTokenRevoked } from "./src/utils/isTokenRevoked";
+
 const dotenv = require("dotenv");
 const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
+const { expressjwt } = require("express-jwt");
 
 dotenv.config();
 
@@ -12,10 +16,21 @@ const PORT = 4500;
 
 const app = express();
 
+interface IReq extends Request {
+	auth: any
+}
+
 app.use(throttleMiddleware);
-app.use("/graphql", graphqlHTTP({
+app.use(expressjwt({ 
+	secret: process.env.JWT_SECRET, 
+	algorithms: ["HS256"], 
+	credentialsRequired: false, 
+	isRevoked: isTokenRevoked
+}));
+app.use("/graphql", graphqlHTTP((req: IReq) => ({
 	schema: rootSchema,
-	rootValue: rootResolver
-}))
+	rootValue: rootResolver,
+	context: { auth: req.auth }
+})))
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

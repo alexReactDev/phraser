@@ -3,8 +3,13 @@ const collectionsController = require("./controller/Collections");
 const phrasesController = require("./controller/Phrases");
 const profilesController = require("./controller/Profiles");
 const usersController = require("./controller/Users");
+const authController = require("./controller/Authorization");
 
 const root = {
+	login: authController.login,
+	signUp: authController.signUp,
+	logout: authController.logout,
+
 	createProfile: profilesController.createProfile,
 	getUserProfiles: profilesController.getUserProfiles,
 

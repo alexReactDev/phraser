@@ -1,6 +1,7 @@
 import { ISettingsInput } from "../types/settings";
 
 const db = require("../model/db.ts");
+const generateId = require("../utils/generateId");
 
 class SettingsController {
 	async createSettings({ id }: { id: string | number }) {

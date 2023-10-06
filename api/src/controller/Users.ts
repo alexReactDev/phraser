@@ -2,9 +2,16 @@ import { IUserInput } from "../types/users";
 
 const db = require("../model/db.ts");
 const settingsController = require("./Settings.ts");
+const generateId = require("../utils/generateId.ts");
 
 class UsersController {
 	async createUser({ input }: { input: IUserInput}) {
+		const user = await db.collection("users").findOne({
+			login: input.login
+		})
+
+		if(user) throw new Error("Bad request. Login already taken");
+
 		const id = generateId();
 
 		try {
