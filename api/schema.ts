@@ -61,7 +61,8 @@ const schema = buildSchema(`
 	type Settings {
 		theme: String,
 		phrasesOrder: String,
-		repetitionsAmount: String
+		repetitionsAmount: String,
+		activeProfile: ID
 	}
 
 	type UserSettings {
@@ -86,7 +87,8 @@ const schema = buildSchema(`
 		getPhrase(id: ID): Phrase,
 		getPhraseCollection(id: ID): Collection,
 		getUserProfiles(id: ID): [Profile],
-		getSession: Session
+		getSession: Session,
+		getUserSettings(id: ID): UserSettings
 	}
 
 	input ProfileInput {
@@ -131,9 +133,17 @@ const schema = buildSchema(`
 	}
 
 	input SettingsInput {
+		theme: String!,
+		phrasesOrder: String!,
+		repetitionsAmount: String!,
+		activeProfile: ID!
+	}
+
+	input PartialSettingsInput {
 		theme: String,
 		phrasesOrder: String,
-		repetitionsAmount: String
+		repetitionsAmount: String,
+		activeProfile: ID
 	}
 
 	input LoginInput {
@@ -159,7 +169,8 @@ const schema = buildSchema(`
 		createCollectionRepetition(id: ID, input: RepetitionInput): Collection,
 		createUser(input: UserInput): String,
 		createProfile(input: ProfileInput): String,
-		updateUserSettings(id: ID, input: SettingsInput): Settings,
+		updateUserSettings(id: ID, input: PartialSettingsInput): UserSettings,
+		setUserSettings(id: ID, input: SettingsInput): String,
 		login(input: LoginInput): Token,
 		signUp(input: SignUpInput): Token,
 		logout: String

@@ -4,12 +4,17 @@ const phrasesController = require("./controller/Phrases");
 const profilesController = require("./controller/Profiles");
 const usersController = require("./controller/Users");
 const authController = require("./controller/Authorization");
+const settingsController = require("./controller/Settings");
 
 const root = {
 	login: authController.login,
 	signUp: authController.signUp,
 	logout: authController.logout,
 	getSession: authController.getSession,
+
+	getUserSettings: settingsController.getUserSettings,
+	setUserSettings: settingsController.setUserSettings,
+	updateUserSettings: settingsController.updateUserSettings,
 
 	createProfile: profilesController.createProfile,
 	getUserProfiles: profilesController.getUserProfiles,

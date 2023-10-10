@@ -1,5 +1,6 @@
 export interface ISettingsInput {
 	theme: string,
 	phrasesOrder: string,
-	repetitionsAmount: string
+	repetitionsAmount: string,
+	activeProfile: string | number
 }

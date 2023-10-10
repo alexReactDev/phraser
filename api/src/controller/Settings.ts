@@ -24,10 +24,28 @@ class SettingsController {
 		return "OK";
 	}
 
-	async updateSettings({ id, input }: { id: string | number, input: ISettingsInput }) {
+	async getUserSettings({ id }: { id: string | number}) {
+		let settings;
+
+		try {
+			settings = await db.collection("settings").findOne({
+				userId: +id
+			})
+		}
+		catch(e: any) {
+			console.log(e)
+			throw new Error(`Server error ${e}`);
+		}
+
+		return settings;
+	}
+
+	async setUserSettings({ id, input }: { id: string | number, input: ISettingsInput }) {
 		try {
 			await db.collection("settings").updateOne({ userId: +id }, {
-				settings: input
+				$set: {
+					settings: input
+				}
 			});
 		}
 		catch(e: any) {
@@ -36,6 +54,38 @@ class SettingsController {
 		}
 
 		return "OK";
+	}
+
+	async updateUserSettings({ id, input }:  { id: string | number, input: Partial<ISettingsInput>}) {
+		let settings;
+		
+		
+		try {
+			settings = await this.getUserSettings({ id });
+		}
+		catch(e: any) {
+			console.log(e)
+			throw new Error(`Server error ${e}`);
+		}
+
+		for(let key in input) {
+			//@ts-ignore
+			settings.settings[key] = input[key];
+		}
+
+		try {
+			await db.collection("settings").updateOne({ userId: +id }, {
+				$set: {
+					settings: settings.settings
+				}
+			});
+		}
+		catch(e: any) {
+			console.log(e)
+			throw new Error(`Server error ${e}`);
+		}
+
+		return settings;
 	}
 
 	async deleteSettings({ id }: { id: string | number }) {
