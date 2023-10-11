@@ -7,9 +7,10 @@ import Collections from './src/components/Collections';
 import Settings from "./src/components/Settings";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import AuthorizationChecker from "./src/components/AuthorizationChecker";
+import Profiles from "./src/components/Profiles";
 
 const client = new ApolloClient({
-  uri: "http://192.168.100.7:4500/graphql",
+  uri: "http://192.168.100.4:4500/graphql",
   cache: new InMemoryCache()
 });
 
@@ -26,9 +27,12 @@ export default function App() {
     <ApolloProvider client={client}>
       <NavigationContainer>
         <AuthorizationChecker>
-          <Navigator.Navigator id="MainNavigator" screenOptions={{
+          <Navigator.Navigator 
+            id="MainNavigator" 
+            screenOptions={{
               tabBarActiveTintColor: "black",
-              tabBarInactiveTintColor: "gray"
+              tabBarInactiveTintColor: "gray",
+              headerRight: () => <Profiles />
             }}>
               <Navigator.Screen name="Add" component={Add} options={{
                 tabBarIcon: ({ focused }) => <Ionicons name="language" size={24} color={focused ? "black" : "gray"} />

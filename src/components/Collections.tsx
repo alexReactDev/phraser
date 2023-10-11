@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
 import EditCollection from "./EditCollection";
 import Learn from "./Learn";
+import Profiles from "./Profiles";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
@@ -26,7 +27,9 @@ function CollectionsNavigation() {
 		<StackNavigator.Navigator
 			id="collectionsNavigator"
 		>
-			<StackNavigator.Screen name="Collections" component={Collections} />
+			<StackNavigator.Screen name="Collections" component={Collections} options={{
+				headerRight: () => <Profiles />
+			}} />
 			<StackNavigator.Screen name="Collection" component={CollectionScreen} options={(props) => ({
 				headerRight: () => <CollectionHeaderButtons {...props} />
 			})} />
