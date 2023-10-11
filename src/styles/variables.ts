@@ -5,6 +5,9 @@ export const fontColorFaintLight = "#dddddd";
 
 export const borderColor = "#dddddd";
 
+export const nondescriptColor = "#bbbbbb";
+export const inactiveColor = "#bbbbbb";
+
 export const blue = "#4a6bff";
 export const green = "#41c948";
 export const yellow = "#e6ca2e";

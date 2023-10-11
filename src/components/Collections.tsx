@@ -15,6 +15,7 @@ import Learn from "./Learn";
 import Profiles from "./Profiles";
 import settings from "../store/settings";
 import { observer } from "mobx-react-lite";
+import NoCollections from "./NoCollections";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
@@ -81,6 +82,9 @@ const Collections = observer(function ({ navigation }: Props) {
 						data.getProfileCollections.map((col: ICollection) => <CollectionCard key={col.id} collection={col} navigation={navigation} />)
 					}
 				</View>
+				{
+					data.getProfileCollections.length === 0 && <NoCollections />
+				}
 			</ScrollView>
 			<TouchableOpacity
 				onPress={() => setDisplayModal(true)}
