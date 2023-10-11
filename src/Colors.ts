@@ -1,4 +1,4 @@
-import { blue, green, orange, red, yellow } from "./styles/variables";
+import { blue, green, orange, pink, red, violet, yellow } from "./styles/variables";
 
 export default [
 	{
@@ -20,5 +20,13 @@ export default [
 	{
 		name: "Orange",
 		value: orange
+	},
+	{
+		name: "Violet",
+		value: violet
+	},
+	{
+		name: "Pink",
+		value: pink
 	}
 ]
