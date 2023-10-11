@@ -79,8 +79,6 @@ export const CHANGE_COLLECTION_LOCK = gql`
 
 export const DELETE_COLLECTION = gql`
 	mutation deleteCollection($id: ID) {
-		deleteCollection(id: $id) {
-			id
-		}
+		deleteCollection(id: $id) 
 	}
 `;
