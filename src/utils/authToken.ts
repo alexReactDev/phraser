@@ -26,3 +26,11 @@ export async function setAuthToken(token: string) {
 
 	return result;
 }
+
+export async function removeAuthToken() {
+	try {
+		await AsyncStorage.removeItem("token");
+	} catch (e) {
+		console.log(e);
+	}
+}

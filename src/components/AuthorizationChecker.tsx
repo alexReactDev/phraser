@@ -1,26 +1,45 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getAuthToken, setAuthToken } from "../utils/authToken";
 import { useQuery } from "@apollo/client";
 import { GET_SESSION } from "../query/authorization";
 import Loader from "./Loader";
 import Welcome from "./Welcome";
 import { IAuthData } from "../types/authorization";
+import session from "../store/session";
+import { observer } from "mobx-react-lite";
+import ErrorComponent from "./Error";
 
-function AuthorizationChecker({ children }: any) {
-	const [ isTokenLoading, setTokenLoading ] = useState(true);
-	const [ token, setToken ] = useState<string | null>(null);
-	const { data, loading, updateQuery } = useQuery(GET_SESSION, { skip: !token });
+const AuthorizationChecker = observer(function ({ children }: any) {
+	const { data, error } = useQuery(GET_SESSION, { 
+		context: {
+			headers: {
+				"Authorization": `Bearer ${session.data.token}`
+			}
+		}, 
+		skip: !session.data.token  || !!session.data.sid
+	});
 
 	useEffect(() => {
+		session.loadingStart();
+
 		getAuthToken().then((res) => {
-			setToken(res);
-			setTokenLoading(false);
+			session.tokenLoaded(res);
+		}).catch((err) => {
+			session.sessionError(err);
 		})
 	}, []);
 
+	useEffect(() => {
+		if(!data) return;
+		session.dataLoaded(data.getSession);
+	}, [data])
+	
+	useEffect(() => {
+		if(!error) return;
+		session.sessionError(error);
+	}, [error])
+
 	async function updateCredentials(data: IAuthData) {
-		console.log("Update credentials!!!!");
-		console.log(data);
 		let savedToken;
 
 		try {
@@ -29,21 +48,16 @@ function AuthorizationChecker({ children }: any) {
 			console.log(e);
 		}
 
-		setToken(savedToken as string);
-
-		updateQuery(() => ({
-				getSession: {
-					sid: data.sid
-				}
-			})
-		);
+		session.dataLoaded(data);
 	}
 
-	if(isTokenLoading || loading) return <Loader />
+	if(session.error) return <ErrorComponent message={session.error.toString()} />
 
-	if(!token || !data ) return <Welcome updateCredentials={updateCredentials} />
+	if(session.loading || (!session.loaded && !session.error)) return <Loader />
+
+	if(!session.data.token || !session.data.sid) return <Welcome updateCredentials={updateCredentials} />
 
 	return children;
-}
+});
 
 export default AuthorizationChecker;

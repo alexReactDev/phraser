@@ -71,13 +71,15 @@ const schema = buildSchema(`
 		settings: Settings
 	}
 
-	type Token {
+	type TokenData {
 		token: String,
-		sid: Float
+		sid: Float,
+		userId: Float
 	}
 
 	type Session {
-		sid: Float
+		sid: Float,
+		userId: Float
 	}
 
 	type Query {
@@ -171,8 +173,8 @@ const schema = buildSchema(`
 		createProfile(input: ProfileInput): String,
 		updateUserSettings(id: ID, input: PartialSettingsInput): UserSettings,
 		setUserSettings(id: ID, input: SettingsInput): String,
-		login(input: LoginInput): Token,
-		signUp(input: SignUpInput): Token,
+		login(input: LoginInput): TokenData,
+		signUp(input: SignUpInput): TokenData,
 		logout: String
 	}
 `);

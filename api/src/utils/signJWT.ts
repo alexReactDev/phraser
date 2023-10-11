@@ -10,6 +10,7 @@ export function signJWT(data: any) {
 
 	return ({
 		token,
-		sid
+		sid,
+		...data
 	})
 }

@@ -19,7 +19,7 @@ class AuthorizationController {
 
 		if(input.password !== user.password) throw new Error(`Access denied`);
 
-		const token = signJWT({ login: user.login });
+		const token = signJWT({ login: user.login, userId: user.id });
 
 		return {...token};
 	}
@@ -39,21 +39,24 @@ class AuthorizationController {
 	}
 
 	async signUp({ input }: { input: ISignUpInput }) {
+		let userId;
+		
 		try {
-			await usersController.createUser({ input });
+			userId = await usersController.createUser({ input });
 		}
 		catch(e: any) {
 			console.log(e)
 			throw new Error(`Server error ${e}`);
 		}
 
-		const token = signJWT({ login: input.login });
+		const token = signJWT({ login: input.login, userId });
 
 		return {...token};
 	}
 
 	async getSession({}, context: { auth: IJWT }) {
-		if(context?.auth?.sid) return { sid: context.auth.sid };
+		console.log(context);
+		if(context?.auth?.sid) return { sid: context.auth.sid, userId: context.auth.userId };
 
 		return "";
 	}

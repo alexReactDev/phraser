@@ -31,7 +31,6 @@ function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, up
 
 	async function loginHandler() {
 		if(!login || !password) return;
-		console.log("Login!!!");
 
 		let data;
 
@@ -90,7 +89,6 @@ function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, u
 	const [ trySignUp ] = useMutation(SIGNUP);
 
 	async function signUpHandler() {
-		console.log("Sign UP!!!!");
 		if(!login || !password || !name) return;
 
 		let data;

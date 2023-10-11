@@ -12,5 +12,6 @@ export interface ISignUpInput {
 export interface IJWT {
 	login: string,
 	iat: number,
-	sid: string | number
+	sid: string | number,
+	userId: number
 }

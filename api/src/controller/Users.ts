@@ -35,7 +35,7 @@ class UsersController {
 			throw new Error(`Server Error: ${e.toString()}`);
 		}
 
-		return "OK"
+		return id;
 	}
 
 	async deleteUser({ id }: { id: string | number}) {
