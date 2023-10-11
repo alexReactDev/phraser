@@ -4,14 +4,16 @@ import { TextInput } from "react-native-gesture-handler";
 import SelectDropdown from "react-native-select-dropdown";
 import colors from "../Colors";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_COLLECTION, GET_COLLECTION, GET_COLLECTIONS_ALL, GET_COLLECTIONS_NAMEID_ALL, MUTATE_COLLECTION } from "../query/collections";
+import { CREATE_COLLECTION, GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_NAMEID, MUTATE_COLLECTION } from "../query/collections";
+import settings from "../store/settings";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
 	mutateId?: number,
 	onReady?: () => void
 }
 
-function EditCollection({ mutateId, onReady }: IProps) {
+const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 	const [ name, setName ] = useState("");
 	const [ color, setColor ] = useState("");
 
@@ -36,10 +38,11 @@ function EditCollection({ mutateId, onReady }: IProps) {
 					id: mutateId,
 					input: {
 						name,
-						color
+						color,
+						profile: settings.settings.activeProfile
 					}
 				},
-				refetchQueries: [GET_COLLECTION, GET_COLLECTIONS_ALL, GET_COLLECTIONS_NAMEID_ALL]
+				refetchQueries: [GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_NAMEID]
 			})
 		} else {
 			if(!name || !color) return;
@@ -48,10 +51,11 @@ function EditCollection({ mutateId, onReady }: IProps) {
 				variables: {
 					input: {
 						name,
-						color
+						color,
+						profile: settings.settings.activeProfile
 					}
 				},
-				refetchQueries: [GET_COLLECTIONS_ALL, GET_COLLECTIONS_NAMEID_ALL]
+				refetchQueries: [GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_NAMEID]
 			})
 		}
 
@@ -159,7 +163,7 @@ function EditCollection({ mutateId, onReady }: IProps) {
 			</View>
 		</View>
 	)
-}
+});
 
 const styles = StyleSheet.create({
 	title: {

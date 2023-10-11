@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { IInitialSettings, ISettings } from "../types/settings";
+import { IInitialSettings, ISettings, IUserSettings } from "../types/settings";
 
 class Settings {
 	loading = false;
@@ -21,11 +21,11 @@ class Settings {
 		this.error = null;
 	}
 
-	settingsLoaded(settings: ISettings) {
+	settingsLoaded(settings: IUserSettings) {
 		console.log(settings);
 		this.loading = false;
 		this.loaded = true;
-		this.settings = settings;
+		this.settings = settings.settings;
 	}
 
 	loadError(error: any) {

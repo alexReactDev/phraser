@@ -1,6 +1,6 @@
 import { View, StyleSheet, ScrollView, TouchableOpacity, Modal } from "react-native";
 import { useQuery } from "@apollo/client/react";
-import { GET_COLLECTIONS_ALL } from "../query/collections";
+import { GET_PROFILE_COLLECTIONS } from "../query/collections";
 import ErrorComponent from "./Error";
 import Loader from "./Loader";
 import { ICollection } from "../types/collections";
@@ -14,6 +14,7 @@ import EditCollection from "./EditCollection";
 import Learn from "./Learn";
 import Profiles from "./Profiles";
 import settings from "../store/settings";
+import { observer } from "mobx-react-lite";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
@@ -41,11 +42,9 @@ function CollectionsNavigation() {
 
 type Props = StackScreenProps<StackNavigatorParams, "Collections", "collectionsNavigator">;
 
-function Collections({ navigation }: Props) {
-	const { data = [], loading, error } = useQuery(GET_COLLECTIONS_ALL);
+const Collections = observer(function ({ navigation }: Props) {
+	const { data = [], loading, error } = useQuery(GET_PROFILE_COLLECTIONS, { variables: { id: settings.settings.activeProfile }});
 	const [ displayModal, setDisplayModal ] = useState(false);
-
-	console.log(settings.settings);
 
 	if(loading) return <Loader />
 
@@ -79,7 +78,7 @@ function Collections({ navigation }: Props) {
 					style={styles.list}
 				>
 					{
-						data.getCollections.map((col: ICollection) => <CollectionCard key={col.id} collection={col} navigation={navigation} />)
+						data.getProfileCollections.map((col: ICollection) => <CollectionCard key={col.id} collection={col} navigation={navigation} />)
 					}
 				</View>
 			</ScrollView>
@@ -91,11 +90,11 @@ function Collections({ navigation }: Props) {
 			</TouchableOpacity>
 		</View>
 	)
-}
+});
 
 const styles = StyleSheet.create({
 	container: {
-		padding: 10,
+		padding: 15,
 		height: "100%",
 		position: "relative"
 	},

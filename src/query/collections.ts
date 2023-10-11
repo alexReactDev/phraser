@@ -11,6 +11,7 @@ export const GET_COLLECTION = gql`
 			created,
 			phrases,
 			repetitions,
+			profile,
 			meta {
 				phrasesCount,
 				repetitionsCount
@@ -19,9 +20,9 @@ export const GET_COLLECTION = gql`
 	}
 `;
 
-export const GET_COLLECTIONS_ALL = gql`
-	query GetCollections {
-		getCollections {
+export const GET_PROFILE_COLLECTIONS = gql`
+	query getProfileCollections($id: ID) {
+		getProfileCollections(id: $id) {
 			id,
 			name,
 			lastUpdate,
@@ -38,6 +39,16 @@ export const GET_COLLECTIONS_ALL = gql`
 	}
 `;
 
+export const GET_PROFILE_COLLECTIONS_NAMEID = gql`
+	query getProfileCollections($id: ID) {
+		getProfileCollections(id: $id) {
+			id,
+			name
+		}
+	}
+`;
+
+
 export const GET_COLLECTION_NAMEID = gql`
 	query getCollection($id: ID) {
 		getCollection(id: $id) {
@@ -47,20 +58,9 @@ export const GET_COLLECTION_NAMEID = gql`
 	}
 `;
 
-export const GET_COLLECTIONS_NAMEID_ALL = gql`
-	query GetCollectionsNameId {
-		getCollections {
-			id,
-			name
-		}
-	}
-`;
-
 export const CREATE_COLLECTION = gql`
 	mutation createCollection($input: CollectionInput) {
-		createCollection(input: $input) {
-			id
-		}
+		createCollection(input: $input)
 	}
 `;
 

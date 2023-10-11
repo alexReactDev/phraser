@@ -4,17 +4,19 @@ import { TouchableOpacity, View, TextInput, StyleSheet } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { fontColor } from "../styles/variables";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_COLLECTIONS_NAMEID_ALL } from "../query/collections";
+import { GET_PROFILE_COLLECTIONS_NAMEID } from "../query/collections";
 import SelectDropdown from "react-native-select-dropdown";
 import { CREATE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE_WITH_COLLECTION, MUTATE_PHRASE } from "../query/phrases";
 import { ICollection } from "../types/collections";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { NavigatorParams } from "../../App";
+import settings from "../store/settings";
+import { observer } from "mobx-react-lite";
 
 type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 
-function Add({ route }: Props) {
-	const { data: { getCollections: collections = [] } = {} } = useQuery(GET_COLLECTIONS_NAMEID_ALL);
+const Add = observer(function ({ route }: Props) {
+	const { data: { getProfileCollections: collections = [] } = {} } = useQuery(GET_PROFILE_COLLECTIONS_NAMEID, { variables: { id: settings.settings.activeProfile } });
 	const { data: { getPhrase: phraseData, getPhraseCollection: phraseCollection } = {} } = useQuery(GET_PHRASE_WITH_COLLECTION, { variables: { id: route.params?.mutateId }, skip: !route.params?.mutateId });
 	const [ createPhrase ] = useMutation(CREATE_PHRASE);
 	const [ mutatePhrase ] = useMutation(MUTATE_PHRASE);
@@ -100,7 +102,7 @@ function Add({ route }: Props) {
 			</TouchableOpacity>
 		</View>
 	)
-}
+});
 
 const styles = StyleSheet.create({
 	container: {

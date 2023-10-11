@@ -21,7 +21,7 @@ const root = {
 
 	createCollection: collectionsController.createCollection,
 	getCollection: collectionsController.getCollection,
-	getCollections: collectionsController.getCollectionsByProfile,
+	getProfileCollections: collectionsController.getCollectionsByProfile,
 	deleteCollection: collectionsController.deleteCollection,
 	mutateCollection: collectionsController.mutateCollection,
 	changeCollectionLock: collectionsController.changeCollectionLock,

@@ -19,10 +19,10 @@ class CollectionsController {
 
 	async getCollectionsByProfile({ id }: { id: string | number }) {
 		let result;
-
+		
 		try {
 			let cursor = await db.collection("collections").find({
-				id: +id
+				profile: +id
 			});
 			result = await cursor.toArray();
 		}
@@ -57,6 +57,7 @@ class CollectionsController {
 				isLocked: false,
 				created: new Date().getTime(),
 				lastUpdate: new Date().getTime(),
+				profile: +input.profile,
 				meta: {
 					phrasesCount: 0,
 					repetitionsCount: 0

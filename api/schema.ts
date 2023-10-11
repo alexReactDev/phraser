@@ -112,6 +112,7 @@ const schema = buildSchema(`
 	input CollectionInput {
 		name: String!,
 		color: String!,
+		profile: ID!
 	}
 
 	input ChangeCollectionLockInput {

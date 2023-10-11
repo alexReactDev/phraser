@@ -55,7 +55,6 @@ class AuthorizationController {
 	}
 
 	async getSession({}, context: { auth: IJWT }) {
-		console.log(context);
 		if(context?.auth?.sid) return { sid: context.auth.sid, userId: context.auth.userId };
 
 		return "";
