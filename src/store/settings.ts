@@ -22,7 +22,6 @@ class Settings {
 	}
 
 	settingsLoaded(settings: IUserSettings) {
-		console.log(settings);
 		this.loading = false;
 		this.loaded = true;
 		this.settings = settings.settings;
