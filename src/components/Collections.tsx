@@ -13,6 +13,7 @@ import { useState } from "react";
 import EditCollection from "./EditCollection";
 import Learn from "./Learn";
 import Profiles from "./Profiles";
+import settings from "../store/settings";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
@@ -43,6 +44,8 @@ type Props = StackScreenProps<StackNavigatorParams, "Collections", "collectionsN
 function Collections({ navigation }: Props) {
 	const { data = [], loading, error } = useQuery(GET_COLLECTIONS_ALL);
 	const [ displayModal, setDisplayModal ] = useState(false);
+
+	console.log(settings.settings);
 
 	if(loading) return <Loader />
 

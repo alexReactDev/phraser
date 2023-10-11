@@ -8,6 +8,8 @@ import { IAuthData } from "../types/authorization";
 import session from "../store/session";
 import { observer } from "mobx-react-lite";
 import ErrorComponent from "./Error";
+import { GET_USER_SETTING } from "../query/settings";
+import settings from "../store/settings";
 
 const AuthorizationChecker = observer(function ({ children }: any) {
 	const { data, error } = useQuery(GET_SESSION, { 
@@ -21,6 +23,7 @@ const AuthorizationChecker = observer(function ({ children }: any) {
 
 	useEffect(() => {
 		session.loadingStart();
+		settings.loadingStart();
 
 		getAuthToken().then((res) => {
 			session.tokenLoaded(res);
@@ -32,12 +35,24 @@ const AuthorizationChecker = observer(function ({ children }: any) {
 	useEffect(() => {
 		if(!data) return;
 		session.dataLoaded(data.getSession);
-	}, [data])
+	}, [data]);
 	
 	useEffect(() => {
 		if(!error) return;
 		session.sessionError(error);
-	}, [error])
+	}, [error]);
+
+	const { data: settingsData, error: settingsError } = useQuery(GET_USER_SETTING, { variables: { id: session.data.userId }, skip: !session.data.sid });
+
+	useEffect(() => {
+		if(!settingsData) return;
+		settings.settingsLoaded(settingsData.getUserSettings);
+	}, [settingsData])
+
+	useEffect(() => {
+		if(!settingsError) return;
+		settings.loadError(error);
+	}, [error]);
 
 	async function updateCredentials(data: IAuthData) {
 		let savedToken;
@@ -56,6 +71,8 @@ const AuthorizationChecker = observer(function ({ children }: any) {
 	if(session.loading || (!session.loaded && !session.error)) return <Loader />
 
 	if(!session.data.token || !session.data.sid) return <Welcome updateCredentials={updateCredentials} />
+
+	if(settings.loading || (!settings.loaded && !settings.error)) return <Loader />
 
 	return children;
 });
