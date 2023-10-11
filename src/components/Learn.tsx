@@ -204,6 +204,21 @@ function Learn({ route, navigation }: Props) {
 					onPress={() => setShowTranslation(!showTranslation)}
 					style={style.currentPhraseCard}
 				>
+					<View
+						style={style.currentPhraseIcon}
+					>
+						<Text
+							style={style.currentPhraseIconText}
+						>
+							{
+								showTranslation
+								?
+								"🐵"
+								:
+								"🙈"
+							}
+						</Text>
+					</View>
 					<Text
 						style={style.currentPhraseText}
 					>
@@ -294,6 +309,7 @@ const style = StyleSheet.create({
 		alignItems: "center"
 	},
 	currentPhraseCard: {
+		position: "relative",
 		width: 200,
 		height: 200,
 		justifyContent: "center",
@@ -306,6 +322,14 @@ const style = StyleSheet.create({
 	},
 	currentPhraseText: {
 		color: fontColor
+	},
+	currentPhraseIcon: {
+		position: "absolute",
+		top: 5,
+		right: 10
+	},
+	currentPhraseIconText: {
+		fontSize: 24
 	},
 	doneTitle: {
 		fontSize: 24,
