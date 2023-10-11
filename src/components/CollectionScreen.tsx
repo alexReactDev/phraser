@@ -10,6 +10,7 @@ import { GET_COLLECTION } from "../query/collections";
 import { FlatList } from "react-native-gesture-handler";
 import { StackScreenProps } from "@react-navigation/stack";
 import { StackNavigatorParams } from "./Collections";
+import NoPhrases from "./NoPhrases";
 
 type Props = StackScreenProps<StackNavigatorParams, "Collection", "collectionsNavigator">;
 
@@ -26,12 +27,17 @@ function CollectionScreen({ route, navigation }: Props) {
 	if(loading || colDataLoading) return <Loader />
 	if(error || colDataError) return <ErrorComponent />
 	return (
-		<FlatList
-			style={styles.container}
-			data={data?.getCollectionPhrases}
-			renderItem={({ item: phrase }) => <CollectionPhrase key={phrase.id} phrase={phrase} navigation={navigation} />}
-			keyExtractor={(phrase) => phrase.id}
-		></FlatList>
+		<>
+			{
+				data.getCollectionPhrases?.length === 0 && <NoPhrases />
+			}
+			<FlatList
+				style={styles.container}
+				data={data?.getCollectionPhrases}
+				renderItem={({ item: phrase }) => <CollectionPhrase key={phrase.id} phrase={phrase} navigation={navigation} />}
+				keyExtractor={(phrase) => phrase.id}
+			></FlatList>
+		</>
 	)
 }
 
