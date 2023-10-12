@@ -1,11 +1,10 @@
 import { View, Text } from "react-native";
+import UserInfo from "./UserInfo";
 
 function Settings() {
 	return (
 		<View>
-			<Text>
-				Settings screen
-			</Text>
+			<UserInfo />
 		</View>
 	)
 }

@@ -97,7 +97,8 @@ const schema = buildSchema(`
 		getPhraseCollection(id: ID): Collection,
 		getUserProfiles(id: ID): [Profile],
 		getSession: Session,
-		getUserSettings(id: ID): UserSettings
+		getUserSettings(id: ID): UserSettings,
+		getUser(id: ID): User
 	}
 
 	input ProfileInput {
@@ -178,7 +179,6 @@ const schema = buildSchema(`
 		createCollection(input: CollectionInput): String,
 		createCollectionRepetition(id: ID, input: RepetitionInput): Collection,
 		createUser(input: UserInput): String,
-		getUser(id: ID): User,
 		createProfile(input: ProfileInput): String,
 		updateUserSettings(id: ID, input: PartialSettingsInput): UserSettings,
 		setUserSettings(id: ID, input: SettingsInput): String,
