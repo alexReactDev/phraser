@@ -37,6 +37,34 @@ class ProfilesController {
 
 		return result;
 	}
+
+	async mutateProfile({ id, input }: { id: string | number, input: { name: string }}) {
+		try {
+			await db.collection("profiles").updateOne({ id: +id }, {
+				$set: {
+					name: input.name
+				}
+			})
+		}
+		catch(e: any) {
+			console.log(e)
+			throw new Error(`Server Error: ${e.toString()}`);
+		}
+
+		return "OK";
+	}
+
+	async deleteProfile({ id }: { id: string | number}) {
+		try {
+			await db.collection("profiles").deleteOne({ id: +id});
+		}
+		catch(e: any) {
+			console.log(e)
+			throw new Error(`Server Error: ${e.toString()}`);
+		}
+
+		return "OK";
+	}
 }
 
 module.exports = new ProfilesController();

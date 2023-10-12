@@ -59,7 +59,6 @@ class SettingsController {
 	async updateUserSettings({ id, input }:  { id: string | number, input: Partial<ISettingsInput>}) {
 		let settings;
 		
-		
 		try {
 			settings = await this.getUserSettings({ id });
 		}

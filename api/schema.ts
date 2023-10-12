@@ -106,6 +106,10 @@ const schema = buildSchema(`
 		userId: ID!
 	}
 
+	input MutateProfileInput {
+		name: String
+	}
+
 	input UserInput {
 		name: String!,
 		login: String!,
@@ -180,6 +184,8 @@ const schema = buildSchema(`
 		createCollectionRepetition(id: ID, input: RepetitionInput): Collection,
 		createUser(input: UserInput): String,
 		createProfile(input: ProfileInput): String,
+		mutateProfile(id: ID, input: MutateProfileInput): String,
+		deleteProfile(id: ID): String
 		updateUserSettings(id: ID, input: PartialSettingsInput): UserSettings,
 		setUserSettings(id: ID, input: SettingsInput): String,
 		login(input: LoginInput): TokenData,

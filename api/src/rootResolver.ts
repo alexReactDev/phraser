@@ -19,6 +19,8 @@ const root = {
 
 	createProfile: profilesController.createProfile,
 	getUserProfiles: profilesController.getUserProfiles,
+	mutateProfile: profilesController.mutateProfile,
+	deleteProfile: profilesController.deleteProfile,
 
 	createCollection: collectionsController.createCollection,
 	getCollection: collectionsController.getCollection,
