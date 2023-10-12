@@ -11,6 +11,7 @@ const root = {
 	signUp: authController.signUp,
 	logout: authController.logout,
 	getSession: authController.getSession,
+	getUser: usersController.getUser,
 
 	getUserSettings: settingsController.getUserSettings,
 	setUserSettings: settingsController.setUserSettings,

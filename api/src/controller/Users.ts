@@ -5,6 +5,21 @@ const settingsController = require("./Settings.ts");
 const generateId = require("../utils/generateId.ts");
 
 class UsersController {
+	async getUser({ id }: { id: string | number}) {
+		let user;
+
+		try {
+			const { password, ...userData } = await db.collection("users").findOne({ id: +id });
+			user = userData;
+		}
+		catch(e: any) {
+			console.log(e)
+			throw new Error(`Server Error: ${e.toString()}`);
+		}
+
+		return user;
+	}
+
 	async createUser({ input }: { input: IUserInput}) {
 		const user = await db.collection("users").findOne({
 			login: input.login

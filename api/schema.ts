@@ -82,6 +82,13 @@ const schema = buildSchema(`
 		userId: Float
 	}
 
+	type User {
+		id: Float,
+		name: String,
+		login: String,
+		created: Float
+	}
+
 	type Query {
 		getCollection(id: ID): Collection,
 		getProfileCollections(id: ID): [Collection],
@@ -171,6 +178,7 @@ const schema = buildSchema(`
 		createCollection(input: CollectionInput): String,
 		createCollectionRepetition(id: ID, input: RepetitionInput): Collection,
 		createUser(input: UserInput): String,
+		getUser(id: ID): User,
 		createProfile(input: ProfileInput): String,
 		updateUserSettings(id: ID, input: PartialSettingsInput): UserSettings,
 		setUserSettings(id: ID, input: SettingsInput): String,
