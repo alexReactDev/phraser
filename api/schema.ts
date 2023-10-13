@@ -190,7 +190,8 @@ const schema = buildSchema(`
 		setUserSettings(id: ID, input: SettingsInput): String,
 		login(input: LoginInput): TokenData,
 		signUp(input: SignUpInput): TokenData,
-		logout: String
+		logout: String,
+		deleteUser(id: ID): String
 	}
 `);
 

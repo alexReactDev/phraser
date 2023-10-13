@@ -38,6 +38,17 @@ class Session {
 		this.loading = false;
 	}
 
+	logout() {
+		this.loading = false;
+		this.error = null;
+		this.loaded = true;
+		this.data = {
+			token: null,
+			sid: null,
+			userId: null
+		};
+	}
+
 	async sessionError(error: any) {
 		if(error.networkError.statusCode === 401) {
 			await removeAuthToken();
