@@ -10,12 +10,14 @@ import { borderColor, fontColor } from "../styles/variables";
 import { observer } from "mobx-react-lite";
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
+import ErrorMessageModal from "./ErrorMessageModal";
 
 const ProfilesSettings = observer(function() {
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const [ input, setInput ] = useState("");
 	const { data: { getUserProfiles: profiles = []} = {}, error } = useQuery(GET_USER_PROFILES, { variables: { id: session.data.userId }});
 	const [ createProfile ] = useMutation(CREATE_PROFILE);
+	const [ errorMessage, setErrorMessage ] = useState("");
 
 	async function createProfileHandler() {
 		try {
@@ -28,8 +30,9 @@ const ProfilesSettings = observer(function() {
 				},
 				refetchQueries: [GET_USER_PROFILES]
 			})
-		} catch(e) {
+		} catch (e: any) {
 			console.log(e);
+			setErrorMessage(e.toString());
 		}
 
 		setDisplayModal(false);
@@ -39,6 +42,9 @@ const ProfilesSettings = observer(function() {
 
 	return (
 		<View style={styles.container}>
+			{
+				errorMessage && <ErrorMessageModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
+			}
 			<Modal
 				visible={displayModal}
 				transparent={true}

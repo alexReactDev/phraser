@@ -56,6 +56,7 @@ class UsersController {
 	async deleteUser({ id }: { id: string | number}) {
 		try {
 			await db.collection("users").deleteOne({ id: +id });
+			await db.collection("settings").deleteOne({ userId: +id });
 		}
 		catch(e: any) {
 			console.log(e)

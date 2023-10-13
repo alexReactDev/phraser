@@ -8,10 +8,13 @@ import session from "../store/session";
 import { removeAuthToken } from "../utils/authToken";
 import { LOGOUT } from "../query/authorization";
 import { observer } from "mobx-react-lite";
+import { useState } from "react";
+import ErrorMessageModal from "./ErrorMessageModal";
 
 const Settings = observer(function() {
 	const [ deleteUser ] = useMutation(DELETE_USER);
 	const [ logout ] = useMutation(LOGOUT);
+	const [ errorMessage, setErrorMessage ] = useState("");
 
 	async function deleteUserHandler() {
 		Alert.alert("Are you sure?", "This action will delete your account permanently", [
@@ -23,39 +26,52 @@ const Settings = observer(function() {
 				text: "Delete account",
 				style: "destructive",
 				onPress: async () => {
-					await deleteUser({
-						variables: {
-							id: session.data.userId
-						},
-						context: {
-							headers: {
-								"Authorization": `Bearer ${session.data.token}`
+					try {
+						await deleteUser({
+							variables: {
+								id: session.data.userId
+							},
+							context: {
+								headers: {
+									"Authorization": `Bearer ${session.data.token}`
+								}
 							}
-						}
-					})
-
-					await removeAuthToken();
-					session.logout();
+						})
+	
+						await removeAuthToken();
+						session.logout();
+					} catch (e: any) {
+						console.log(e);
+						setErrorMessage(e.toString());
+					}
 				}
 			}
 		])
 	}
 
 	async function logoutHandler() {
-		await logout({
-			context: {
-				headers: {
-					"Authorization": `Bearer ${session.data.token}`
+		try {
+			await logout({
+				context: {
+					headers: {
+						"Authorization": `Bearer ${session.data.token}`
+					}
 				}
-			}
-		});
+			});
 
-		await removeAuthToken();
-		session.logout();
+			await removeAuthToken();
+			session.logout();
+		} catch (e: any) {
+			console.log(e);
+			setErrorMessage(e.toString());
+		}
 	}
 
 	return (
 		<ScrollView>
+			{
+				errorMessage && <ErrorMessageModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
+			}
 			<UserInfo />
 			<ProfilesSettings />
 			<LearnModeSettings />

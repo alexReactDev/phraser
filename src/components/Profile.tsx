@@ -9,6 +9,7 @@ import { DELETE_PROFILE, GET_USER_PROFILES, MUTATE_PROFILE } from "../query/prof
 import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "../query/settings";
 import { observer } from "mobx-react-lite";
 import session from "../store/session";
+import ErrorMessageModal from "./ErrorMessageModal";
 
 const Profile = observer(function({ profile }: { profile: IProfile}) {
 	const [ showButtons, setShowButtons ] = useState(false);
@@ -17,6 +18,7 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 	const [ mutateProfile ] = useMutation(MUTATE_PROFILE);
 	const [ deleteProfile ] = useMutation(DELETE_PROFILE);
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
+	const [ errorMessage, setErrorMessage ] = useState("");
 
 	if(!profile) return "";
 
@@ -28,8 +30,9 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 				},
 				refetchQueries: [GET_USER_PROFILES]
 			})
-		} catch(e) {
+		} catch (e: any) {
 			console.log(e);
+			setErrorMessage(e.toString());
 		}
 	}
 
@@ -42,8 +45,9 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 				},
 				refetchQueries: [GET_USER_PROFILES]
 			})
-		} catch(e) {
+		} catch (e: any) {
 			console.log(e);
+			setErrorMessage(e.toString());
 		}
 
 		setDisplayModal(false);
@@ -60,13 +64,17 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 				},
 				refetchQueries: [GET_USER_SETTING]
 			})
-		} catch(e) {
+		} catch (e: any) {
 			console.log(e);
+			setErrorMessage(e.toString());
 		}
 	}
 
 	return (
 		<>
+			{
+				errorMessage && <ErrorMessageModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
+			}
 			<Modal
 				visible={displayModal}
 				transparent={true}
