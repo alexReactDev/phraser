@@ -1,13 +1,15 @@
-import { View, Text } from "react-native";
+import { ScrollView } from "react-native";
 import UserInfo from "./UserInfo";
 import ProfilesSettings from "./ProfilesSettings";
+import LearnModeSettings from "./LearnModeSettings";
 
 function Settings() {
 	return (
-		<View>
+		<ScrollView>
 			<UserInfo />
 			<ProfilesSettings />
-		</View>
+			<LearnModeSettings />
+		</ScrollView>
 	)
 }
 

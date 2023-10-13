@@ -157,7 +157,7 @@ const schema = buildSchema(`
 	input PartialSettingsInput {
 		theme: String,
 		phrasesOrder: String,
-		repetitionsAmount: String,
+		repetitionsAmount: Int,
 		activeProfile: ID
 	}
 
