@@ -1,5 +1,5 @@
-function generateId() {
-	return new Date().getTime()
-}
+const uuid = require("uuid");
 
-module.exports = generateId;
+module.exports = function () {
+	return uuid.v4();
+}
