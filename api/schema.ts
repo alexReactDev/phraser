@@ -5,7 +5,8 @@ const schema = buildSchema(`
 	type PhraseMeta {
 		repeated: Int,
 		guessed: Int,
-		forgotten: Int
+		forgotten: Int,
+		lastRepetition: Int
 	}
 
 	type Phrase {
@@ -19,7 +20,8 @@ const schema = buildSchema(`
 
 	type CollectionMeta {
 		phrasesCount: Int,
-		repetitionsCount: Int
+		repetitionsCount: Int,
+		lastRepetition: Int
 	}
 
 	type Collection {
@@ -37,11 +39,16 @@ const schema = buildSchema(`
 
 	type Repetition {
 		id: ID,
+		userId: ID,
 		phrasesCount: Int,
 		totalGuessed: Int,
 		totalForgotten: Int,
 		totalRepeated: Int,
-		phrasesRepetitions: [PhraseRepetition]
+		totalOmitted: Int,
+		collectionName: String,
+		repetitionType: String,
+		phrasesRepetitions: [PhraseRepetition],
+		omittedPhrases: [ID],
 		created: Float
 	}
 
