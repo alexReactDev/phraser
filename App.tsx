@@ -10,7 +10,7 @@ import AuthorizationChecker from "./src/components/AuthorizationChecker";
 import Profiles from "./src/components/Profiles";
 
 const client = new ApolloClient({
-  uri: "http://192.168.100.2:4500/graphql",
+  uri: process.env.EXPO_PUBLIC_API_URL,
   cache: new InMemoryCache()
 });
 
