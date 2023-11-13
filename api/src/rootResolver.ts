@@ -5,6 +5,7 @@ const profilesController = require("./controller/Profiles");
 const usersController = require("./controller/Users");
 const authController = require("./controller/Authorization");
 const settingsController = require("./controller/Settings");
+const repetitionsController = require("./controller/Repetitions");
 
 const root = {
 	login: authController.login,
@@ -38,9 +39,8 @@ const root = {
 	mutatePhrasesMeta: phrasesController.mutatePhraseMeta,
 	deletePhrase: phrasesController.deletePhrase,
 
-	createCollectionRepetition({ id, input }: any) {
-		return mock.collections.find((col: any) => col.id === id);
-	}
+	createRepetition: repetitionsController.createRepetition,
+	getUserRepetitions: repetitionsController.getUserRepetitions
 }
 
 module.exports = root;

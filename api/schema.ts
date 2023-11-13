@@ -37,6 +37,13 @@ const schema = buildSchema(`
 		profile: ID
 	}
 
+	type PhraseRepetition {
+		id: ID,
+		guessed: Int,
+		forgotten: Int,
+		repeated: Int
+	}
+
 	type Repetition {
 		id: ID,
 		userId: ID,
@@ -50,13 +57,6 @@ const schema = buildSchema(`
 		phrasesRepetitions: [PhraseRepetition],
 		omittedPhrases: [ID],
 		created: Float
-	}
-
-	type PhraseRepetition {
-		id: ID,
-		guessed: Int,
-		forgotten: Int,
-		repeated: Int
 	}
 
 	type Profile {
@@ -105,7 +105,8 @@ const schema = buildSchema(`
 		getUserProfiles(id: ID): [Profile],
 		getSession: Session,
 		getUserSettings(id: ID): UserSettings,
-		getUser(id: ID): User
+		getUser(id: ID): User,
+		getUserRepetitions(userId: ID): [Repetition]
 	}
 
 	input ProfileInput {
@@ -145,15 +146,6 @@ const schema = buildSchema(`
 		repeated: Int
 	}
 
-	input RepetitionInput {
-		phrasesCount: Int,
-		totalGuessed: Int,
-		totalForgotten: Int,
-		totalRepeated: Int,
-		phrasesRepetitions: [PhraseRepetitionInput]
-		created: Float
-	}
-
 	input SettingsInput {
 		theme: String!,
 		phrasesOrder: String!,
@@ -179,6 +171,21 @@ const schema = buildSchema(`
 		password: String!
 	}
 
+	input RepetitionInput {
+		id: ID,
+		userId: ID,
+		phrasesCount: Int,
+		totalGuessed: Int,
+		totalForgotten: Int,
+		totalRepeated: Int,
+		totalOmitted: Int,
+		collectionName: String,
+		repetitionType: String,
+		phrasesRepetitions: [PhraseRepetitionInput],
+		omittedPhrases: [ID],
+		created: Float
+	}
+
 	type Mutation {
 		deletePhrase(id: ID): String,
 		deleteCollection(id: ID): String,
@@ -188,7 +195,6 @@ const schema = buildSchema(`
 		changeCollectionLock(id: ID, input: ChangeCollectionLockInput): String,
 		createPhrase(input: PhraseInput, collection: ID): Phrase,
 		createCollection(input: CollectionInput): String,
-		createCollectionRepetition(id: ID, input: RepetitionInput): Collection,
 		createUser(input: UserInput): String,
 		createProfile(input: ProfileInput): String,
 		mutateProfile(id: ID, input: MutateProfileInput): String,
@@ -198,7 +204,8 @@ const schema = buildSchema(`
 		login(input: LoginInput): TokenData,
 		signUp(input: SignUpInput): TokenData,
 		logout: String,
-		deleteUser(id: ID): String
+		deleteUser(id: ID): String,
+		createRepetition(repetition: RepetitionInput): String
 	}
 `);
 
