@@ -5,16 +5,20 @@ const settingsController = require("./Settings.ts");
 const generateId = require("../utils/generateId.ts");
 
 class UsersController {
-	async getUser({ id }: { id: string | number}) {
+	async getUser({ id }: { id: string }) {
 		let user;
 
 		try {
-			const { password, ...userData } = await db.collection("users").findOne({ id: +id });
+			const res = await db.collection("users").findOne({ id });
+
+			if(!res) throw new Error("Status 404. User not found");
+
+			const { password, ...userData } = res;
 			user = userData;
 		}
 		catch(e: any) {
 			console.log(e)
-			throw new Error(`Server Error: ${e.toString()}`);
+			throw new Error(`Server Error. Cannot get user. ${e.toString()}`);
 		}
 
 		return user;
@@ -34,7 +38,8 @@ class UsersController {
 				id,
 				name: input.name,
 				login: input.login,
-				password: input.password
+				password: input.password,
+				created: new Date().getTime()
 			})
 		}
 		catch(e: any) {
@@ -53,10 +58,10 @@ class UsersController {
 		return id;
 	}
 
-	async deleteUser({ id }: { id: string | number}) {
+	async deleteUser({ id }: { id: string }) {
 		try {
-			await db.collection("users").deleteOne({ id: +id });
-			await db.collection("settings").deleteOne({ userId: +id });
+			await db.collection("users").deleteOne({ id: id });
+			await db.collection("settings").deleteOne({ userId: id });
 		}
 		catch(e: any) {
 			console.log(e)
