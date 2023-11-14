@@ -1,13 +1,14 @@
 import { IChangeCollectionLockInput, ICollectionInput } from "../types/collections";
 
 const db = require("../model/db.ts");
+const generateId = require("../utils/generateId");
 
 class CollectionsController {
-	async getCollection({ id }: { id: string | number }) {
+	async getCollection({ id }: { id: string }) {
 		let result;
 
 		try {
-			result = await db.collection("collections").findOne({ id: +id });
+			result = await db.collection("collections").findOne({ id });
 		}
 		catch(e: any) {
 			console.log(e)
@@ -17,12 +18,12 @@ class CollectionsController {
 		return result;
 	}
 
-	async getCollectionsByProfile({ id }: { id: string | number }) {
+	async getCollectionsByProfile({ id }: { id: string }) {
 		let result;
 		
 		try {
 			let cursor = await db.collection("collections").find({
-				profile: +id
+				profile: id
 			});
 			result = await cursor.toArray();
 		}
@@ -34,7 +35,7 @@ class CollectionsController {
 		return result;
 	}
 
-	async getCollectionByPhrase({ id }: { id: string | number }) {
+	async getCollectionByPhrase({ id }: { id: string }) {
 		let result;
 
 		try {
@@ -53,11 +54,11 @@ class CollectionsController {
 		try {
 			await db.collection("collections").insertOne({
 				...input,
-				id: new Date().getTime(),
+				id: generateId(),
 				isLocked: false,
 				created: new Date().getTime(),
 				lastUpdate: new Date().getTime(),
-				profile: +input.profile,
+				profile: input.profile,
 				meta: {
 					phrasesCount: 0,
 					repetitionsCount: 0
@@ -73,9 +74,9 @@ class CollectionsController {
 		return "OK";
 	}
 
-	async mutateCollection({ id, input }: { id: string | number, input: ICollectionInput}) {
+	async mutateCollection({ id, input }: { id: string, input: ICollectionInput}) {
 		try {
-			await db.collection("collections").updateOne({ id: +id }, {
+			await db.collection("collections").updateOne({ id }, {
 				$set: {
 					name: input.name,
 					color: input.color
@@ -89,9 +90,9 @@ class CollectionsController {
 		return "OK";
 	}
 
-	async changeCollectionLock({ id, input }: { id: string | number, input: IChangeCollectionLockInput}) {
+	async changeCollectionLock({ id, input }: { id: string, input: IChangeCollectionLockInput}) {
 		try {
-			await db.collection("collections").updateOne({ id: +id }, {
+			await db.collection("collections").updateOne({ id }, {
 				$set: {
 					isLocked: input.isLocked
 				}
@@ -104,9 +105,9 @@ class CollectionsController {
 		return "OK";
 	}
 
-	async deleteCollection({ id }: { id: string | number }) {
+	async deleteCollection({ id }: { id: string }) {
 		try {
-			let res = await db.collection("collections").deleteOne({ id: +id });
+			let res = await db.collection("collections").deleteOne({ id });
 			console.log(res);
 		} catch (e) {
 			console.log(e);

@@ -13,5 +13,5 @@ export interface IJWT {
 	login: string,
 	iat: number,
 	sid: string | number,
-	userId: number
+	userId: string
 }

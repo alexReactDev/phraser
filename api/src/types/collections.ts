@@ -1,7 +1,7 @@
 export interface ICollectionInput {
 	name: string,
 	color: string,
-	profile: string | number
+	profile: string
 }
 
 export interface IChangeCollectionLockInput {

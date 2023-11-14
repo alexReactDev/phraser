@@ -80,17 +80,17 @@ const schema = buildSchema(`
 
 	type TokenData {
 		token: String,
-		sid: Float,
-		userId: Float
+		sid: String,
+		userId: String
 	}
 
 	type Session {
-		sid: Float,
-		userId: Float
+		sid: String,
+		userId: String
 	}
 
 	type User {
-		id: Float,
+		id: ID,
 		name: String,
 		login: String,
 		created: Float

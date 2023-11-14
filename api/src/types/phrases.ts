@@ -10,11 +10,11 @@ export interface IPhraseMeta {
 }
 
 export interface IPhraseRepetitionInput extends IPhraseMeta {
-	id: string | number
+	id: string
 }
 
 export interface IPhrase {
-	id: number,
+	id: string,
 	value: string,
 	translation: string,
 	crated: bigint,

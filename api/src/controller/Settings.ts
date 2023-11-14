@@ -4,11 +4,11 @@ const db = require("../model/db.ts");
 const generateId = require("../utils/generateId");
 
 class SettingsController {
-	async createSettings({ id }: { id: string | number }) {
+	async createSettings({ id }: { id: string }) {
 		try {
 			await db.collection("settings").insertOne({
 				id: generateId(),
-				userId: +id,
+				userId: id,
 				settings: {
 					theme: "default",
 					phrasesOrder: "default",
@@ -24,12 +24,12 @@ class SettingsController {
 		return "OK";
 	}
 
-	async getUserSettings({ id }: { id: string | number}) {
+	async getUserSettings({ id }: { id: string }) {
 		let settings;
 
 		try {
 			settings = await db.collection("settings").findOne({
-				userId: +id
+				userId: id
 			})
 		}
 		catch(e: any) {
@@ -40,9 +40,9 @@ class SettingsController {
 		return settings;
 	}
 
-	async setUserSettings({ id, input }: { id: string | number, input: ISettingsInput }) {
+	async setUserSettings({ id, input }: { id: string, input: ISettingsInput }) {
 		try {
-			await db.collection("settings").updateOne({ userId: +id }, {
+			await db.collection("settings").updateOne({ userId: id }, {
 				$set: {
 					settings: input
 				}
@@ -56,7 +56,7 @@ class SettingsController {
 		return "OK";
 	}
 
-	async updateUserSettings({ id, input }:  { id: string | number, input: Partial<ISettingsInput>}) {
+	async updateUserSettings({ id, input }:  { id: string, input: Partial<ISettingsInput>}) {
 		let settings;
 		
 		try {
@@ -73,7 +73,7 @@ class SettingsController {
 		}
 
 		try {
-			await db.collection("settings").updateOne({ userId: +id }, {
+			await db.collection("settings").updateOne({ userId: id }, {
 				$set: {
 					settings: settings.settings
 				}
@@ -87,9 +87,9 @@ class SettingsController {
 		return settings;
 	}
 
-	async deleteSettings({ id }: { id: string | number }) {
+	async deleteSettings({ id }: { id: string }) {
 		try {
-			await db.collection("settings").deleteOne({ userId: +id });
+			await db.collection("settings").deleteOne({ userId: id });
 		}
 		catch(e: any) {
 			console.log(e)

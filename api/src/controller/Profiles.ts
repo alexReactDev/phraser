@@ -9,7 +9,7 @@ class ProfilesController {
 			await db.collection("profiles").insertOne({
 				id: generateId(),
 				name: input.name,
-				userId: +input.userId
+				userId: input.userId
 			})
 		}
 		catch(e: any) {
@@ -20,12 +20,12 @@ class ProfilesController {
 		return "OK";
 	}
 
-	async getUserProfiles({ id }: { id: string | number }) {
+	async getUserProfiles({ id }: { id: string }) {
 		let result;
 
 		try {
 			const cursor = await db.collection("profiles").find({
-				userId: +id
+				userId: id
 			})
 
 			result = await cursor.toArray();
@@ -38,9 +38,9 @@ class ProfilesController {
 		return result;
 	}
 
-	async mutateProfile({ id, input }: { id: string | number, input: { name: string }}) {
+	async mutateProfile({ id, input }: { id: string, input: { name: string }}) {
 		try {
-			await db.collection("profiles").updateOne({ id: +id }, {
+			await db.collection("profiles").updateOne({ id }, {
 				$set: {
 					name: input.name
 				}
@@ -54,9 +54,9 @@ class ProfilesController {
 		return "OK";
 	}
 
-	async deleteProfile({ id }: { id: string | number}) {
+	async deleteProfile({ id }: { id: string }) {
 		try {
-			await db.collection("profiles").deleteOne({ id: +id});
+			await db.collection("profiles").deleteOne({ id });
 		}
 		catch(e: any) {
 			console.log(e)
