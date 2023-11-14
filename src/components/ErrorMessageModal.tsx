@@ -21,6 +21,7 @@ function ErrorMessageModal({ errorMessage = "Something went wrong", onClose }: I
 						>
 							<Ionicons name="close" color="gray" size={24} />
 						</TouchableOpacity>
+					<Ionicons name="alert-circle-outline" size={22} color="gray" />
 					<Text style={styles.title}>
 						{errorMessage}
 					</Text>
@@ -41,21 +42,30 @@ const styles = StyleSheet.create({
 		right: 15,
 		top: 15,
 		padding: 10,
-		paddingRight: 30,
-		minWidth: 100,
+		paddingRight: 35,
+		minWidth: 200,
 		borderWidth: 1,
 		borderStyle: "solid",
-		borderColor: "red",
-		backgroundColor: "pink",
+		borderColor: "gray",
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 2.5,
+		backgroundColor: "#f5f5f5",
+		shadowColor: "black",
+		shadowOffset: { width: 10, height: 10 },
+		shadowOpacity: 1,
+		shadowRadius: 5,
+		shadowSize: 10
+
 	},
 	title: {
-		color: "red",
+		color: "darkgrey",
 		fontWeight: "bold"
 	},
 	btn: {
 		position: "absolute",
 		right: 2,
-		top: 2
+		top: 9.5
 	}
 })
 
