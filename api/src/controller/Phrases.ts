@@ -64,6 +64,8 @@ class PhrasesController {
 
 			if(!col) throw new Error("404. Collection not found");
 
+			if(col.isLocked) throw new Error("400. Collection is locked");
+
 			await db.collection("collections").updateOne({ id: collection }, {
 				$set: {
 					phrases: [...col.phrases, id],
@@ -75,7 +77,7 @@ class PhrasesController {
 			})
 		} catch (e) {
 			console.log(e);
-			return `Sever error. Failed to create phrase: failed to add phrase to collection. ${e}`;
+			throw new Error(`Sever error. Failed to create phrase: failed to add phrase to collection. ${e}`);
 		}
 
 		return phrase;

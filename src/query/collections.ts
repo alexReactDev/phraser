@@ -39,11 +39,12 @@ export const GET_PROFILE_COLLECTIONS = gql`
 	}
 `;
 
-export const GET_PROFILE_COLLECTIONS_NAMEID = gql`
+export const GET_PROFILE_COLLECTIONS_FOR_PHRASES = gql`
 	query getProfileCollections($id: ID) {
 		getProfileCollections(id: $id) {
 			id,
-			name
+			name,
+			isLocked
 		}
 	}
 `;

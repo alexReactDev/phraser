@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Alert, Modal, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { useMutation, useQuery } from "@apollo/client";
-import { CHANGE_COLLECTION_LOCK, DELETE_COLLECTION, GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_NAMEID } from "../query/collections";
+import { CHANGE_COLLECTION_LOCK, DELETE_COLLECTION, GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "../query/collections";
 import EditCollection from "./EditCollection";
 
 function CollectionHeaderButtons({ route, navigation }: any) {
@@ -36,7 +36,7 @@ function CollectionHeaderButtons({ route, navigation }: any) {
 				onPress: () => {
 					deleteCollection({
 						variables: { id: colId },
-						refetchQueries: [GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_NAMEID]
+						refetchQueries: [GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES]
 					});
 					navigation.navigate("Collections");
 				}
