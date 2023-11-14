@@ -6,13 +6,16 @@ import session from "../store/session";
 import ErrorComponent from "./Error";
 import { borderColor, fontColor, fontColorFaint } from "../styles/variables";
 import moment from "moment";
+import Loader from "./Loader";
 
 const UserInfo = observer(function () {
-	const { data, error } = useQuery(GET_USER, { variables: { id: session.data.userId }});
+	const { data, error, loading } = useQuery(GET_USER, { variables: { id: session.data.userId }});
 
 	const createdDate = moment(data?.getUser.created).format("D MMM YYYY");
 
-	if(error) return <ErrorComponent />
+	if(loading) return <Loader />
+
+	if(error || !data) return <ErrorComponent />
 
 	return (
 		<View style={styles.container}>
