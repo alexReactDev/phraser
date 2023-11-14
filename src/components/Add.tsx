@@ -47,7 +47,7 @@ const Add = observer(function ({ route }: Props) {
 						input: data,
 						collection
 					},
-					refetchQueries: [GET_COLLECTION_PHRASES]
+					refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: collection } }]
 				});
 			} else {
 				createPhrase({
@@ -55,7 +55,7 @@ const Add = observer(function ({ route }: Props) {
 						input: data,
 						collection
 					},
-					refetchQueries: [GET_COLLECTION_PHRASES]
+					refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: collection } }]
 				})
 			}
 		}
