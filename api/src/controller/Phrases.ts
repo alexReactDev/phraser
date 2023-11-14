@@ -1,13 +1,14 @@
 import { IPhrase, IPhraseInput, IPhraseRepetitionInput } from "../types/phrases";
 
 const db = require("../model/db.ts");
+const generateId = require("../utils/generateId");
 
 class PhrasesController {
-	async getPhrase({ id }: { id: string | number }) {
+	async getPhrase({ id }: { id: string }) {
 		let phrase;
 
 		try {
-			phrase = await db.collection("phrases").findOne({ id: +id });
+			phrase = await db.collection("phrases").findOne({ id });
 		} catch (e) {
 			console.log(e);
 			return `Error! ${e}`;
@@ -16,29 +17,32 @@ class PhrasesController {
 		return phrase;
 	}
 
-	async getPhrasesByCollection({ id }: { id: string | number }) {
+	async getPhrasesByCollection({ id }: { id: string }) {
 		let phrases;
 
 		try {
-			const collection = await db.collection("collections").findOne({ id: +id });
+			const collection = await db.collection("collections").findOne({ id });
+
+			if(!collection) throw new Error("404. Collection not found");
 
 			const cursor = await db.collection("phrases").find({ id: { $in: collection.phrases }});
 
 			phrases = await cursor.toArray();
 		} catch (e) {
 			console.log(e);
-			return `Error! ${e}`;
+			return `Server error. Can't get phrases. ${e}`;
 		}
 
 		return phrases;
 	}
 
-	async createPhrase({ input, collection }: { input: IPhraseInput, collection: string | number }) {
+	async createPhrase({ input, collection }: { input: IPhraseInput, collection: string }) {
 		const timestamp = new Date().getTime();
+		const id = generateId();
 
 		const phrase = {
 			...input,
-			id: timestamp,
+			id,
 			created: timestamp,
 			lastUpdate: timestamp,
 			meta: {
@@ -52,27 +56,34 @@ class PhrasesController {
 			await db.collection("phrases").insertOne(phrase);
 		} catch (e) {
 			console.log(e);
-			return `Error! ${e}`;
+			return `Server error. Failed to create phrase. ${e}`;
 		}
 
 		try {
-			const col = await db.collection("collections").findOne({ id: +collection });
-			await db.collection("collections").updateOne({ id: +collection }, {
+			const col = await db.collection("collections").findOne({ id: collection });
+
+			if(!col) throw new Error("404. Collection not found");
+
+			await db.collection("collections").updateOne({ id: collection }, {
 				$set: {
-					phrases: [...col.phrases, timestamp]
+					phrases: [...col.phrases, id],
+					meta: {
+						...col.meta,
+						phrasesCount: col.meta.phrasesCount + 1
+					}
 				}
 			})
 		} catch (e) {
 			console.log(e);
-			return `Error! ${e}`;
+			return `Sever error. Failed to create phrase: failed to add phrase to collection. ${e}`;
 		}
 
 		return phrase;
 	}
 
-	async mutatePhrase({ id, input, collection }: { id: string | number, input: IPhraseInput, collection: string | number}) {
+	async mutatePhrase({ id, input, collection }: { id: string, input: IPhraseInput, collection: string}) {
 		try {
-			await db.collection("phrases").updateOne({ id: +id }, {
+			await db.collection("phrases").updateOne({ id }, {
 				$set: {
 					value: input.value,
 					translation: input.translation
@@ -86,27 +97,27 @@ class PhrasesController {
 		try {
 			const oldCollection = await db.collection("collections").findOne({
 				phrases: {
-					$in: [+id]
+					$in: [id]
 				}
 			})
 
 			console.log(oldCollection);
-			console.log(+id);
+			console.log(id);
 
-			if(collection && oldCollection.id !== +collection) {
+			if(collection && oldCollection.id !== collection) {
 				await db.collection("collections").updateOne({ id: oldCollection.id }, {
 					$set: {
-						phrases: oldCollection.phrases.filter((phrase: string | number) => phrase !== +id)
+						phrases: oldCollection.phrases.filter((phrase: string) => phrase !== id)
 					}
 				})
 
-				const newCollection = await db.collection("collections").findOne({ id: +collection });
+				const newCollection = await db.collection("collections").findOne({ id: collection });
 
 				if(!newCollection) return "Code 400. Bad request";
 
-				await db.collection("collections").updateOne({ id: +collection }, {
+				await db.collection("collections").updateOne({ id: collection }, {
 					$set: {
-						phrases: [ ...newCollection.phrases, +id ]
+						phrases: [ ...newCollection.phrases, id ]
 					}
 				})
 			}
@@ -119,7 +130,7 @@ class PhrasesController {
 	}
 
 	async mutatePhraseMeta({ input }: { input: [IPhraseRepetitionInput] }) {
-		const phrasesIds = input.map((repetition) => +repetition.id);
+		const phrasesIds = input.map((repetition) => repetition.id);
 
 		console.log(input);
 		console.log(phrasesIds);
@@ -143,9 +154,9 @@ class PhrasesController {
 
 		for(let i = 0; i < input.length; i++) {
 			const { id, ...meta } = input[i];
-			const oldMeta = phrases.find((phrase: IPhrase) => phrase.id === +id).meta;
+			const oldMeta = phrases.find((phrase: IPhrase) => phrase.id === id).meta;
 
-			let promise = db.collection("phrases").updateOne({ id: +id }, {
+			let promise = db.collection("phrases").updateOne({ id }, {
 				$set: {
 					meta: {
 						repeated: oldMeta.repeated + +meta.repeated,
@@ -168,9 +179,9 @@ class PhrasesController {
 		return "OK";
 	}	
 
-	async deletePhrase({ id }: { id: string | number }) {
+	async deletePhrase({ id }: { id: string }) {
 		try {
-			await db.collection("phrases").deleteOne({ id: +id });
+			await db.collection("phrases").deleteOne({ id });
 		} catch (e) {
 			console.log(e);
 			return `Error! ${e}`;
