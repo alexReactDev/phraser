@@ -8,14 +8,25 @@ import { IProfile } from "../types/profiles";
 import session from "../store/session";
 import settings from "../store/settings";
 import { borderColor, fontColor, nondescriptColor } from "../styles/variables";
+import { observer } from "mobx-react-lite";
+import { useEffect, useRef } from "react";
 
-function Profiles() {
+const Profiles = observer(function () {
 	const { data, loading, error } = useQuery(GET_USER_PROFILES, {
 		variables: {
 			id: session.data.userId
 		}
 	});
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
+	
+	const selectDropdownRef = useRef(null);
+
+	useEffect(() => {		
+		if(!selectDropdownRef.current) return;
+
+		//@ts-ignore TS doesn't recognize SelectDropdown ref methods
+		selectDropdownRef.current.selectIndex(data.getUserProfiles.findIndex((profile: IProfile) => profile.id === settings.settings.activeProfile));
+	}, [settings.settings.activeProfile, loading])
 
 	async function profileSelectHandler(selected: IProfile) {
 		const res = await updateUserSettings({
@@ -39,6 +50,7 @@ function Profiles() {
 	return (
 		<View style={styles.container}>
 			<SelectDropdown
+				ref={selectDropdownRef}
 				data={data.getUserProfiles}
 				onSelect={(selected) => profileSelectHandler(selected)}
 				rowTextForSelection={(profile) => profile.name}
@@ -50,7 +62,7 @@ function Profiles() {
 			></SelectDropdown>
 		</View>
 	)
-}
+});
 
 const styles = StyleSheet.create({
 	container: {
