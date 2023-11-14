@@ -3,7 +3,6 @@ import { signJWT } from "../utils/signJWT";
 
 const db = require("../model/db.ts");
 const usersController = require("./Users");
-const jwt = require("jsonwebtoken");
 
 class AuthorizationController {
 	async login({ input }: { input: ILoginInput }) {
