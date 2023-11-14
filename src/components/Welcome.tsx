@@ -90,10 +90,10 @@ function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, u
 	async function signUpHandler() {
 		if(!login || !password || !name) return;
 
-		let data;
+		let res;
 
 		try {
-			data = await trySignUp({
+			res = await trySignUp({
 				variables: {
 					input: {
 						login,
@@ -104,10 +104,10 @@ function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, u
 			})
 		} catch(e) {
 			console.log(e);
-			setErrorMessage(`Signup error ${e}`);
+			setErrorMessage(`Signup error. ${e}`);
 		}
 
-		updateCredentials(data?.data.login);
+		updateCredentials(res?.data.signUp);
 	}
 
 	return (
