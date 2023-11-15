@@ -20,7 +20,7 @@ const UserInfo = observer(function () {
 	return (
 		<View style={styles.container}>
 			<View style={styles.picture}>
-				<Image source={require("../../assets/user.png")} />
+				<Image source={require("@assets/user.png")} />
 			</View>
 			<View style={styles.data}>
 				<Text style={styles.title}>
