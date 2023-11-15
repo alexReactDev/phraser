@@ -4,7 +4,7 @@ import { TextInput } from "react-native-gesture-handler";
 import SelectDropdown from "react-native-select-dropdown";
 import colors from "../../../Colors";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_COLLECTION, GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_NAMEID, MUTATE_COLLECTION } from "../../../query/collections";
+import { CREATE_COLLECTION, GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES, MUTATE_COLLECTION } from "../../../query/collections";
 import settings from "../../../store/settings";
 import { observer } from "mobx-react-lite";
 
@@ -42,7 +42,7 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 						profile: settings.settings.activeProfile
 					}
 				},
-				refetchQueries: [GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_NAMEID]
+				refetchQueries: [GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES]
 			})
 		} else {
 			if(!name || !color) return;
@@ -55,7 +55,7 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 						profile: settings.settings.activeProfile
 					}
 				},
-				refetchQueries: [GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_NAMEID]
+				refetchQueries: [GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES]
 			})
 		}
 
