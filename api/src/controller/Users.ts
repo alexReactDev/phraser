@@ -3,6 +3,7 @@ import { IUserInput } from "../types/users";
 const db = require("../model/db.ts");
 const settingsController = require("./Settings.ts");
 const generateId = require("../utils/generateId.ts");
+const globalErrorHandler = require("../service/globalErrorHandler");
 
 class UsersController {
 	async getUser({ id }: { id: string }) {
@@ -17,7 +18,7 @@ class UsersController {
 			user = userData;
 		}
 		catch(e: any) {
-			console.log(e)
+			globalErrorHandler(e);
 			throw new Error(`Server Error. Cannot get user. ${e.toString()}`);
 		}
 
@@ -29,7 +30,7 @@ class UsersController {
 			login: input.login
 		})
 
-		if(user) throw new Error("Bad request. Login already taken");
+		if(user) throw new Error("400. Bad request. Login already taken");
 
 		const id = generateId();
 
@@ -43,16 +44,16 @@ class UsersController {
 			})
 		}
 		catch(e: any) {
-			console.log(e)
-			throw new Error(`Server Error: ${e.toString()}`);
+			globalErrorHandler(e);
+			throw new Error(`Server Error. Failed to create user. ${e.toString()}`);
 		}
 
 		try {
 			await settingsController.createSettings({ id });
 		}
 		catch(e: any) {
-			console.log(e)
-			throw new Error(`Server Error: ${e.toString()}`);
+			globalErrorHandler(e);
+			throw new Error(`Server Error. Failed to create user settings. ${e.toString()}`);
 		}
 
 		return id;
@@ -64,8 +65,8 @@ class UsersController {
 			await db.collection("settings").deleteOne({ userId: id });
 		}
 		catch(e: any) {
-			console.log(e)
-			throw new Error(`Server error ${e}`);
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to delete user. ${e}`);
 		}
 
 		return "OK";

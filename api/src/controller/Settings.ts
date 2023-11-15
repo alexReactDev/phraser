@@ -2,6 +2,7 @@ import { ISettingsInput } from "../types/settings";
 
 const db = require("../model/db.ts");
 const generateId = require("../utils/generateId");
+const globalErrorHandler = require("../service/globalErrorHandler");
 
 class SettingsController {
 	async createSettings({ id }: { id: string }) {
@@ -17,8 +18,8 @@ class SettingsController {
 			});
 		}
 		catch(e: any) {
-			console.log(e)
-			throw new Error(`Server error ${e}`);
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to create settings. ${e}`);
 		}
 
 		return "OK";
@@ -33,8 +34,8 @@ class SettingsController {
 			})
 		}
 		catch(e: any) {
-			console.log(e)
-			throw new Error(`Server error ${e}`);
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to get settings. ${e}`);
 		}
 
 		return settings;
@@ -49,8 +50,8 @@ class SettingsController {
 			});
 		}
 		catch(e: any) {
-			console.log(e)
-			throw new Error(`Server error ${e}`);
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to set user settings. ${e}`);
 		}
 
 		return "OK";
@@ -59,13 +60,8 @@ class SettingsController {
 	async updateUserSettings({ id, input }:  { id: string, input: Partial<ISettingsInput>}) {
 		let settings;
 		
-		try {
-			settings = await this.getUserSettings({ id });
-		}
-		catch(e: any) {
-			console.log(e)
-			throw new Error(`Server error ${e}`);
-		}
+		settings = await this.getUserSettings({ id });
+
 
 		for(let key in input) {
 			//@ts-ignore
@@ -80,8 +76,8 @@ class SettingsController {
 			});
 		}
 		catch(e: any) {
-			console.log(e)
-			throw new Error(`Server error ${e}`);
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to update user settings. ${e}`);
 		}
 
 		return settings;
@@ -92,8 +88,8 @@ class SettingsController {
 			await db.collection("settings").deleteOne({ userId: id });
 		}
 		catch(e: any) {
-			console.log(e)
-			throw new Error(`Server error ${e}`);
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to delete settings. ${e}`);
 		}
 
 		return "OK";

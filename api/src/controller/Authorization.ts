@@ -3,6 +3,7 @@ import { signJWT } from "../utils/signJWT";
 
 const db = require("../model/db.ts");
 const usersController = require("./Users");
+const globalErrorHandler = require("../service/globalErrorHandler");
 
 class AuthorizationController {
 	async login({ input }: { input: ILoginInput }) {
@@ -10,13 +11,15 @@ class AuthorizationController {
 
 		try {
 			user = await db.collection("users").findOne({ login: input.login });
+
+			if(!user) throw new Error("404. User not found");
 		}
 		catch(e: any) {
-			console.log(e)
-			throw new Error(`Server error ${e}`);
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to log in. ${e}`);
 		}
 
-		if(input.password !== user.password) throw new Error(`Access denied`);
+		if(input.password !== user.password) throw new Error(`403. Access denied`);
 
 		const token = signJWT({ login: user.login, userId: user.id });
 
@@ -30,8 +33,8 @@ class AuthorizationController {
 			})
 		}
 		catch(e: any) {
-			console.log(e)
-			throw new Error(`Server error ${e}`);
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to log out ${e}`);
 		}
 
 		return "OK";
@@ -44,8 +47,8 @@ class AuthorizationController {
 			userId = await usersController.createUser({ input });
 		}
 		catch(e: any) {
-			console.log(e)
-			throw new Error(`Server error ${e}`);
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to create user. ${e}`);
 		}
 
 		const token = signJWT({ login: input.login, userId });

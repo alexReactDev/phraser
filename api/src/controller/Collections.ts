@@ -2,6 +2,7 @@ import { IChangeCollectionLockInput, ICollectionInput } from "../types/collectio
 
 const db = require("../model/db.ts");
 const generateId = require("../utils/generateId");
+const globalErrorHandler = require("../service/globalErrorHandler");
 
 class CollectionsController {
 	async getCollection({ id }: { id: string }) {
@@ -9,10 +10,12 @@ class CollectionsController {
 
 		try {
 			result = await db.collection("collections").findOne({ id });
+
+			if(!result) throw new Error("404. Collection not found");
 		}
 		catch(e: any) {
-			console.log(e)
-			return `Error ${e}`;
+			globalErrorHandler(e);
+			throw `Server error. Failed to get collection. ${e}`;
 		}
 
 		return result;
@@ -25,11 +28,12 @@ class CollectionsController {
 			let cursor = await db.collection("collections").find({
 				profile: id
 			});
+
 			result = await cursor.toArray();
 		}
 		catch(e: any) {
-			console.log(e)
-			return `Error ${e}`;
+			globalErrorHandler(e);
+			throw `Server error. Failed to get collection. ${e}`;
 		}
 
 		return result;
@@ -41,10 +45,12 @@ class CollectionsController {
 		try {
 			result = await db.collection("collections").findOne({
 				phrases: { $in: [id] }
-			})
+			});
+
+			if(!result) throw new Error("404. Collection not found");
 		} catch (e) {
-			console.log(e);
-			return `Error ${e}`;
+			globalErrorHandler(e);
+			throw `Server error. Failed to find collection. ${e}`;
 		}
 
 		return result;
@@ -67,8 +73,8 @@ class CollectionsController {
 				repetitions: []
 			})
 		} catch (e) {
-			console.log(e);
-			return `Error ${e}`;
+			globalErrorHandler(e);
+			throw `Server error. Failed to create collection. ${e}`;
 		}
 
 		return "OK";
@@ -83,8 +89,8 @@ class CollectionsController {
 				}
 			})
 		} catch (e) {
-			console.log(e);
-			return `Error ${e}`;
+			globalErrorHandler(e);
+			throw `Server error. Failed to mutate collection. ${e}`;
 		}
 
 		return "OK";
@@ -98,8 +104,8 @@ class CollectionsController {
 				}
 			})
 		} catch (e) {
-			console.log(e);
-			return `Error ${e}`;
+			globalErrorHandler(e);
+			throw `Server error. Failed to lock/unlock collection. ${e}`;
 		}
 
 		return "OK";
@@ -107,11 +113,10 @@ class CollectionsController {
 
 	async deleteCollection({ id }: { id: string }) {
 		try {
-			let res = await db.collection("collections").deleteOne({ id });
-			console.log(res);
+			await db.collection("collections").deleteOne({ id });
 		} catch (e) {
-			console.log(e);
-			return `Error ${e}`;
+			globalErrorHandler(e);
+			throw `Server error. Failed to delete collection. ${e}`;
 		}
 
 		return "OK";

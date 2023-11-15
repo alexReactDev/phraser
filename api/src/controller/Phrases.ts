@@ -2,6 +2,7 @@ import { IPhrase, IPhraseInput, IPhraseRepetitionInput } from "../types/phrases"
 
 const db = require("../model/db.ts");
 const generateId = require("../utils/generateId");
+const globalErrorHandler = require("../service/globalErrorHandler");
 
 class PhrasesController {
 	async getPhrase({ id }: { id: string }) {
@@ -9,9 +10,11 @@ class PhrasesController {
 
 		try {
 			phrase = await db.collection("phrases").findOne({ id });
+
+			if(!phrase) throw new Error("404. Phrase not found");
 		} catch (e) {
-			console.log(e);
-			return `Error! ${e}`;
+			globalErrorHandler(e);
+			throw `Server error. Failed to get collection ${e}`;
 		}
 
 		return phrase;
@@ -29,8 +32,8 @@ class PhrasesController {
 
 			phrases = await cursor.toArray();
 		} catch (e) {
-			console.log(e);
-			return `Server error. Can't get phrases. ${e}`;
+			globalErrorHandler(e);
+			throw `Server error. Can't get phrases. ${e}`;
 		}
 
 		return phrases;
@@ -55,8 +58,8 @@ class PhrasesController {
 		try {
 			await db.collection("phrases").insertOne(phrase);
 		} catch (e) {
-			console.log(e);
-			return `Server error. Failed to create phrase. ${e}`;
+			globalErrorHandler(e);
+			throw `Server error. Failed to create phrase. ${e}`;
 		}
 
 		try {
@@ -76,7 +79,7 @@ class PhrasesController {
 				}
 			})
 		} catch (e) {
-			console.log(e);
+			globalErrorHandler(e);
 			throw new Error(`Sever error. Failed to create phrase: failed to add phrase to collection. ${e}`);
 		}
 
@@ -92,8 +95,8 @@ class PhrasesController {
 				}
 			})
 		} catch (e) {
-			console.log(e);
-			return `Error! ${e}`;
+			globalErrorHandler(e);
+			throw `Server error. Failed to mutate phrase. ${e}`;
 		}
 
 		try {
@@ -103,19 +106,20 @@ class PhrasesController {
 				}
 			})
 
-			console.log(oldCollection);
-			console.log(id);
+			if(!oldCollection) throw new Error("404. Collection not found");
 
-			if(collection && oldCollection.id !== collection) {
+			if(collection && (oldCollection.id !== collection)) {
+				const newCollection = await db.collection("collections").findOne({ id: collection });
+
+				if(!newCollection) throw new Error("404. Collection not found");
+
+				if(newCollection.isLocked) throw new Error("400. Collection is locked");
+
 				await db.collection("collections").updateOne({ id: oldCollection.id }, {
 					$set: {
 						phrases: oldCollection.phrases.filter((phrase: string) => phrase !== id)
 					}
 				})
-
-				const newCollection = await db.collection("collections").findOne({ id: collection });
-
-				if(!newCollection) return "Code 400. Bad request";
 
 				await db.collection("collections").updateOne({ id: collection }, {
 					$set: {
@@ -124,8 +128,8 @@ class PhrasesController {
 				})
 			}
 		} catch (e) {
-			console.log(e);
-			return `Error! ${e}`;
+			globalErrorHandler(e);
+			throw `Server error. Failed to mutate phrase: failed to change collection. ${e}`;
 		}
 
 		return "OK";
@@ -133,9 +137,6 @@ class PhrasesController {
 
 	async mutatePhraseMeta({ input }: { input: [IPhraseRepetitionInput] }) {
 		const phrasesIds = input.map((repetition) => repetition.id);
-
-		console.log(input);
-		console.log(phrasesIds);
 		
 		let phrases;
 
@@ -146,11 +147,11 @@ class PhrasesController {
 
 			phrases = await cursor.toArray();
 		} catch (e) {
-			console.log(e);
+			globalErrorHandler(e);
 			return `Error! ${e}`;
 		}
 
-		console.log(phrases);
+		globalErrorHandler(phrases);
 
 		let updatePromises = [];
 
@@ -174,7 +175,7 @@ class PhrasesController {
 		try {
 			await Promise.all(updatePromises);
 		} catch (e) {
-			console.log(e);
+			globalErrorHandler(e);
 			return `Error! ${e}`;
 		}
 
@@ -185,8 +186,8 @@ class PhrasesController {
 		try {
 			await db.collection("phrases").deleteOne({ id });
 		} catch (e) {
-			console.log(e);
-			return `Error! ${e}`;
+			globalErrorHandler(e);
+			throw `Server error. Failed to delete phrase. ${e}`;
 		}
 
 		return "OK";
