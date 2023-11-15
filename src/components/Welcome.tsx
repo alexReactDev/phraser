@@ -4,7 +4,7 @@ import { faintBlue, fontColor } from "../styles/variables";
 import { useMutation } from "@apollo/client";
 import { LOGIN, SIGNUP } from "../query/authorization";
 import { IAuthData } from "../types/authorization";
-import ErrorComponent from "./Error";
+import ErrorMessage from "./ErrorMessage";
 
 function Welcome({ updateCredentials }: { updateCredentials: (data: IAuthData) => void }) {
 	const [ showSignUp, setShowSignUp ] = useState(false);
@@ -59,7 +59,7 @@ function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, up
 			</Text>
 			{
 				errorMessage &&
-				<ErrorComponent message={errorMessage} />
+				<ErrorMessage message={errorMessage} />
 			}
 			<TextInput
 				value={login}
@@ -117,7 +117,7 @@ function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, u
 			</Text>
 			{
 				errorMessage &&
-				<ErrorComponent message={errorMessage} />
+				<ErrorMessage message={errorMessage} />
 			}
 			<TextInput
 				value={name}

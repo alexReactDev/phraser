@@ -1,7 +1,7 @@
 import { View, StyleSheet, ScrollView, TouchableOpacity, Modal } from "react-native";
 import { useQuery } from "@apollo/client/react";
 import { GET_PROFILE_COLLECTIONS } from "../query/collections";
-import ErrorComponent from "./Error";
+import ErrorComponent from "./ErrorComponent";
 import Loader from "./Loader";
 import { ICollection } from "../types/collections";
 import CollectionCard from "./CollectionCard";
@@ -49,7 +49,7 @@ const Collections = observer(function ({ navigation }: Props) {
 
 	if(loading) return <Loader />
 
-	if(error) return <ErrorComponent />
+	if(error) return <ErrorComponent message="Failed to load collections"/>
 
 	return (
 		<View style={styles.container}>

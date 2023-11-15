@@ -7,7 +7,7 @@ import Welcome from "./Welcome";
 import { IAuthData } from "../types/authorization";
 import session from "../store/session";
 import { observer } from "mobx-react-lite";
-import ErrorComponent from "./Error";
+import ErrorComponent from "./ErrorComponent";
 import { GET_USER_SETTING } from "../query/settings";
 import settings from "../store/settings";
 

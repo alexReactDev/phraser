@@ -3,8 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { useQuery } from "@apollo/client";
 import { GET_COLLECTION_PHRASES } from "../query/phrases";
 import Loader from "./Loader";
-import ErrorComponent from "./Error";
-import { IPhrase } from "../types/phrases";
+import ErrorComponent from "./ErrorComponent";
 import CollectionPhrase from "./CollectionPhrase";
 import { GET_COLLECTION } from "../query/collections";
 import { FlatList } from "react-native-gesture-handler";
@@ -25,7 +24,7 @@ function CollectionScreen({ route, navigation }: Props) {
 	}, [colData]);
 
 	if(loading || colDataLoading) return <Loader />
-	if(error || colDataError) return <ErrorComponent />
+	if(error || colDataError) return <ErrorComponent message="Failed to load collection data" />
 	return (
 		<>
 			{

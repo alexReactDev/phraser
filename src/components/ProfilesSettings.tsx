@@ -1,5 +1,5 @@
 import { Button, Modal, StyleSheet, Text, View, TextInput, TouchableOpacity } from "react-native";
-import ErrorComponent from "./Error";
+import ErrorComponent from "./ErrorComponent";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_PROFILE, GET_USER_PROFILES } from "../query/profiles";
 import session from "../store/session";
@@ -38,7 +38,7 @@ const ProfilesSettings = observer(function() {
 		setDisplayModal(false);
 	}
 
-	if(error) return <ErrorComponent />
+	if(error) return <ErrorComponent message="Failed to load profiles data" />
 
 	return (
 		<View style={styles.container}>

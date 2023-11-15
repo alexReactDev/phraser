@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 
-function ErrorComponent({ message = "" }) {
+function ErrorMessage({ message = "" }) {
 	return (
 		<View style={styles.errorContainer}>
 			<Text style={styles.title}>
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
 	}
 })
 
-export default ErrorComponent;
+export default ErrorMessage;

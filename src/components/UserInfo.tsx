@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import { GET_USER } from "../query/user";
 import { observer } from "mobx-react-lite";
 import session from "../store/session";
-import ErrorComponent from "./Error";
+import ErrorComponent from "./ErrorComponent";
 import { borderColor, fontColor, fontColorFaint } from "../styles/variables";
 import moment from "moment";
 import Loader from "./Loader";
@@ -15,7 +15,7 @@ const UserInfo = observer(function () {
 
 	if(loading) return <Loader />
 
-	if(error || !data) return <ErrorComponent />
+	if(error || !data) return <ErrorComponent message="Failed to load user data" />
 
 	return (
 		<View style={styles.container}>

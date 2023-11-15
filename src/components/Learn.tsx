@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { GET_COLLECTION_PHRASES } from "../query/phrases";
 import Loader from "./Loader";
-import ErrorComponent from "./Error";
+import ErrorComponent from "./ErrorComponent";
 import { IPhrase } from "../types/phrases";
 import { Ionicons } from '@expo/vector-icons';
 import { borderColor, fontColor, fontColorFaint } from "../styles/variables";
@@ -133,7 +133,7 @@ function Learn({ route, navigation }: Props) {
 	}
 
 	if (loading) return <Loader />
-	if (error) return <ErrorComponent />
+	if (error) return <ErrorComponent message="Failed to load collection data" />
 
 	if(!started) return (
 		<View 
