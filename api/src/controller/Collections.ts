@@ -67,7 +67,8 @@ class CollectionsController {
 				profile: input.profile,
 				meta: {
 					phrasesCount: 0,
-					repetitionsCount: 0
+					repetitionsCount: 0,
+					lastRepetition: null
 				},
 				phrases: [],
 				repetitions: []

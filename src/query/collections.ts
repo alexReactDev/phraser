@@ -14,7 +14,8 @@ export const GET_COLLECTION = gql`
 			profile,
 			meta {
 				phrasesCount,
-				repetitionsCount
+				repetitionsCount,
+				lastRepetition
 			}
 		}
 	}
@@ -55,6 +56,20 @@ export const GET_COLLECTION_NAMEID = gql`
 		getCollection(id: $id) {
 			id,
 			name
+		}
+	}
+`;
+
+export const GET_COLLECTION_META = gql`
+	query getCollection($id: ID) {
+		getCollection(id: $id) {
+			id,
+			name,
+			meta {
+				phrasesCount,
+				repetitionsCount,
+				lastRepetition
+			}
 		}
 	}
 `;

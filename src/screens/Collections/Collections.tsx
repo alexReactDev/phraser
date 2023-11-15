@@ -16,11 +16,15 @@ import Profiles from "../../components/Profiles";
 import settings from "../../store/settings";
 import { observer } from "mobx-react-lite";
 import NoCollections from "./components/NoCollections";
+import Cards from "./Learn/Cards/Cards";
+import AIGeneratedText from "./Learn/AIGeneratedText/AIGeneratedText";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
 	Collection: { colId: number },
-	Learn: { colId: number }
+	Learn: { colId: number },
+	Cards: { colId: number },
+	AIGeneratedText: { colId: number }
 }
 
 const StackNavigator = createStackNavigator<StackNavigatorParams>();
@@ -37,6 +41,8 @@ function CollectionsNavigation() {
 				headerRight: () => <CollectionHeaderButtons {...props} />
 			})} />
 			<StackNavigator.Screen name="Learn" component={Learn} />
+			<StackNavigator.Screen name="Cards" component={Cards}/>
+			<StackNavigator.Screen name="AIGeneratedText" component={AIGeneratedText} />
 		</StackNavigator.Navigator>
 	)
 }

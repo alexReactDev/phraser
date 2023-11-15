@@ -7,7 +7,8 @@ export interface ICollection {
 	lastUpdate: bigint,
 	meta: {
 		phrasesCount: number,
-		repetitionsCount: number
+		repetitionsCount: number,
+		lastRepetition: number | null
 	},
 	phrases: number[],
 	repetitions: number[]
