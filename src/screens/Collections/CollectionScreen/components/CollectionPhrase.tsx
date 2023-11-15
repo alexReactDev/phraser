@@ -1,9 +1,9 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { IPhrase } from "../types/phrases";
+import { IPhrase } from "../../../../types/phrases";
 import { Ionicons } from "@expo/vector-icons";
-import { fontColorFaint } from "../styles/variables";
+import { fontColorFaint } from "../../../../styles/variables";
 import { useMutation } from "@apollo/client";
-import { DELETE_PHRASE, GET_COLLECTION_PHRASES } from "../query/phrases";
+import { DELETE_PHRASE, GET_COLLECTION_PHRASES } from "../../../../query/phrases";
 
 interface IProps {
 	phrase: IPhrase,

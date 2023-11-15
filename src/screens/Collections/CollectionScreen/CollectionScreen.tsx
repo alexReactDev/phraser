@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { useQuery } from "@apollo/client";
-import { GET_COLLECTION_PHRASES } from "../query/phrases";
-import Loader from "./Loader";
-import ErrorComponent from "./ErrorComponent";
-import CollectionPhrase from "./CollectionPhrase";
-import { GET_COLLECTION } from "../query/collections";
+import { GET_COLLECTION_PHRASES } from "../../../query/phrases";
+import Loader from "../../../components/Loader";
+import ErrorComponent from "../../../components/Errors/ErrorComponent";
+import CollectionPhrase from "./components/CollectionPhrase";
+import { GET_COLLECTION } from "../../../query/collections";
 import { FlatList } from "react-native-gesture-handler";
 import { StackScreenProps } from "@react-navigation/stack";
-import { StackNavigatorParams } from "./Collections";
-import NoPhrases from "./NoPhrases";
+import { StackNavigatorParams } from "../Collections";
+import NoPhrases from "./components/NoPhrases";
 
 type Props = StackScreenProps<StackNavigatorParams, "Collection", "collectionsNavigator">;
 

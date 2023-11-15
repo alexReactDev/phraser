@@ -1,21 +1,21 @@
 import { View, StyleSheet, ScrollView, TouchableOpacity, Modal } from "react-native";
 import { useQuery } from "@apollo/client/react";
-import { GET_PROFILE_COLLECTIONS } from "../query/collections";
-import ErrorComponent from "./ErrorComponent";
-import Loader from "./Loader";
-import { ICollection } from "../types/collections";
-import CollectionCard from "./CollectionCard";
+import { GET_PROFILE_COLLECTIONS } from "../../query/collections";
+import ErrorComponent from "../../components/Errors/ErrorComponent";
+import Loader from "../../components/Loader";
+import { ICollection } from "../../types/collections";
+import CollectionCard from "./components/CollectionCard";
 import { StackScreenProps, createStackNavigator } from "@react-navigation/stack";
-import CollectionScreen from "./CollectionScreen";
-import CollectionHeaderButtons from "./CollectionHeaderButtons";
+import CollectionScreen from "./CollectionScreen/CollectionScreen";
+import CollectionHeaderButtons from "./components/CollectionHeaderButtons";
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
-import EditCollection from "./EditCollection";
-import Learn from "./Learn";
-import Profiles from "./Profiles";
-import settings from "../store/settings";
+import EditCollection from "./components/EditCollection";
+import Learn from "./Learn/Learn";
+import Profiles from "../../components/Profiles";
+import settings from "../../store/settings";
 import { observer } from "mobx-react-lite";
-import NoCollections from "./NoCollections";
+import NoCollections from "./components/NoCollections";
 
 export type StackNavigatorParams = {
 	Collections: undefined,

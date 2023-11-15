@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
-import { borderColor, fontColor, nondescriptColor } from "../styles/variables";
+import { borderColor, fontColor, nondescriptColor } from "../../../styles/variables";
 import { Ionicons } from '@expo/vector-icons';
 import { observer } from "mobx-react-lite";
-import settings from "../store/settings";
+import settings from "../../../store/settings";
 import { useMutation } from "@apollo/client";
-import { UPDATE_USER_SETTINGS } from "../query/settings";
-import session from "../store/session";
-import ErrorMessageModal from "./ErrorMessageModal";
+import { UPDATE_USER_SETTINGS } from "../../../query/settings";
+import session from "../../../store/session";
+import ErrorMessageModal from "../../../components/Errors/ErrorMessageModal";
 import { useState } from "react";
 
 const orderOptions = ["default", "random"];

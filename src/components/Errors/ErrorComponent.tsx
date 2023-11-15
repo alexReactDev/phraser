@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import { fontColorFaint, nondescriptColor } from "../styles/variables";
+import { fontColorFaint, nondescriptColor } from "../../styles/variables";
 
 function ErrorComponent({ message = "Unknown error" }) {
 	return (

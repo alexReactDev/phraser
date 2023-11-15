@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { ICollection } from "../types/collections";
+import { ICollection } from "../../../types/collections";
 import moment from "moment";
-import { fontColor, fontColorFaint, fontColorFaintLight, fontColorLight } from "../styles/variables";
+import { fontColor, fontColorFaint, fontColorFaintLight, fontColorLight } from "../../../styles/variables";
 
 interface IProps {
 	collection: ICollection,

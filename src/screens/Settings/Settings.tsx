@@ -1,15 +1,15 @@
 import { Alert, Button, ScrollView, StyleSheet, View } from "react-native";
-import UserInfo from "./UserInfo";
-import ProfilesSettings from "./ProfilesSettings";
-import LearnModeSettings from "./LearnModeSettings";
+import UserInfo from "./components/UserInfo";
+import ProfilesSettings from "./components/ProfilesSettings";
+import LearnModeSettings from "./components/LearnModeSettings";
 import { useMutation } from "@apollo/client";
-import { DELETE_USER } from "../query/user";
-import session from "../store/session";
-import { removeAuthToken } from "../utils/authToken";
-import { LOGOUT } from "../query/authorization";
+import { DELETE_USER } from "../../query/user";
+import session from "../../store/session";
+import { removeAuthToken } from "../../utils/authToken";
+import { LOGOUT } from "../../query/authorization";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import ErrorMessageModal from "./ErrorMessageModal";
+import ErrorMessageModal from "../../components/Errors/ErrorMessageModal";
 
 const Settings = observer(function() {
 	const [ deleteUser ] = useMutation(DELETE_USER);

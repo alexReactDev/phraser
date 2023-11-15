@@ -3,11 +3,11 @@ import { getAuthToken, setAuthToken } from "../utils/authToken";
 import { useQuery } from "@apollo/client";
 import { GET_SESSION } from "../query/authorization";
 import Loader from "./Loader";
-import Welcome from "./Welcome";
+import Welcome from "../screens/Welcome/Welcome";
 import { IAuthData } from "../types/authorization";
 import session from "../store/session";
 import { observer } from "mobx-react-lite";
-import ErrorComponent from "./ErrorComponent";
+import ErrorComponent from "./Errors/ErrorComponent";
 import { GET_USER_SETTING } from "../query/settings";
 import settings from "../store/settings";
 

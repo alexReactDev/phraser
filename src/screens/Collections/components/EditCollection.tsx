@@ -2,10 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import SelectDropdown from "react-native-select-dropdown";
-import colors from "../Colors";
+import colors from "../../../Colors";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_COLLECTION, GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_NAMEID, MUTATE_COLLECTION } from "../query/collections";
-import settings from "../store/settings";
+import { CREATE_COLLECTION, GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_NAMEID, MUTATE_COLLECTION } from "../../../query/collections";
+import settings from "../../../store/settings";
 import { observer } from "mobx-react-lite";
 
 interface IProps {

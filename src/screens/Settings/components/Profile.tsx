@@ -1,15 +1,15 @@
 import { Button, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { IProfile } from "../types/profiles";
-import { borderColor } from "../styles/variables";
+import { IProfile } from "../../../types/profiles";
+import { borderColor } from "../../../styles/variables";
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
-import settings from "../store/settings";
+import settings from "../../../store/settings";
 import { useMutation } from "@apollo/client";
-import { DELETE_PROFILE, GET_USER_PROFILES, MUTATE_PROFILE } from "../query/profiles";
-import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "../query/settings";
+import { DELETE_PROFILE, GET_USER_PROFILES, MUTATE_PROFILE } from "../../../query/profiles";
+import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "../../../query/settings";
 import { observer } from "mobx-react-lite";
-import session from "../store/session";
-import ErrorMessageModal from "./ErrorMessageModal";
+import session from "../../../store/session";
+import ErrorMessageModal from "../../../components/Errors/ErrorMessageModal";
 
 const Profile = observer(function({ profile }: { profile: IProfile}) {
 	const [ showButtons, setShowButtons ] = useState(false);

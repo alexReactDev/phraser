@@ -1,16 +1,16 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { GET_COLLECTION_PHRASES } from "../query/phrases";
-import Loader from "./Loader";
-import ErrorComponent from "./ErrorComponent";
-import { IPhrase } from "../types/phrases";
+import { GET_COLLECTION_PHRASES } from "../../../query/phrases";
+import Loader from "../../../components/Loader";
+import ErrorComponent from "../../../components/Errors/ErrorComponent";
+import { IPhrase } from "../../../types/phrases";
 import { Ionicons } from '@expo/vector-icons';
-import { borderColor, fontColor, fontColorFaint } from "../styles/variables";
-import { CREATE_COLLECTION_REPETITION, MUTATE_PHRASES_META } from "../query/repetitions";
-import { GET_COLLECTION_NAMEID } from "../query/collections";
+import { borderColor, fontColor, fontColorFaint } from "../../../styles/variables";
+import { CREATE_COLLECTION_REPETITION, MUTATE_PHRASES_META } from "../../../query/repetitions";
+import { GET_COLLECTION_NAMEID } from "../../../query/collections";
 import { StackScreenProps } from "@react-navigation/stack";
-import { StackNavigatorParams } from "./Collections";
+import { StackNavigatorParams } from "../Collections";
 
 type Props = StackScreenProps<StackNavigatorParams, "Learn", "collectionsNavigator">;
 

@@ -1,10 +1,10 @@
 import { Text, View, TextInput, Button, StyleSheet } from "react-native";
 import { useState } from "react";
-import { faintBlue, fontColor } from "../styles/variables";
+import { faintBlue, fontColor } from "../../styles/variables";
 import { useMutation } from "@apollo/client";
-import { LOGIN, SIGNUP } from "../query/authorization";
-import { IAuthData } from "../types/authorization";
-import ErrorMessage from "./ErrorMessage";
+import { LOGIN, SIGNUP } from "../../query/authorization";
+import { IAuthData } from "../../types/authorization";
+import ErrorMessage from "../../components/Errors/ErrorMessage";
 
 function Welcome({ updateCredentials }: { updateCredentials: (data: IAuthData) => void }) {
 	const [ showSignUp, setShowSignUp ] = useState(false);

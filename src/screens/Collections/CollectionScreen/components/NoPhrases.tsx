@@ -1,15 +1,15 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StyleSheet, Text, View } from "react-native";
-import { fontColorFaint, nondescriptColor } from '../styles/variables';
+import { fontColorFaint, nondescriptColor } from '../../../../styles/variables';
 
-function NoCollections() {
+function NoPhrases() {
 	return (
 		<View style={style.container}>
 			<View style={style.iconContainer}>
-				<MaterialCommunityIcons name="folder-remove-outline" size={96} color={nondescriptColor} />
+				<MaterialCommunityIcons name="file-document-multiple-outline" size={96} color={nondescriptColor} />
 			</View>
 			<Text style={style.text}>
-				No collections
+				No phrases
 			</Text>
 		</View>
 	)
@@ -30,4 +30,4 @@ const style = StyleSheet.create({
 	}
 })
 
-export default NoCollections;
+export default NoPhrases;
