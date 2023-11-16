@@ -1,3 +1,4 @@
+import { Collection } from "../Classes/Collection";
 import { IChangeCollectionLockInput, ICollectionInput } from "../types/collections";
 
 const db = require("../model/db.ts");
@@ -15,7 +16,7 @@ class CollectionsController {
 		}
 		catch(e: any) {
 			globalErrorHandler(e);
-			throw `Server error. Failed to get collection. ${e}`;
+			throw new Error(`Server error. Failed to get collection. ${e}`);
 		}
 
 		return result;
@@ -33,7 +34,7 @@ class CollectionsController {
 		}
 		catch(e: any) {
 			globalErrorHandler(e);
-			throw `Server error. Failed to get collection. ${e}`;
+			throw new Error(`Server error. Failed to get collection. ${e}`);
 		}
 
 		return result;
@@ -50,32 +51,20 @@ class CollectionsController {
 			if(!result) throw new Error("404. Collection not found");
 		} catch (e) {
 			globalErrorHandler(e);
-			throw `Server error. Failed to find collection. ${e}`;
+			throw new Error(`Server error. Failed to find collection. ${e}`);
 		}
 
 		return result;
 	}
 
 	async createCollection({ input }: {input: ICollectionInput}) {
+		const collection = new Collection(input.name, input.color, input.profile);
+
 		try {
-			await db.collection("collections").insertOne({
-				...input,
-				id: generateId(),
-				isLocked: false,
-				created: new Date().getTime(),
-				lastUpdate: new Date().getTime(),
-				profile: input.profile,
-				meta: {
-					phrasesCount: 0,
-					repetitionsCount: 0,
-					lastRepetition: null
-				},
-				phrases: [],
-				repetitions: []
-			})
+			await db.collection("collections").insertOne(collection);
 		} catch (e) {
 			globalErrorHandler(e);
-			throw `Server error. Failed to create collection. ${e}`;
+			throw new Error(`Server error. Failed to create collection. ${e}`);
 		}
 
 		return "OK";
@@ -91,7 +80,7 @@ class CollectionsController {
 			})
 		} catch (e) {
 			globalErrorHandler(e);
-			throw `Server error. Failed to mutate collection. ${e}`;
+			throw new Error(`Server error. Failed to mutate collection. ${e}`);
 		}
 
 		return "OK";
@@ -106,7 +95,7 @@ class CollectionsController {
 			})
 		} catch (e) {
 			globalErrorHandler(e);
-			throw `Server error. Failed to lock/unlock collection. ${e}`;
+			throw new Error(`Server error. Failed to lock/unlock collection. ${e}`);
 		}
 
 		return "OK";
@@ -117,7 +106,7 @@ class CollectionsController {
 			await db.collection("collections").deleteOne({ id });
 		} catch (e) {
 			globalErrorHandler(e);
-			throw `Server error. Failed to delete collection. ${e}`;
+			throw new Error(`Server error. Failed to delete collection. ${e}`);
 		}
 
 		return "OK";

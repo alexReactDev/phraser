@@ -6,7 +6,8 @@ export interface IPhraseInput {
 export interface IPhraseMeta {
 	repeated: number,
 	forgotten: number,
-	guessed: number
+	guessed: number,
+	lastRepetition: number
 }
 
 export interface IPhraseRepetitionInput extends IPhraseMeta {
@@ -19,9 +20,6 @@ export interface IPhrase {
 	translation: string,
 	crated: bigint,
 	lastUpdate: bigint,
-	meta: {
-		repeated: number,
-		guessed: number,
-		forgotten: number
-	}
+	meta: IPhraseMeta,
+	profile: string
 }

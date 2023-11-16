@@ -12,6 +12,7 @@ import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { NavigatorParams } from "../../../App";
 import settings from "../../store/settings";
 import { observer } from "mobx-react-lite";
+import session from "@store/session";
 
 type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 
@@ -54,6 +55,11 @@ const Add = observer(function ({ route }: Props) {
 					variables: {
 						input: data,
 						collection
+					},
+					context: {
+						headers: {
+							"Authorization": `Bearer ${session.data.token}`
+						}
 					},
 					refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: collection } }]
 				})

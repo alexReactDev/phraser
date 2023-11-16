@@ -32,6 +32,8 @@ class SettingsController {
 			settings = await db.collection("settings").findOne({
 				userId: id
 			})
+
+			if(!settings) throw new Error("404. User settings not found");
 		}
 		catch(e: any) {
 			globalErrorHandler(e);

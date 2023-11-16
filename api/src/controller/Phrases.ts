@@ -1,8 +1,10 @@
+import { IJWT } from "../types/authorization";
 import { IPhrase, IPhraseInput, IPhraseRepetitionInput } from "../types/phrases";
 
 const db = require("../model/db.ts");
 const generateId = require("../utils/generateId");
 const globalErrorHandler = require("../service/globalErrorHandler");
+const settingsController = require("./Settings");
 
 class PhrasesController {
 	async getPhrase({ id }: { id: string }) {
@@ -39,9 +41,15 @@ class PhrasesController {
 		return phrases;
 	}
 
-	async createPhrase({ input, collection }: { input: IPhraseInput, collection: string }) {
+	async createPhrase({ input, collection }: { input: IPhraseInput, collection: string }, context: { auth: IJWT }) {
 		const timestamp = new Date().getTime();
 		const id = generateId();
+
+		console.log(context);
+
+ 		const userSettings = await settingsController.getUserSettings({ id: context.auth.userId });
+
+		console.log(userSettings);
 
 		const phrase = {
 			...input,
@@ -52,7 +60,8 @@ class PhrasesController {
 				repeated: 0,
 				guessed: 0,
 				forgotten: 0
-			}
+			},
+			profile: userSettings.settings.activeProfile
 		}
 
 		try {

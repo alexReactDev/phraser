@@ -8,7 +8,9 @@ export interface ISettings {
 	theme: string,
 	phrasesOrder: string,
 	repetitionsAmount: number,
-	activeProfile: string
+	activeProfile: string,
+	autoCollectionsSize: number,
+	intervalRepetitionDates: "exact" | "extended" | "auto"
 }
 
 export interface IInitialSettings {

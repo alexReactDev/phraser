@@ -1,3 +1,5 @@
+import { IJWT } from "./types/authorization";
+
 const mock = require("../mock.json");
 const collectionsController = require("./controller/Collections");
 const phrasesController = require("./controller/Phrases");
@@ -6,6 +8,7 @@ const usersController = require("./controller/Users");
 const authController = require("./controller/Authorization");
 const settingsController = require("./controller/Settings");
 const repetitionsController = require("./controller/Repetitions");
+const autoCollectionsController = require("./controller/AutoCollections");
 
 const root = {
 	login: authController.login,
@@ -25,7 +28,17 @@ const root = {
 	deleteProfile: profilesController.deleteProfile,
 
 	createCollection: collectionsController.createCollection,
-	getCollection: collectionsController.getCollection,
+	getCollection: async ({ id }: { id: string }, context: { auth: IJWT}) => {
+		if(id === "auto") {
+			return await autoCollectionsController.createAutoCollection({}, context);
+		} else if (id === "htm") {
+			return await autoCollectionsController.createHardToMemorizeCollection({}, context);
+		} else if (id === "interval") {
+			return await autoCollectionsController.createIntervalCollection({}, context)
+		} else {
+			return await collectionsController.getCollection({ id }, context);
+		}
+	},
 	getProfileCollections: collectionsController.getCollectionsByProfile,
 	deleteCollection: collectionsController.deleteCollection,
 	mutateCollection: collectionsController.mutateCollection,
