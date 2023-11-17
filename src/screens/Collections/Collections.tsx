@@ -18,6 +18,9 @@ import { observer } from "mobx-react-lite";
 import NoCollections from "./components/NoCollections";
 import Cards from "./Learn/Cards/Cards";
 import AIGeneratedText from "./Learn/AIGeneratedText/AIGeneratedText";
+import AutoCollections from "./components/AutoCollections";
+import WarningMessage from "@components/Errors/WarningMessage";
+import ErrorMessage from "@components/Errors/ErrorMessage";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
@@ -50,12 +53,17 @@ function CollectionsNavigation() {
 type Props = StackScreenProps<StackNavigatorParams, "Collections", "collectionsNavigator">;
 
 const Collections = observer(function ({ navigation }: Props) {
-	const { data = [], loading, error } = useQuery(GET_PROFILE_COLLECTIONS, { variables: { id: settings.settings.activeProfile }});
+	const { data = [], loading, error } = useQuery(GET_PROFILE_COLLECTIONS, { variables: { id: settings.settings.activeProfile }, onError(e: any) { console.log("FUCK" + e); }});
 	const [ displayModal, setDisplayModal ] = useState(false);
+	const [ autoCollectionsError, setAutoCollectionsError ] = useState("");
 
 	if(loading) return <Loader />
 
 	if(error) return <ErrorComponent message="Failed to load collections"/>
+
+	function autoCollectionsErrorHandler(e: any) {
+		setAutoCollectionsError(e);
+	}
 
 	return (
 		<View style={styles.container}>
@@ -81,9 +89,16 @@ const Collections = observer(function ({ navigation }: Props) {
 				</View>
 			</Modal>
 			<ScrollView>
+				{
+					autoCollectionsError &&
+					<View style={styles.errorContainer}>
+						<WarningMessage message={autoCollectionsError} />
+					</View>
+				}
 				<View
 					style={styles.list}
 				>
+					<AutoCollections navigation={navigation} onError={autoCollectionsErrorHandler} />
 					{
 						data.getProfileCollections.map((col: ICollection) => <CollectionCard key={col.id} collection={col} navigation={navigation} />)
 					}
@@ -149,6 +164,9 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		top: 5,
 		right: 5
+	},
+	errorContainer: {
+		marginBottom: 10
 	}
 })
 
