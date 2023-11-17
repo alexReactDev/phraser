@@ -1,11 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
 
 function ErrorMessage({ message = "" }) {
 	return (
 		<View style={styles.errorContainer}>
-			<Text style={styles.title}>
-				Error. Something went wrong
-			</Text>
+			<View style={styles.titleContainer}>
+				<Ionicons name="alert-circle-outline" size={21} color="#b41111" />
+				<Text style={styles.title}>
+					Error
+				</Text>
+			</View>
 			<Text style={styles.message}>
 				{message}
 			</Text>
@@ -15,11 +19,18 @@ function ErrorMessage({ message = "" }) {
 
 const styles = StyleSheet.create({
 	errorContainer: {
-		padding: 20,
+		padding: 10,
 		borderWidth: 1,
 		borderStyle: "solid",
 		borderColor: "red",
+		borderRadius: 5,
 		backgroundColor: "#fcacac88"
+	},
+	titleContainer: {
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		gap: 8
 	},
 	title: {
 		textAlign: "center",
