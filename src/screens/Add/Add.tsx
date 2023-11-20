@@ -66,8 +66,6 @@ const Add = observer(function ({ route }: Props) {
 			}
 		}
 	})
-	
-	collections.map((col: ICollection) => console.log(col));
 
 	return (
 		<View
