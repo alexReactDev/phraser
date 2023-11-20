@@ -214,7 +214,8 @@ const schema = buildSchema(`
 		signUp(input: SignUpInput): TokenData,
 		logout: String,
 		deleteUser(id: ID): String,
-		createRepetition(repetition: RepetitionInput): String
+		createRepetition(repetition: RepetitionInput): String,
+		generateAutoCollection(type: String): Collection
 	}
 `);
 

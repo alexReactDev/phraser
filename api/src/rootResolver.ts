@@ -28,17 +28,18 @@ const root = {
 	deleteProfile: profilesController.deleteProfile,
 
 	createCollection: collectionsController.createCollection,
-	getCollection: async ({ id }: { id: string }, context: { auth: IJWT}) => {
-		if(id === "auto") {
+	generateAutoCollection: async ({ type }: { type: string }, context: { auth: IJWT}) => {
+		if(type === "auto") {
 			return await autoCollectionsController.createAutoCollection({}, context);
-		} else if (id === "htm") {
+		} else if (type === "htm") {
 			return await autoCollectionsController.createHardToMemorizeCollection({}, context);
-		} else if (id === "interval") {
+		} else if (type === "interval") {
 			return await autoCollectionsController.createIntervalCollection({}, context)
 		} else {
-			return await collectionsController.getCollection({ id }, context);
+			throw new Error("400. Bad request");
 		}
 	},
+	getCollection: collectionsController.getCollection,
 	getProfileCollections: collectionsController.getCollectionsByProfile,
 	deleteCollection: collectionsController.deleteCollection,
 	mutateCollection: collectionsController.mutateCollection,
