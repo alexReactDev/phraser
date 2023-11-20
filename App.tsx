@@ -8,6 +8,7 @@ import Settings from "./src/screens/Settings/Settings";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import AuthorizationChecker from "./src/components/AuthorizationChecker";
 import Profiles from "./src/components/Profiles";
+import { ClickOutsideProvider } from "react-native-click-outside";
 
 const client = new ApolloClient({
   uri: process.env.EXPO_PUBLIC_API_URL,
@@ -24,29 +25,31 @@ const Navigator = createBottomTabNavigator<NavigatorParams>();
 
 export default function App() {
   return (
-    <ApolloProvider client={client}>
-      <NavigationContainer>
-        <AuthorizationChecker>
-          <Navigator.Navigator 
-            id="MainNavigator" 
-            screenOptions={{
-              tabBarActiveTintColor: "black",
-              tabBarInactiveTintColor: "gray",
-              headerRight: () => <Profiles />
-            }}>
-              <Navigator.Screen name="Add" component={Add} options={{
-                tabBarIcon: ({ focused }) => <Ionicons name="language" size={24} color={focused ? "black" : "gray"} />
-              }}></Navigator.Screen>
-              <Navigator.Screen name="Collections" component={Collections} options={{
-                tabBarIcon: ({ focused }) => <Ionicons name="copy" size={24} color={focused ? "black" : "gray"} />,
-                headerShown: false
-              }}></Navigator.Screen>
-              <Navigator.Screen name="Settings" component={Settings} options={{
-                tabBarIcon: ({ focused }) => <Ionicons name="settings-sharp" size={24} color={focused ? "black" : "gray"}  />
-              }}></Navigator.Screen>
-          </Navigator.Navigator>
-        </AuthorizationChecker>
-      </NavigationContainer>
-    </ApolloProvider>
+    <ClickOutsideProvider>
+      <ApolloProvider client={client}>
+        <NavigationContainer>
+          <AuthorizationChecker>
+            <Navigator.Navigator 
+              id="MainNavigator" 
+              screenOptions={{
+                tabBarActiveTintColor: "black",
+                tabBarInactiveTintColor: "gray",
+                headerRight: () => <Profiles />
+              }}>
+                <Navigator.Screen name="Add" component={Add} options={{
+                  tabBarIcon: ({ focused }) => <Ionicons name="language" size={24} color={focused ? "black" : "gray"} />
+                }}></Navigator.Screen>
+                <Navigator.Screen name="Collections" component={Collections} options={{
+                  tabBarIcon: ({ focused }) => <Ionicons name="copy" size={24} color={focused ? "black" : "gray"} />,
+                  headerShown: false
+                }}></Navigator.Screen>
+                <Navigator.Screen name="Settings" component={Settings} options={{
+                  tabBarIcon: ({ focused }) => <Ionicons name="settings-sharp" size={24} color={focused ? "black" : "gray"}  />
+                }}></Navigator.Screen>
+            </Navigator.Navigator>
+          </AuthorizationChecker>
+        </NavigationContainer>
+      </ApolloProvider>
+    </ClickOutsideProvider>
   );
 }

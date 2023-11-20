@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Alert, Modal, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { useMutation, useQuery } from "@apollo/client";
 import { CHANGE_COLLECTION_LOCK, DELETE_COLLECTION, GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "../../../query/collections";
 import EditCollection from "./EditCollection";
+import { fontColor } from "@styles/variables";
+import { useClickOutside } from "react-native-click-outside";
 
 function CollectionHeaderButtons({ route, navigation }: any) {
 	const colId = route.params.colId;
@@ -11,6 +13,8 @@ function CollectionHeaderButtons({ route, navigation }: any) {
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const [ deleteCollection ] = useMutation(DELETE_COLLECTION);
 	const [ changeCollectionLock ] = useMutation(CHANGE_COLLECTION_LOCK);
+	const [ displayMenu, setDisplayMenu ] = useState(false);
+	const ref = useClickOutside(() => setDisplayMenu(false));
 
 	useEffect(() => {
 		if(!data) return;
@@ -80,29 +84,56 @@ function CollectionHeaderButtons({ route, navigation }: any) {
 				</View>
 			</Modal>
 			<TouchableOpacity
-				activeOpacity={0.5}
-				onPress={() => navigation.navigate("Learn", { colId })}
-				style={{marginTop: 5, marginRight: 4}}
+				activeOpacity={0.75}
+				onPress={() => setDisplayMenu(true)}
+				style={styles.menuContainer}
 			>
-				<Ionicons name="book" size={24} color="#eee" />
-			</TouchableOpacity>
-			<TouchableOpacity
-				activeOpacity={0.5}
-				onPress={setLockHandler}
-			>
-				<Ionicons name={data.getCollection.isLocked ? "lock-closed" : "lock-open"} size={24} color="#eee" />
-			</TouchableOpacity>
-			<TouchableOpacity
-				activeOpacity={0.5}
-				onPress={() => setDisplayModal(true)}
-			>
-				<Ionicons name="pencil" size={24} color="#eee" />
-			</TouchableOpacity>
-			<TouchableOpacity
-				activeOpacity={0.5}
-				onPress={deleteHandler}
-			>
-				<Ionicons name="trash-outline" size={24} color="#eee" />
+				<Ionicons name="ellipsis-vertical" size={24} color="#eee" />
+				{
+					displayMenu &&
+					<View style={styles.menuBody} ref={ref}>
+						<TouchableOpacity
+							activeOpacity={0.5}
+							onPress={() => navigation.navigate("Learn", { colId })}
+							style={styles.menuItem}
+						>
+							<Text style={styles.menuItemText}>
+								Learn
+							</Text>
+							<Ionicons name="book" size={21} color="gray" />
+						</TouchableOpacity>
+						<TouchableOpacity
+							activeOpacity={0.5}
+							onPress={setLockHandler}
+							style={styles.menuItem}
+						>
+							<Text style={styles.menuItemText}>
+								{data.getCollection.isLocked ? "Unlock" : "Lock"}
+							</Text>
+							<Ionicons name={data.getCollection.isLocked ? "lock-open" : "lock-closed"} size={21} color="gray" />
+						</TouchableOpacity>
+						<TouchableOpacity
+							activeOpacity={0.5}
+							onPress={() => setDisplayModal(true)}
+							style={styles.menuItem}
+						>
+							<Text style={styles.menuItemText}>
+								Edit
+							</Text>
+							<Ionicons name="pencil" size={21} color="gray" />
+						</TouchableOpacity>
+						<TouchableOpacity
+							activeOpacity={0.5}
+							onPress={deleteHandler}
+							style={styles.menuItem}
+						>
+							<Text style={styles.menuItemText}>
+								Delete
+							</Text>
+							<Ionicons name="trash-outline" size={21} color="gray" />
+						</TouchableOpacity>
+					</View>
+				}
 			</TouchableOpacity>
 		</View>
 	)
@@ -135,6 +166,29 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		top: 5,
 		right: 5
+	},
+	menuContainer: {
+		position: "relative"
+	},
+	menuBody : {
+		position: "absolute",
+		top: 0,
+		right: 0,
+		width: 160,
+		padding: 12,
+		borderRadius: 4,
+		gap: 11,
+		backgroundColor: "white"
+	},
+	menuItem: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 10,
+		justifyContent: "space-between"
+	},
+	menuItemText: {
+		fontSize: 16,
+		color: fontColor
 	}
 })
 
