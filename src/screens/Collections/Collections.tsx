@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client/react";
 import { GET_PROFILE_COLLECTIONS } from "../../query/collections";
 import ErrorComponent from "../../components/Errors/ErrorComponent";
 import Loader from "../../components/Loader";
-import { ICollection } from "../../types/collections";
+import { ICollection } from "../../../types/collections";
 import CollectionCard from "./components/CollectionCard";
 import { StackScreenProps, createStackNavigator } from "@react-navigation/stack";
 import CollectionScreen from "./CollectionScreen/CollectionScreen";

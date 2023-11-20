@@ -1,7 +1,7 @@
 import { IPhrase } from "../types/phrases";
 import { IJWT } from "../types/authorization";
 import { Collection } from "../Classes/Collection";
-import { ICollection } from "../types/collections";
+import { ICollection } from "../../../types/collections";
 
 const settingsController = require("./Settings");
 const globalErrorHandler = require("../service/globalErrorHandler");
