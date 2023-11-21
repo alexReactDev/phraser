@@ -1,22 +1,20 @@
 export interface PhraseRepetition {
-	id: number,
+	id: string,
 	guessed: number,
-	forgotten: number,
-	repeated: number
+	forgotten: number
 }
 
 export interface IRepetition {
 	id: string,
 	userId: number,
 	phrasesCount: number,
-	totalGuessed: number,
 	totalForgotten: number,
-	totalRepeated: number,
 	totalOmitted: number,
 	collectionName: string,
 	repetitionType: string,
-	phrasesRepetitions: [PhraseRepetition],
-	omittedPhrases: [number],
+	repetitionsAmount: number,
+	phrasesRepetitions: PhraseRepetition[],
+	omittedPhrases: number[],
 	created: BigInt | number
 }
 

@@ -47,20 +47,18 @@ const schema = buildSchema(`
 	type PhraseRepetition {
 		id: ID,
 		guessed: Int,
-		forgotten: Int,
-		repeated: Int
+		forgotten: Int
 	}
 
 	type Repetition {
 		id: ID,
 		userId: ID,
 		phrasesCount: Int,
-		totalGuessed: Int,
 		totalForgotten: Int,
-		totalRepeated: Int,
 		totalOmitted: Int,
 		collectionName: String,
 		repetitionType: String,
+		repetitionsAmount: Int,
 		phrasesRepetitions: [PhraseRepetition],
 		omittedPhrases: [ID],
 		created: Float

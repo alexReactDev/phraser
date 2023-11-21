@@ -1,4 +1,4 @@
-import { IRepetitionInput } from "../types/repetitions";
+import { IRepetitionInput } from "@ts/repetitions";
 
 const db = require("../model/db");
 const generateId = require("../utils/generateId");
