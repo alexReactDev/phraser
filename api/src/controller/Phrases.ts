@@ -146,49 +146,6 @@ class PhrasesController {
 	}
 
 	async mutatePhraseMeta({ input }: { input: [IPhraseRepetitionInput] }) {
-		const phrasesIds = input.map((repetition) => repetition.id);
-		
-		let phrases;
-
-		try {
-			const cursor = await db.collection("phrases").find({ id: {
-				$in: phrasesIds
-			}})
-
-			phrases = await cursor.toArray();
-		} catch (e) {
-			globalErrorHandler(e);
-			return `Error! ${e}`;
-		}
-
-		globalErrorHandler(phrases);
-
-		let updatePromises = [];
-
-		for(let i = 0; i < input.length; i++) {
-			const { id, ...meta } = input[i];
-			const oldMeta = phrases.find((phrase: IPhrase) => phrase.id === id).meta;
-
-			let promise = db.collection("phrases").updateOne({ id }, {
-				$set: {
-					meta: {
-						repeated: oldMeta.repeated + +meta.repeated,
-						guessed: oldMeta.guessed + +meta.guessed,
-						forgotten: oldMeta.forgotten + +meta.forgotten
-					}
-				}
-			})
-
-			updatePromises.push(promise);
-		}
-
-		try {
-			await Promise.all(updatePromises);
-		} catch (e) {
-			globalErrorHandler(e);
-			return `Error! ${e}`;
-		}
-
 		return "OK";
 	}	
 

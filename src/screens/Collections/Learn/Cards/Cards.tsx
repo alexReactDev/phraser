@@ -1,187 +1,88 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { GET_COLLECTION_PHRASES } from "../../../../query/phrases";
 import Loader from "../../../../components/Loader";
 import ErrorComponent from "../../../../components/Errors/ErrorComponent";
-import { IPhrase } from "../../../../types/phrases";
 import { Ionicons } from '@expo/vector-icons';
 import { borderColor, fontColor, fontColorFaint } from "../../../../styles/variables";
-import { CREATE_COLLECTION_REPETITION, MUTATE_PHRASES_META } from "../../../../query/repetitions";
 import { GET_COLLECTION_NAMEID } from "../../../../query/collections";
 import { StackScreenProps } from "@react-navigation/stack";
 import { StackNavigatorParams } from "../../Collections";
+import { Cards } from "src/classes/Cards";
+import { observer } from "mobx-react-lite";
+import settings from "@store/settings";
+import * as Progress from "react-native-progress";
+import { IRepetition, IRepetitionInput } from "@ts/repetitions";
+import Result from "./components/Result";
+
+interface PhraseData {
+	value: string,
+	translation: string
+}
+
+interface ProgressData {
+	total: number,
+	progress: number
+}
 
 type Props = StackScreenProps<StackNavigatorParams, "Cards", "collectionsNavigator">;
 
-function Learn({ route, navigation }: Props) {
+const Learn = observer(function ({ route, navigation }: Props) {
 	const colId = route.params.colId;
 
-	const { data, loading, error } = useQuery(GET_COLLECTION_PHRASES, { variables: { id: colId }});
-	const phrasesData = data?.getCollectionPhrases;
-
+	const { data, error } = useQuery(GET_COLLECTION_PHRASES, { variables: { id: colId }});
 	const { data: colData } = useQuery(GET_COLLECTION_NAMEID, { variables: { id: colId }});
-
-	const [ mutatePhrasesMeta ] = useMutation(MUTATE_PHRASES_META);
-	const [ createCollectionRepetition ] = useMutation(CREATE_COLLECTION_REPETITION);
-
-	const [ started, setStarted ] = useState(false);
-	const [ phrases, setPhrases ] = useState<number[]>([]);
-	const [ phrasesRepetitions, setPhrasesRepetitions ] = useState<IPhraseRepetition[]>([]);
-	const [ showTranslation, setShowTranslation ] = useState(false);
-	const [ currentPhrase, setCurrentPhrase ] = useState<number>();
-	const [ previousPhrase, setPreviousPhrase ] = useState("previous phrase: some phrase");
-	const [ incomingPhrase, setIncomingPhrase ] = useState("");
-	const [ finished, setFinished ] = useState(false);
-	const [ result, setResult ] = useState<IRepetition | null>(null);
-
-	useEffect(() => {
-		if(finished) finishHandler();
-	}, [finished]);
 
 	useEffect(() => {
 		if(colData) navigation.setOptions({ title: "Cards. Learning " + colData.getCollection.name });
-	}, [colData])
+	}, [colData]);
 
-	function startHandler() {
-		const phrases = phrasesData.map((phrase: IPhrase) => phrase.id);
-		setPhrases(phrases);
-		setPhrasesRepetitions(phrases.map((id: number) => ({
-			id,
-			guessed: 0,
-			forgotten: 0,
-			repeated: 0
-		})))
-		setCurrentPhrase(phrases[0]);
-		setIncomingPhrase(phrasesData.find((phrase: IPhrase) => phrase.id === phrases[1]).value + ": ?");
+	const [ controller, setController ] = useState<Cards | null>(null);
+
+	const [ showTranslation, setShowTranslation ] = useState(false);
+	
+	const [ previousPhrase, setPreviousPhrase ] = useState("");
+	const [ currentPhrase, setCurrentPhrase ] = useState<PhraseData | null>(null);
+
+	const [ progress, setProgress ] = useState<ProgressData | null>(null);
+	
+	const [ started, setStarted ] = useState(false);
+	const [ finished, setFinished ] = useState(false);
+	const [ result, setResult ] = useState<IRepetitionInput | null>(null);
+
+	useEffect(() => {
+		if(!data || !colData) return;
+		
+		const controller = new Cards(colData.getCollection.name, data.getCollectionPhrases, {
+			mode: settings.settings.phrasesOrder!, 
+			repetitionsAmount: settings.settings.repetitionsAmount!
+		});
+		const initialData = controller.start();
+		setController(controller);
+		setCurrentPhrase(initialData.value);
+		setProgress((controller!).getProgress());
 		setStarted(true);
-	}
+	}, [data, colData]);
 
 	function nextHandler(remembered: boolean) {
-		let newPhrases = phrases.filter((p, index) => index !== 0);
-		if(!remembered) newPhrases = [...newPhrases, currentPhrase!]
+		const nextData = (controller!).next(remembered);
 
-		const phraseRepetitionData: IPhraseRepetition = phrasesRepetitions.find((phraseRepetition: IPhraseRepetition) => phraseRepetition.id === currentPhrase)!;
-		let newPhraseRepetitionData = {
-			...phraseRepetitionData,
-			repeated: phraseRepetitionData!.repeated + 1
+		if(nextData?.done === true) {
+			const result = (controller!).finish();
+			setResult(result);
+			setFinished(true);
 		}
 
-		if(remembered) {
-			newPhraseRepetitionData = {
-				...newPhraseRepetitionData,
-				guessed: newPhraseRepetitionData.guessed! + 1
-			}
-		} else {
-			newPhraseRepetitionData = {
-				...newPhraseRepetitionData,
-				forgotten: newPhraseRepetitionData.forgotten! + 1
-			}
-		}
-
-		setPhrasesRepetitions(phrasesRepetitions.filter((repetition) => repetition.id !== currentPhrase).concat([newPhraseRepetitionData]));
-
-		if(newPhrases.length === 0) return setFinished(true);
-
-		setPhrases(newPhrases);
-
-		const currentPhraseData = phrasesData.find((phrase: IPhrase) => phrase.id === currentPhrase);
-		setPreviousPhrase(currentPhraseData.value + ": " + currentPhraseData.translation);
-
-		const incomingPhraseData = phrasesData.find((phrase: IPhrase) => phrase.id === newPhrases[1]);
-		setIncomingPhrase(incomingPhraseData ? incomingPhraseData.value + ": ?" : "");
-
-		setCurrentPhrase(newPhrases[0]);
-		setShowTranslation(false);
+		setPreviousPhrase(`Previous phrase: ${currentPhrase?.value}: ${currentPhrase?.translation}`);
+		setCurrentPhrase(nextData?.value);
+		setProgress((controller!).getProgress());
 	}
 
-	function finishHandler() {
-		let repetitionData: Partial<IRepetition> = phrasesRepetitions.reduce((meta, phraseRepetition) => {
-			return {
-				phrasesCount: meta.phrasesCount + 1,
-				totalGuessed: meta.totalGuessed + phraseRepetition.guessed,
-				totalForgotten: meta.totalForgotten + phraseRepetition.forgotten,
-				totalRepeated: meta.totalRepeated + phraseRepetition.repeated
-			}
-		}, {
-			totalRepeated: 0,
-			totalGuessed: 0,
-			totalForgotten: 0,
-			phrasesCount: 0
-		})
-
-		repetitionData = {
-			...repetitionData,
-			created: new Date().getTime(),
-			phrasesRepetitions
-		};
-
-		setResult(repetitionData as IRepetition);
-
-		createCollectionRepetition({
-			variables: {
-				id: colId,
-				input: repetitionData
-			}
-		});
-
-		mutatePhrasesMeta({
-			variables: {
-				input: phrasesRepetitions
-			}
-		});
-	}
-
-	if (loading) return <Loader />
+	if (!started) return <Loader />
 	if (error) return <ErrorComponent message="Failed to load collection data" />
 
-	if(!started) return (
-		<View 
-			style={style.demoContainer}
-		>
-			<Button 
-				title="Start"
-				onPress={startHandler}
-			/>
-		</View>
-	)
-
-	if(finished) return (
-		<View 
-			style={style.demoContainer}
-		>
-			<Text
-				style={style.doneTitle}
-			>
-				Done!
-			</Text>
-			<Text
-				style={style.resultTitle}
-			>
-				Result:
-			</Text>
-			<Text
-				style={style.metaText}
-			>
-				Phrases count: {result?.phrasesCount}
-			</Text>
-			<Text
-				style={style.metaText}
-			>
-				Repeated: {result?.totalRepeated}
-			</Text>
-			<Text
-				style={style.metaText}
-			>
-				Guessed: {result?.totalGuessed}
-			</Text>
-			<Text
-				style={style.metaText}
-			>
-				Forgotten: {result?.totalForgotten}
-			</Text>
-		</View>
-	)
+	if(finished) return <Result result={result!} />
 
 	return (
 		<View
@@ -190,10 +91,15 @@ function Learn({ route, navigation }: Props) {
 			<View
 				style={style.adjacentPhrasesContainer}
 			>
-				<Text
-					style={style.ajacentPhrases}
-				>
-					{previousPhrase}
+				<Progress.Bar
+					width={200}
+					height={12}
+					unfilledColor="lightgray"
+					progress={(progress!).progress / (progress!).total}
+					color="gray"
+				></Progress.Bar>
+				<Text>
+					{`${(progress!).progress}/${(progress!).total}`}
 				</Text>
 			</View>
 			<View
@@ -225,9 +131,9 @@ function Learn({ route, navigation }: Props) {
 						{
 							showTranslation
 							?
-							phrasesData.find((phrase: IPhrase) => phrase.id === currentPhrase).translation
+							(currentPhrase!).translation
 							:
-							phrasesData.find((phrase: IPhrase) => phrase.id === currentPhrase).value
+							(currentPhrase!).value
 						}
 					</Text>
 				</TouchableOpacity>
@@ -238,7 +144,7 @@ function Learn({ route, navigation }: Props) {
 				<Text
 					style={style.ajacentPhrases}
 				>
-					{incomingPhrase}
+					{previousPhrase}
 				</Text>
 			</View>
 			<View
@@ -269,14 +175,9 @@ function Learn({ route, navigation }: Props) {
 			</View>
 		</View>
 	)
-}
+});
 
 const style = StyleSheet.create({
-	demoContainer: {
-		height: "100%",
-		justifyContent: "center",
-		alignItems: "center"
-	},
 	container: {
 		height: "100%"
 	},
@@ -284,6 +185,7 @@ const style = StyleSheet.create({
 		height: "10%",
 		flexDirection: "row",
 		justifyContent: "center",
+		gap: 10,
 		alignItems: "center"
 	},
 	ajacentPhrases: {
@@ -330,17 +232,6 @@ const style = StyleSheet.create({
 	},
 	currentPhraseIconText: {
 		fontSize: 24
-	},
-	doneTitle: {
-		fontSize: 24,
-		marginBottom: 15
-	},
-	resultTitle: {
-		fontSize: 18,
-		marginBottom: 5
-	},
-	metaText: {
-		marginBottom: 4
 	}
 })
 
