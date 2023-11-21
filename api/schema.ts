@@ -75,7 +75,7 @@ const schema = buildSchema(`
 	type Settings {
 		theme: String,
 		phrasesOrder: String,
-		repetitionsAmount: String,
+		repetitionsAmount: Int,
 		activeProfile: ID,
 		autoCollectionSize: Int,
 		intervalRepetitionDates: String
