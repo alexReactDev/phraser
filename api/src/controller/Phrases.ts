@@ -1,5 +1,6 @@
 import { IJWT } from "../types/authorization";
-import { IPhrase, IPhraseInput, IPhraseRepetitionInput } from "../types/phrases";
+import { IPhrase } from "@ts/phrases";
+import { IPhraseInput, IPhraseRepetitionInput } from "../types/phrases";
 
 const db = require("../model/db.ts");
 const generateId = require("../utils/generateId");

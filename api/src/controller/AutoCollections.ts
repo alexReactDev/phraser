@@ -1,4 +1,4 @@
-import { IPhrase } from "../types/phrases";
+import { IPhrase } from "@ts/phrases";
 import { IJWT } from "../types/authorization";
 import { Collection } from "../Classes/Collection";
 import { ICollection } from "../../../types/collections";

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { IPhrase } from "../../../../types/phrases";
+import { IPhrase } from "@ts/phrases";
 import { Ionicons } from "@expo/vector-icons";
 import { fontColorFaint } from "../../../../styles/variables";
 import { useMutation } from "@apollo/client";
