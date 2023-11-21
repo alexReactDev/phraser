@@ -14,7 +14,9 @@ module.exports = function(api) {
             "@query": "./src/query",
             "@store": "./src/store",
             "@styles": "./src/styles",
-            "@types": "./src/types",
+            "@ts": "./types",
+            "@ts-frontend": "./src/types",
+            "@ts-backend": "./api/src/types",
             "@utils": "./src/utils"
           },
         },
