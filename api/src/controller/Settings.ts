@@ -1,4 +1,4 @@
-import { ISettingsInput } from "../types/settings";
+import { ISettings } from "@ts/settings";
 
 const db = require("../model/db.ts");
 const generateId = require("../utils/generateId");
@@ -43,7 +43,7 @@ class SettingsController {
 		return settings;
 	}
 
-	async setUserSettings({ id, input }: { id: string, input: ISettingsInput }) {
+	async setUserSettings({ id, input }: { id: string, input: ISettings}) {
 		try {
 			await db.collection("settings").updateOne({ userId: id }, {
 				$set: {
@@ -59,7 +59,7 @@ class SettingsController {
 		return "OK";
 	}
 
-	async updateUserSettings({ id, input }:  { id: string, input: Partial<ISettingsInput>}) {
+	async updateUserSettings({ id, input }:  { id: string, input: Partial<ISettings>}) {
 		let settings;
 		
 		settings = await this.getUserSettings({ id });

@@ -1,16 +1,11 @@
 import { makeAutoObservable } from "mobx";
-import { IInitialSettings, ISettings, IUserSettings } from "../types/settings";
+import { ISettings, IUserSettings } from "@ts/settings";
 
 class Settings {
 	loading = false;
 	loaded = false;
 	error = null;
-	settings: IInitialSettings = {
-		theme: null,
-		phrasesOrder: null,
-		repetitionsAmount: null,
-		activeProfile: null
-	}
+	settings: Partial<ISettings> = {};
 
 	constructor() {
 		makeAutoObservable(this);
