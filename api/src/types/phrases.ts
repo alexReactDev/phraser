@@ -6,6 +6,7 @@ export interface IPhraseInput {
 }
 
 export interface IPhraseRepetitionInput {
-	id: string,
-	meta: IPhraseMeta
+	guessed: number,
+	forgotten: number,
+	lastRepetition: number
 }

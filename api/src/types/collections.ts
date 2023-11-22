@@ -4,6 +4,11 @@ export interface ICollectionInput {
 	profile: string
 }
 
+export interface ICollectionMetaInput {
+	repetitionsCount: number,
+	lastRepetition: number
+}
+
 export interface IChangeCollectionLockInput {
 	isLocked: boolean
 }

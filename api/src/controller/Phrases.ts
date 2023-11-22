@@ -1,5 +1,4 @@
 import { IJWT } from "../types/authorization";
-import { IPhrase } from "@ts/phrases";
 import { IPhraseInput, IPhraseRepetitionInput } from "../types/phrases";
 
 const db = require("../model/db.ts");
@@ -145,13 +144,11 @@ class PhrasesController {
 		return "OK";
 	}
 
-	async mutatePhraseMeta({ input }: { input: IPhraseRepetitionInput }) {
-		console.log(input);
-
+	async mutatePhraseMeta({ id, input }: { id: string, input: IPhraseRepetitionInput }) {
 		let phrase;
 
 		try {
-			phrase = await db.collection("phrases").findOne({ id: input.id });
+			phrase = await db.collection("phrases").findOne({ id });
 		} catch (e) {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to get phrase. ${e}`);
@@ -160,11 +157,11 @@ class PhrasesController {
 		if(!phrase) throw new Error("404. Collection not found");
 
 		try {
-			await db.collection("phrases").updateOne({ id: input.id }, {
+			await db.collection("phrases").updateOne({ id }, {
 				$set: {
-					"meta.guessed": phrase.meta.guessed + input.meta.guessed,
-					"meta.forgotten": phrase.meta.forgotten + input.meta.forgotten,
-					"meta.lastRepetition": input.meta.lastRepetition
+					"meta.guessed": phrase.meta.guessed + input.guessed,
+					"meta.forgotten": phrase.meta.forgotten + input.forgotten,
+					"meta.lastRepetition": input.lastRepetition
 				}
 			});
 		} catch (e) {

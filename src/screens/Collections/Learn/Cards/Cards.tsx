@@ -54,7 +54,7 @@ const Learn = observer(function ({ route, navigation }: Props) {
 	useEffect(() => {
 		if(!data || !colData) return;
 		
-		const controller = new Cards(colData.getCollection.name, data.getCollectionPhrases, {
+		const controller = new Cards(colData.getCollection, data.getCollectionPhrases, {
 			mode: settings.settings.phrasesOrder!, 
 			repetitionsAmount: settings.settings.repetitionsAmount!
 		});

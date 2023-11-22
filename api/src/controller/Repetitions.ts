@@ -5,13 +5,13 @@ const generateId = require("../utils/generateId");
 const globalErrorHandler = require("../service/globalErrorHandler");
 
 class RepetitionsController {
-	async createRepetition({ repetition }: { repetition: IRepetitionInput }) {
+	async createRepetition({ input }: { input: IRepetitionInput }) {
 		try {
 			const id = generateId();
 
 			await db.collection("repetitions").insertOne({
 				id,
-				...repetition
+				...input
 			})
 		} catch (e) {
 			globalErrorHandler(e);

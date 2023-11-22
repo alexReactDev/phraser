@@ -22,3 +22,5 @@ export interface ICollection {
 	phrases: String[],
 	repetitions: String[],
 }
+
+export type TCollectionNameId = Pick<ICollection, "name" | "id">

@@ -9,7 +9,7 @@ export const GET_COLLECTION_PHRASES = gql`
 			created,
 			lastUpdate,
 			meta {
-				repeated, guessed, forgotten
+				guessed, forgotten, lastRepetition
 			}
 		}
 	}
@@ -24,7 +24,7 @@ export const GET_PHRASE = gql`
 			created,
 			lastUpdate,
 			meta {
-				repeated, guessed, forgotten
+				guessed, forgotten, lastRepetition
 			}
 		}
 	}
@@ -60,6 +60,12 @@ export const MUTATE_PHRASE = gql`
 		}
 	}
 `;
+
+export const MUTATE_PHRASE_META = gql`
+	mutation mutatePhraseMeta($id: ID, $input: PhraseMetaInput) {
+		mutatePhraseMeta(id: $id, input: $input)
+	}
+`
 
 export const DELETE_PHRASE = gql`
 	mutation deletePhrase($id: ID) {

@@ -43,6 +43,7 @@ const root = {
 	getProfileCollections: collectionsController.getCollectionsByProfile,
 	deleteCollection: collectionsController.deleteCollection,
 	mutateCollection: collectionsController.mutateCollection,
+	mutateCollectionMeta: collectionsController.mutateCollectionMeta,
 	changeCollectionLock: collectionsController.changeCollectionLock,
 	getPhraseCollection: collectionsController.getCollectionByPhrase,
 

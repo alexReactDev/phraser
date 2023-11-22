@@ -87,6 +87,12 @@ export const MUTATE_COLLECTION = gql`
 	}
 `;
 
+export const MUTATE_COLLECTION_META = gql`
+	mutation mutateCollectionMeta($id: ID, $input: CollectionMetaInput) {
+		mutateCollectionMeta(id: $id, input: $input)
+	}
+`;
+
 export const CHANGE_COLLECTION_LOCK = gql`
 	mutation changeCollectionLock($id: ID, $input: ChangeCollectionLockInput) {
 		changeCollectionLock(id: $id, input: $input)

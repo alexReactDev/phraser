@@ -1,6 +1,6 @@
 import { ICollection } from "types/collections";
 import { Collection } from "../Classes/Collection";
-import { IChangeCollectionLockInput, ICollectionInput } from "../types/collections";
+import { IChangeCollectionLockInput, ICollectionInput, ICollectionMetaInput } from "../types/collections";
 
 const db = require("../model/db.ts");
 const globalErrorHandler = require("../service/globalErrorHandler");
@@ -18,7 +18,7 @@ class CollectionsController {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to get collection. ${e}`);
 		}
-
+		
 		return result;
 	}
 
@@ -81,6 +81,33 @@ class CollectionsController {
 		} catch (e) {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to mutate collection. ${e}`);
+		}
+
+		return "OK";
+	}
+
+	async mutateCollectionMeta({ id, input }: { id: string, input: ICollectionMetaInput }) {
+		let collection;
+
+		try {
+			collection = await db.collection("collections").findOne({ id });
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to get collection. ${e}`);
+		}
+
+		if(!collection) throw new Error("404. Collection not found");
+
+		try {
+			await db.collection("collections").updateOne({ id }, {
+				$set: {
+					"meta.repetitionsCount": collection.meta.repetitionsCount + input.repetitionsCount,
+					"meta.lastRepetition": input.lastRepetition
+				}
+			})
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed edit collection meta. ${e}`);
 		}
 
 		return "OK";
