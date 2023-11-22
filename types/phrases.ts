@@ -1,5 +1,4 @@
 export interface IPhraseMeta {
-	repeated: number,
 	forgotten: number,
 	guessed: number,
 	lastRepetition: number

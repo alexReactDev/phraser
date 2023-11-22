@@ -46,9 +46,11 @@ class AutoCollectionsController {
 		}
 
 		const phrasesWithScore = phrases.map((phrase: IPhrase) => {
+			const repetitionsAmount = phrase.meta.guessed + phrase.meta.forgotten;
+
 			return {
 				phrase,
-				score: (phrase.meta.forgotten - phrase.meta.guessed) - phrase.meta.repeated + ((new Date().getTime() - phrase.meta.lastRepetition) / 86400000 /*1d*/)
+				score: (phrase.meta.forgotten - phrase.meta.guessed) - repetitionsAmount + ((new Date().getTime() - phrase.meta.lastRepetition) / 86400000 /*1d*/)
 			}
 		});
 

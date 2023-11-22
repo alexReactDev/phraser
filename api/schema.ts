@@ -3,7 +3,6 @@ const { buildSchema } = require("graphql");
 const schema = buildSchema(`
 
 	type PhraseMeta {
-		repeated: Int,
 		guessed: Int,
 		forgotten: Int,
 		lastRepetition: Int
