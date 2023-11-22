@@ -145,7 +145,33 @@ class PhrasesController {
 		return "OK";
 	}
 
-	async mutatePhraseMeta({ input }: { input: [IPhraseRepetitionInput] }) {
+	async mutatePhraseMeta({ input }: { input: IPhraseRepetitionInput }) {
+		console.log(input);
+
+		let phrase;
+
+		try {
+			phrase = await db.collection("phrases").findOne({ id: input.id });
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to get phrase. ${e}`);
+		}
+
+		if(!phrase) throw new Error("404. Collection not found");
+
+		try {
+			await db.collection("phrases").updateOne({ id: input.id }, {
+				$set: {
+					"meta.guessed": phrase.meta.guessed + input.meta.guessed,
+					"meta.forgotten": phrase.meta.forgotten + input.meta.forgotten,
+					"meta.lastRepetition": input.meta.lastRepetition
+				}
+			});
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to edit phrase meta. ${e}`);
+		}
+
 		return "OK";
 	}	
 

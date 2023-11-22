@@ -50,7 +50,7 @@ const root = {
 	getCollectionPhrases: phrasesController.getPhrasesByCollection,
 	createPhrase: phrasesController.createPhrase,
 	mutatePhrase: phrasesController.mutatePhrase,
-	mutatePhrasesMeta: phrasesController.mutatePhraseMeta,
+	mutatePhraseMeta: phrasesController.mutatePhraseMeta,
 	deletePhrase: phrasesController.deletePhrase,
 
 	createRepetition: repetitionsController.createRepetition,

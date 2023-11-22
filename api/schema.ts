@@ -5,7 +5,7 @@ const schema = buildSchema(`
 	type PhraseMeta {
 		guessed: Int,
 		forgotten: Int,
-		lastRepetition: Int
+		lastRepetition: Float
 	}
 
 	type Phrase {
@@ -145,11 +145,15 @@ const schema = buildSchema(`
 		isLocked: Boolean
 	}
 
-	input PhraseRepetitionInput {
-		id: ID,
+	input PhraseMetaInput {
 		guessed: Int,
 		forgotten: Int,
-		repeated: Int
+		lastRepetition: Float
+	}
+
+	input PhraseRepetitionInput {
+		id: ID,
+		meta: PhraseMetaInput
 	}
 
 	input SettingsInput {
@@ -196,7 +200,7 @@ const schema = buildSchema(`
 		deletePhrase(id: ID): String,
 		deleteCollection(id: ID): String,
 		mutatePhrase(id: ID, input: PhraseInput, collection: ID): String,
-		mutatePhrasesMeta(input: [PhraseRepetitionInput]): [Phrase],
+		mutatePhraseMeta(input: PhraseRepetitionInput): String,
 		mutateCollection(id: ID, input: CollectionInput): String,
 		changeCollectionLock(id: ID, input: ChangeCollectionLockInput): String,
 		createPhrase(input: PhraseInput, collection: ID): Phrase,
