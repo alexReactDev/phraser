@@ -5,15 +5,11 @@ import { Ionicons } from '@expo/vector-icons';
 import Add from './src/screens/Add/Add';
 import Collections from './src/screens/Collections/Collections';
 import Settings from "./src/screens/Settings/Settings";
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import AuthorizationChecker from "./src/components/AuthorizationChecker";
 import Profiles from "./src/components/Profiles";
 import { ClickOutsideProvider } from "react-native-click-outside";
-
-const client = new ApolloClient({
-  uri: process.env.EXPO_PUBLIC_API_URL,
-  cache: new InMemoryCache()
-});
+import { client } from "src/apollo";
 
 export type NavigatorParams = {
   Add: { mutateId: number | undefined } | undefined,
