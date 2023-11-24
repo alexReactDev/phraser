@@ -9,7 +9,7 @@ import { borderColor, fontColor, fontColorFaint } from "../../../../styles/varia
 import { GET_COLLECTION_NAMEID } from "../../../../query/collections";
 import { StackScreenProps } from "@react-navigation/stack";
 import { StackNavigatorParams } from "../../Collections";
-import { Cards } from "src/classes/Cards";
+import Cards from "src/classes/Cards";
 import { observer } from "mobx-react-lite";
 import settings from "@store/settings";
 import * as Progress from "react-native-progress";

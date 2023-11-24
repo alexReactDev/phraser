@@ -19,7 +19,7 @@ interface IParams {
 	repetitionsAmount: number
 }
 
-export class Cards {
+class Cards {
 	collection: TCollectionNameId;
 	mode: TPhrasesOrder;
 	repetitionsAmount: number;
@@ -159,3 +159,5 @@ export class Cards {
 		})
 	}
 }
+
+export default Cards;
