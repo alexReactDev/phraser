@@ -102,7 +102,6 @@ export class Cards {
 			userId: (session.data.userId!),
 			phrasesCount: this.phrases.length,
 			totalForgotten: this.phrases.reduce((total, phrase: IPhraseData) => phrase.forgotten + total, 0),
-			totalOmitted: 0, //Not applicable
 			collectionName: this.collection.name,
 			repetitionType: "Cards",
 			repetitionsAmount: this.repetitionsAmount,
@@ -111,7 +110,6 @@ export class Cards {
 				guessed: phrase.guessed,
 				forgotten: phrase.forgotten
 			})),
-			omittedPhrases: [], //Not applicable
 			created: new Date().getTime()
 		}
 

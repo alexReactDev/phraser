@@ -54,12 +54,10 @@ const schema = buildSchema(`
 		userId: ID,
 		phrasesCount: Int,
 		totalForgotten: Int,
-		totalOmitted: Int,
 		collectionName: String,
 		repetitionType: String,
 		repetitionsAmount: Int,
 		phrasesRepetitions: [PhraseRepetition],
-		omittedPhrases: [ID],
 		created: Float
 	}
 
@@ -191,12 +189,10 @@ const schema = buildSchema(`
 		userId: ID,
 		phrasesCount: Int,
 		totalForgotten: Int,
-		totalOmitted: Int,
 		collectionName: String,
 		repetitionType: String,
 		repetitionsAmount: Int,
 		phrasesRepetitions: [PhraseRepetitionInput],
-		omittedPhrases: [ID],
 		created: Float
 	}
 

@@ -9,12 +9,10 @@ export interface IRepetition {
 	userId: number,
 	phrasesCount: number,
 	totalForgotten: number,
-	totalOmitted: number,
 	collectionName: string,
 	repetitionType: string,
 	repetitionsAmount: number,
 	phrasesRepetitions: PhraseRepetition[],
-	omittedPhrases: number[],
 	created: BigInt | number
 }
 
