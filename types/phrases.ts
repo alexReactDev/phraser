@@ -13,3 +13,8 @@ export interface IPhrase {
 	meta: IPhraseMeta,
 	profile: string
 }
+
+export interface IPair {
+	value: string,
+	translation: string
+}

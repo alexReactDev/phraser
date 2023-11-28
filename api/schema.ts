@@ -73,7 +73,9 @@ const schema = buildSchema(`
 		repetitionsAmount: Int,
 		activeProfile: ID,
 		autoCollectionSize: Int,
-		intervalRepetitionDates: String
+		intervalRepetitionDates: String,
+		useGPT3: Boolean,
+		textDifficulty: String
 	}
 
 	type UserSettings {
@@ -110,7 +112,9 @@ const schema = buildSchema(`
 		getSession: Session,
 		getUserSettings(id: ID): UserSettings,
 		getUser(id: ID): User,
-		getUserRepetitions(userId: ID): [Repetition]
+		getUserRepetitions(userId: ID): [Repetition],
+		getGeneratedText(phrases: [String]): String,
+		getGeneratedSentences(phrases: [String]): [String]
 	}
 
 	input ProfileInput {

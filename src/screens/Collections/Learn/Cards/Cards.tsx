@@ -12,9 +12,9 @@ import { StackNavigatorParams } from "../../Collections";
 import Cards from "src/classes/Cards";
 import { observer } from "mobx-react-lite";
 import settings from "@store/settings";
-import * as Progress from "react-native-progress";
 import { IRepetition, IRepetitionInput } from "@ts/repetitions";
-import Result from "./components/Result";
+import Result from "../components/Result";
+import ProgressBar from "../components/ProgressBar";
 
 interface PhraseData {
 	value: string,
@@ -45,7 +45,7 @@ const Learn = observer(function ({ route, navigation }: Props) {
 	const [ previousPhrase, setPreviousPhrase ] = useState("");
 	const [ currentPhrase, setCurrentPhrase ] = useState<PhraseData | null>(null);
 
-	const [ progress, setProgress ] = useState<ProgressData | null>(null);
+	const [ progress, setProgress ] = useState<ProgressData>({ progress: 0, total: 0});
 	
 	const [ started, setStarted ] = useState(false);
 	const [ finished, setFinished ] = useState(false);
@@ -54,7 +54,7 @@ const Learn = observer(function ({ route, navigation }: Props) {
 	useEffect(() => {
 		if(!data || !colData) return;
 		
-		const controller = new Cards(colData.getCollection, data.getCollectionPhrases, {
+		const controller = new Cards(data.getCollectionPhrases, colData.getCollection, {
 			mode: settings.settings.phrasesOrder!, 
 			repetitionsAmount: settings.settings.repetitionsAmount!
 		});
@@ -91,16 +91,7 @@ const Learn = observer(function ({ route, navigation }: Props) {
 			<View
 				style={style.adjacentPhrasesContainer}
 			>
-				<Progress.Bar
-					width={200}
-					height={12}
-					unfilledColor="lightgray"
-					progress={(progress!).progress / (progress!).total}
-					color="gray"
-				></Progress.Bar>
-				<Text>
-					{`${(progress!).progress}/${(progress!).total}`}
-				</Text>
+				<ProgressBar progress={progress.progress} total={progress.total} />
 			</View>
 			<View
 				style={style.currentPhraseContainer}
@@ -185,7 +176,6 @@ const style = StyleSheet.create({
 		height: "10%",
 		flexDirection: "row",
 		justifyContent: "center",
-		gap: 10,
 		alignItems: "center"
 	},
 	ajacentPhrases: {

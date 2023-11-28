@@ -1,6 +1,5 @@
 import { IJWT } from "./types/authorization";
 
-const mock = require("../mock.json");
 const collectionsController = require("./controller/Collections");
 const phrasesController = require("./controller/Phrases");
 const profilesController = require("./controller/Profiles");
@@ -9,6 +8,7 @@ const authController = require("./controller/Authorization");
 const settingsController = require("./controller/Settings");
 const repetitionsController = require("./controller/Repetitions");
 const autoCollectionsController = require("./controller/AutoCollections");
+const AIGeneratedTextController = require("./controller/AIGeneratedText");
 
 const root = {
 	login: authController.login,
@@ -55,7 +55,10 @@ const root = {
 	deletePhrase: phrasesController.deletePhrase,
 
 	createRepetition: repetitionsController.createRepetition,
-	getUserRepetitions: repetitionsController.getUserRepetitions
+	getUserRepetitions: repetitionsController.getUserRepetitions,
+
+	getGeneratedText: (...args: any) => AIGeneratedTextController.generateText(...args),
+	getGeneratedSentences: AIGeneratedTextController.generateSentences
 }
 
 module.exports = root;

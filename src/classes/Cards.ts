@@ -1,12 +1,9 @@
-import { MUTATE_COLLECTION_META } from "@query/collections";
-import { MUTATE_PHRASE_META } from "@query/phrases";
-import { CREATE_REPETITION } from "@query/repetitions";
-import session from "@store/session";
 import { TCollectionNameId } from "@ts/collections";
 import { IPhrase } from "@ts/phrases";
-import { IRepetitionInput } from "@ts/repetitions";
 import { TPhrasesOrder } from "@ts/settings";
-import { client } from "src/apollo";
+import Learner from "./Learner";
+import Repetition from "./RepetitionCreator";
+import session from "@store/session";
 
 interface IPhraseData {
 	phrase: IPhrase,
@@ -19,7 +16,7 @@ interface IParams {
 	repetitionsAmount: number
 }
 
-class Cards {
+class Cards extends Learner {
 	collection: TCollectionNameId;
 	mode: TPhrasesOrder;
 	repetitionsAmount: number;
@@ -28,7 +25,8 @@ class Cards {
 	repeatedCount = 0;
 	currentIdx = 0;
 
-	constructor(collection: TCollectionNameId, phrases: IPhrase[], params: IParams) {
+	constructor(phrases: IPhrase[], collection: TCollectionNameId, params: IParams) {
+		super();
 		this.collection = collection;
 		this.mode = params.mode;
 		this.repetitionsAmount = params.repetitionsAmount;
@@ -98,7 +96,7 @@ class Cards {
 	}
 
 	finish() {
-		const repetition = {
+		const repetition = new Repetition({
 			userId: (session.data.userId!),
 			phrasesCount: this.phrases.length,
 			totalForgotten: this.phrases.reduce((total, phrase: IPhraseData) => phrase.forgotten + total, 0),
@@ -110,8 +108,7 @@ class Cards {
 				guessed: phrase.guessed,
 				forgotten: phrase.forgotten
 			})),
-			created: new Date().getTime()
-		}
+		});
 
 		this._createRepetition(repetition);
 
@@ -123,40 +120,6 @@ class Cards {
 			total: this.phrases.length * this.repetitionsAmount,
 			progress: this.repeatedCount
 		}
-	}
-
-	async _updateCollectionMeta(id: string) {
-		await client.mutate({
-			mutation: MUTATE_COLLECTION_META,
-			variables: {
-				id,
-				input: {
-					repetitionsCount: 1,
-					lastRepetition: new Date().getTime()
-				}
-			}
-		})
-	}
-
-	async _updatePhraseMeta(id: string, remembered: boolean) {
-		await client.mutate({
-			mutation: MUTATE_PHRASE_META,
-			variables: {
-				id,
-				input: {
-					guessed: remembered ? 1 : 0,
-					forgotten: remembered ? 0 : 1,
-					lastRepetition: new Date().getTime()
-				}
-			}
-		})
-	}
-
-	async _createRepetition(repetition: IRepetitionInput) {
-		await client.mutate({
-			mutation: CREATE_REPETITION,
-			variables: { input: repetition }
-		})
 	}
 }
 
