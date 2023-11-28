@@ -12,7 +12,7 @@ function ErrorComponent({ message = "Unknown error" }) {
 				Something went wrong
 			</Text>
 			<Text style={style.message}>
-				{message}
+				{message.toString()}
 			</Text>
 		</View>
 	)
@@ -20,7 +20,8 @@ function ErrorComponent({ message = "Unknown error" }) {
 
 const style = StyleSheet.create({
 	container: {
-		marginVertical: 32
+		marginVertical: 32,
+		paddingHorizontal: 10
 	},
 	icon: {
 		textAlign: "center",

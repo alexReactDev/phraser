@@ -11,7 +11,7 @@ function ErrorMessage({ message = "" }) {
 				</Text>
 			</View>
 			<Text style={styles.message}>
-				{message}
+				{message.toString()}
 			</Text>
 		</View>
 	)

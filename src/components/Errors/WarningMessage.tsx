@@ -12,7 +12,7 @@ function WarningMessage({ message = "" }) {
 				</Text>
 			</View>
 			<Text style={styles.text}>
-				{message}
+				{message.toString()}
 			</Text>
 		</View>
 	)

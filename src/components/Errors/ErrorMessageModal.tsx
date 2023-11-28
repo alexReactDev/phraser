@@ -23,7 +23,7 @@ function ErrorMessageModal({ errorMessage = "Something went wrong", onClose }: I
 						</TouchableOpacity>
 					<Ionicons name="alert-circle-outline" size={22} color="gray" />
 					<Text style={styles.title}>
-						{errorMessage}
+						{errorMessage.toString()}
 					</Text>
 				</View>
 			</View>
