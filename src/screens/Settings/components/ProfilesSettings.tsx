@@ -35,6 +35,7 @@ const ProfilesSettings = observer(function() {
 			setErrorMessage(e.toString());
 		}
 
+		setInput("");
 		setDisplayModal(false);
 	}
 
@@ -59,6 +60,7 @@ const ProfilesSettings = observer(function() {
 							Profile name
 						</Text>
 						<TextInput
+							autoFocus
 							value={input}
 							onChangeText={(t) => setInput(t)}
 							style={styles.modalInput}
