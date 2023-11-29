@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useClickOutside } from "react-native-click-outside";
 
 function Tip({ text }: { text: string }) {
-	const [ showTooltip, setShow ] = useState(true);
+	const [ showTooltip, setShow ] = useState(false);
 	const ref = useClickOutside(() => setShow(false));
 
 	return (
