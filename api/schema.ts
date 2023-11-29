@@ -168,7 +168,7 @@ const schema = buildSchema(`
 		autoCollectionsSize: Int!,
 		intervalRepetitionDates: String!,
 		textDifficulty: String!,
-		useGPT3: String!
+		useGPT3: Boolean!
 	}
 
 	input PartialSettingsInput {
@@ -180,7 +180,7 @@ const schema = buildSchema(`
 		autoCollectionsSize: Int,
 		intervalRepetitionDates: String,
 		textDifficulty: String,
-		useGPT3: String
+		useGPT3: Boolean
 	}
 
 	input LoginInput {
