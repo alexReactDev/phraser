@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { observer } from "mobx-react-lite";
 import settings from "../../../store/settings";
 import { useMutation } from "@apollo/client";
-import { UPDATE_USER_SETTINGS } from "../../../query/settings";
+import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "../../../query/settings";
 import session from "../../../store/session";
 import ErrorMessageModal from "../../../components/Errors/ErrorMessageModal";
 import { useState } from "react";
@@ -23,7 +23,8 @@ const LearnModeSettings = observer(function() {
 				variables: {
 					id: session.data.userId,
 					input: { phrasesOrder: selected }
-				}
+				},
+				refetchQueries: [ GET_USER_SETTING ]
 			})
 		} catch (e: any) {
 			console.log(e);
@@ -37,7 +38,8 @@ const LearnModeSettings = observer(function() {
 				variables: {
 					id: session.data.userId,
 					input: { repetitionsAmount: selected }
-				}
+				},
+				refetchQueries: [ GET_USER_SETTING ]
 			})
 		} catch (e: any) {
 			console.log(e);
