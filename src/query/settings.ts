@@ -24,7 +24,12 @@ export const GET_USER_SETTING = gql`
 				phrasesOrder,
 				theme,
 				repetitionsAmount,
-				activeProfile
+				activeProfile,
+				disableAutoCollections,
+				autoCollectionsSize,
+				intervalRepetitionDates,
+				useGPT3,
+				textDifficulty
 			}
 		}
 	}

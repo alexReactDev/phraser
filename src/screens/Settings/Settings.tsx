@@ -10,6 +10,8 @@ import { LOGOUT } from "../../query/authorization";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import ErrorMessageModal from "../../components/Errors/ErrorMessageModal";
+import AutoCollectionsSettings from "./components/AutoCollectionsSettings";
+import AISettings from "./components/AISettings";
 
 const Settings = observer(function() {
 	const [ deleteUser ] = useMutation(DELETE_USER);
@@ -75,6 +77,8 @@ const Settings = observer(function() {
 			<UserInfo />
 			<ProfilesSettings />
 			<LearnModeSettings />
+			<AutoCollectionsSettings />
+			<AISettings />
 			<View style={styles.buttonsContainer}>
 				<View style={styles.button}>
 					<Button title="Logout" color="#ff6c6c" onPress={logoutHandler}/>

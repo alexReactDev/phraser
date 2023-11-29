@@ -53,7 +53,7 @@ function CollectionsNavigation() {
 type Props = StackScreenProps<StackNavigatorParams, "Collections", "collectionsNavigator">;
 
 const Collections = observer(function ({ navigation }: Props) {
-	const { data = [], loading, error } = useQuery(GET_PROFILE_COLLECTIONS, { variables: { id: settings.settings.activeProfile }, onError(e: any) { console.log("FUCK" + e); }});
+	const { data = [], loading, error } = useQuery(GET_PROFILE_COLLECTIONS, { variables: { id: settings.settings.activeProfile } });
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const [ autoCollectionsError, setAutoCollectionsError ] = useState("");
 
@@ -98,7 +98,10 @@ const Collections = observer(function ({ navigation }: Props) {
 				<View
 					style={styles.list}
 				>
-					<AutoCollections navigation={navigation} onError={autoCollectionsErrorHandler} />
+					{
+						!settings.settings.disableAutoCollections &&
+						<AutoCollections navigation={navigation} onError={autoCollectionsErrorHandler} />
+					}
 					{
 						data.getProfileCollections.map((col: ICollection) => <CollectionCard key={col.id} collection={col} navigation={navigation} />)
 					}

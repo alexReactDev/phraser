@@ -72,7 +72,8 @@ const schema = buildSchema(`
 		phrasesOrder: String,
 		repetitionsAmount: Int,
 		activeProfile: ID,
-		autoCollectionSize: Int,
+		disableAutoCollections: Boolean,
+		autoCollectionsSize: Int,
 		intervalRepetitionDates: String,
 		useGPT3: Boolean,
 		textDifficulty: String
@@ -162,14 +163,24 @@ const schema = buildSchema(`
 		theme: String!,
 		phrasesOrder: String!,
 		repetitionsAmount: String!,
-		activeProfile: ID!
+		activeProfile: ID!,
+		disableAutoCollections: Boolean!,
+		autoCollectionsSize: Int!,
+		intervalRepetitionDates: String!,
+		textDifficulty: String!,
+		useGPT3: String!
 	}
 
 	input PartialSettingsInput {
 		theme: String,
 		phrasesOrder: String,
 		repetitionsAmount: Int,
-		activeProfile: ID
+		activeProfile: ID,
+		disableAutoCollections: Boolean,
+		autoCollectionsSize: Int,
+		intervalRepetitionDates: String,
+		textDifficulty: String,
+		useGPT3: String
 	}
 
 	input LoginInput {

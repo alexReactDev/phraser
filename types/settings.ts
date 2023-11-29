@@ -13,6 +13,7 @@ export interface ISettings {
 	phrasesOrder: TPhrasesOrder,
 	repetitionsAmount: number,
 	activeProfile: string,
+	disableAutoCollections: boolean,
 	autoCollectionsSize: number,
 	intervalRepetitionDates: TIntervalRepetitionDates,
 	useGPT3: boolean,
