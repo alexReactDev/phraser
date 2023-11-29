@@ -35,9 +35,11 @@ const styles = StyleSheet.create({
 	container: {
 		width: "100%",
 		height: "100%",
-		position: "relative"
+		position: "relative",
+		backgroundColor: "#ffffff88"
 	},
 	body: {
+		maxWidth: "90%",
 		position: "absolute",
 		right: 15,
 		top: 15,
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
 		borderColor: "gray",
 		flexDirection: "row",
 		alignItems: "center",
-		gap: 2.5,
+		gap: 5,
 		backgroundColor: "#f5f5f5",
 		shadowColor: "black",
 		shadowOffset: { width: 10, height: 10 },
