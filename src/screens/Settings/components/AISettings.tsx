@@ -15,7 +15,7 @@ const textDifficultyValues = [{ text: "Not specified", value: "default"}, { text
 
 function AISettings() {
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
-	const [ errorMessage, setErrorMessage ] = useState("Lorem ipsum");
+	const [ errorMessage, setErrorMessage ] = useState("");
 
 	async function useGPT3Handler(value: boolean) {
 		try {
