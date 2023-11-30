@@ -53,7 +53,7 @@ const ProfilesSettings = observer(function() {
 			>
 				<View style={styles.modalContainer}>
 					<TouchableOpacity style={styles.modalCross} onPress={() => setDisplayModal(false)}>
-						<Ionicons name="close" color="gray" size={24} />
+						<Ionicons name="close" color="gray" size={32} />
 					</TouchableOpacity>
 					<View style={styles.modalBody}>
 						<Text style={styles.modalTitle}>
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
 	modalCross: {
 		position: "absolute",
 		top: 0,
-		right: 0
+		right: 10
 	},
 	modalTitle: {
 		fontSize: 18,

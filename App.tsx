@@ -29,11 +29,11 @@ export default function App() {
               id="MainNavigator" 
               screenOptions={{
                 tabBarActiveTintColor: "black",
-                tabBarInactiveTintColor: "gray",
-                headerRight: () => <Profiles />
+                tabBarInactiveTintColor: "gray"
               }}>
                 <Navigator.Screen name="Add" component={Add} options={{
-                  tabBarIcon: ({ focused }) => <Ionicons name="language" size={24} color={focused ? "black" : "gray"} />
+                  tabBarIcon: ({ focused }) => <Ionicons name="language" size={24} color={focused ? "black" : "gray"} />,
+                  headerRight: () => <Profiles />
                 }}></Navigator.Screen>
                 <Navigator.Screen name="Collections" component={Collections} options={{
                   tabBarIcon: ({ focused }) => <Ionicons name="copy" size={24} color={focused ? "black" : "gray"} />,
