@@ -53,9 +53,7 @@ class AutoCollectionsController {
 				score: (phrase.meta.forgotten - phrase.meta.guessed) - repetitionsAmount + ((new Date().getTime() - phrase.meta.lastRepetition) / 86400000 /*1d*/)
 			}
 		});
-
-		console.log(phrasesWithScore);
-
+		
 		interface IPhraseWithScore {
 			phrase: IPhrase,
 			score: number
