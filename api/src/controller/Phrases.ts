@@ -12,12 +12,12 @@ class PhrasesController {
 
 		try {
 			phrase = await db.collection("phrases").findOne({ id });
-
-			if(!phrase) throw new Error("404. Phrase not found");
 		} catch (e) {
 			globalErrorHandler(e);
-			throw `Server error. Failed to get collection ${e}`;
+			throw new Error(`Server error. Failed to get phrase ${e}`);
 		}
+
+		if(!phrase) throw new Error("404. Phrase not found");
 
 		return phrase;
 	}
@@ -35,7 +35,7 @@ class PhrasesController {
 			phrases = await cursor.toArray();
 		} catch (e) {
 			globalErrorHandler(e);
-			throw `Server error. Can't get phrases. ${e}`;
+			throw new Error(`Server error. Failed to get phrases. ${e}`);
 		}
 
 		return phrases;
@@ -45,11 +45,7 @@ class PhrasesController {
 		const timestamp = new Date().getTime();
 		const id = generateId();
 
-		console.log(context);
-
  		const userSettings = await settingsController.getUserSettings({ id: context.auth.userId });
-
-		console.log(userSettings);
 
 		const phrase = {
 			...input,
@@ -68,34 +64,15 @@ class PhrasesController {
 			await db.collection("phrases").insertOne(phrase);
 		} catch (e) {
 			globalErrorHandler(e);
-			throw `Server error. Failed to create phrase. ${e}`;
+			throw new Error(`Server error. Failed to create phrase. ${e}`);
 		}
 
-		try {
-			const col = await db.collection("collections").findOne({ id: collection });
-
-			if(!col) throw new Error("404. Collection not found");
-
-			if(col.isLocked) throw new Error("400. Collection is locked");
-
-			await db.collection("collections").updateOne({ id: collection }, {
-				$set: {
-					phrases: [...col.phrases, id],
-					meta: {
-						...col.meta,
-						phrasesCount: col.meta.phrasesCount + 1
-					}
-				}
-			})
-		} catch (e) {
-			globalErrorHandler(e);
-			throw new Error(`Sever error. Failed to create phrase: failed to add phrase to collection. ${e}`);
-		}
+		await this.addToCollection({ id, destId: collection });
 
 		return phrase;
 	}
 
-	async mutatePhrase({ id, input, collection }: { id: string, input: IPhraseInput, collection: string}) {
+	async mutatePhrase({ id, input }: { id: string, input: IPhraseInput }) {
 		try {
 			await db.collection("phrases").updateOne({ id }, {
 				$set: {
@@ -105,43 +82,52 @@ class PhrasesController {
 			})
 		} catch (e) {
 			globalErrorHandler(e);
-			throw `Server error. Failed to mutate phrase. ${e}`;
-		}
-
-		try {
-			const oldCollection = await db.collection("collections").findOne({
-				phrases: {
-					$in: [id]
-				}
-			})
-
-			if(!oldCollection) throw new Error("404. Collection not found");
-
-			if(collection && (oldCollection.id !== collection)) {
-				const newCollection = await db.collection("collections").findOne({ id: collection });
-
-				if(!newCollection) throw new Error("404. Collection not found");
-
-				if(newCollection.isLocked) throw new Error("400. Collection is locked");
-
-				await db.collection("collections").updateOne({ id: oldCollection.id }, {
-					$set: {
-						phrases: oldCollection.phrases.filter((phrase: string) => phrase !== id)
-					}
-				})
-
-				await db.collection("collections").updateOne({ id: collection }, {
-					$set: {
-						phrases: [ ...newCollection.phrases, id ]
-					}
-				})
-			}
-		} catch (e) {
-			globalErrorHandler(e);
-			throw `Server error. Failed to mutate phrase: failed to change collection. ${e}`;
+			throw new Error(`Server error. Failed to mutate phrase. ${e}`);
 		}
 
 		return "OK";
+	}
+
+	async movePhrase({ id, destId }: { id: string, destId: string }) {
+		await this.removeFromCollection({ id });
+
+		await this.addToCollection({ id, destId });
+
+		return "OK"
+	}
+
+	async moveMany({ ids, destId }: { ids: string[], destId: string}) {
+		await this.removeFromCollectionMany({ ids });
+
+		let dest;
+
+		try {
+			dest = await db.collection("collections").findOne({ id: destId });
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to move phrases: Failed to get destination collection ${e}`);
+		}
+
+		if(!dest) throw new Error("404. Destination collection not found");
+
+		if(dest.isLocked) throw new Error("400. Destination collection is locked");
+
+		try {
+			await db.collection("collections").updateOne({ id: destId }, {
+				$set: {
+					phrases: [ ...dest.phrases, ...ids ],
+					meta: {
+						...dest.meta,
+						phrasesCount: dest.meta.phrasesCount + ids.length
+					}
+				}
+			})
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to move phrases: Failed to update destination collection ${e}`);
+		}
+
+		return "OK"
 	}
 
 	async mutatePhraseMeta({ id, input }: { id: string, input: IPhraseRepetitionInput }) {
@@ -173,14 +159,133 @@ class PhrasesController {
 	}	
 
 	async deletePhrase({ id }: { id: string }) {
+		await this.removeFromCollection({ id });
+
 		try {
 			await db.collection("phrases").deleteOne({ id });
 		} catch (e) {
 			globalErrorHandler(e);
-			throw `Server error. Failed to delete phrase. ${e}`;
+			throw new Error(`Server error. Failed to delete phrase. ${e}`);
 		}
 
 		return "OK";
+	}
+
+	async deleteMany({ ids }: { ids: string[] }) {
+		await this.removeFromCollectionMany({ ids });
+
+		try {
+			await db.collection("phrases").deleteMany({ id: { $in: ids } });
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to delete phrases. ${e}`);
+		}
+
+		return "OK";
+	}
+
+	async addToCollection({ id, destId }: { id: string, destId: string }) {
+		let dest;
+
+		try {
+			dest = await db.collection("collections").findOne({ id: destId });
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to add to collection: Failed to get destination collection ${e}`);
+		}
+
+		if(!dest) throw new Error("404. Destination collection not found");
+
+		if(dest.isLocked) throw new Error("400. Destination collection is locked");
+
+		try {
+			await db.collection("collections").updateOne({ id: destId }, {
+				$set: {
+					phrases: [ ...dest.phrases, id ],
+					meta: {
+						...dest.meta,
+						phrasesCount: dest.meta.phrasesCount + 1
+					}
+				}
+			})
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to add to collection. Failed to update destination collection ${e}`);
+		}
+
+		return "OK"
+	}
+
+	async removeFromCollection({ id }: { id: string }) {
+		let collection;
+
+		try {
+			collection = await db.collection("collections").findOne({
+				phrases: {
+					$in: [id]
+				}
+			})
+		}
+		catch(e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed remove phrase from collection: Failed to get collection. ${e}`);
+		}
+
+		if(!collection) throw new Error("404. Failed to remove phrase from collection: Collection not found");
+
+		try {
+			await db.collection("collections").updateOne({ id: collection.id }, {
+				$set: {
+					phrases: collection.phrases.filter((phrase: string) => phrase !== id),
+					meta: {
+						...collection.meta,
+						phrasesCount: collection.meta.phrasesCount - 1
+					}
+				}
+			})
+		}
+		catch(e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed remove phrase from collection. ${e}`);
+		}
+
+		return "OK"
+	}
+
+	async removeFromCollectionMany({ ids }: { ids: string[] }) {
+		let collection;
+
+		try {
+			collection = await db.collection("collections").findOne({
+				phrases: {
+					$in: ids
+				}
+			})
+		}
+		catch(e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed remove phrases from collection: Failed to get collection. ${e}`);
+		}
+
+		if(!collection) throw new Error("404. Failed to remove phrases from collection: Collection not found");
+
+		try {
+			await db.collection("collections").updateOne({ id: collection.id }, {
+				$set: {
+					phrases: collection.phrases.filter((phrase: string) => !ids.includes(phrase)),
+					meta: {
+						...collection.meta,
+						phrasesCount: collection.meta.phrasesCount - ids.length
+					}
+				}
+			})
+		}
+		catch(e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed remove phrases from collection. ${e}`);
+		}
+
+		return "OK"
 	}
 }
 

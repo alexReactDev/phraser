@@ -52,7 +52,10 @@ const root = {
 	createPhrase: phrasesController.createPhrase,
 	mutatePhrase: phrasesController.mutatePhrase,
 	mutatePhraseMeta: phrasesController.mutatePhraseMeta,
-	deletePhrase: phrasesController.deletePhrase,
+	movePhrase: (...args: any) => phrasesController.movePhrase(...args),
+	movePhrasesMany: (...args: any) => phrasesController.moveMany(...args),
+	deletePhrase: (...args: any) => phrasesController.deletePhrase(...args),
+	deletePhrasesMany: (...args: any) => phrasesController.deleteMany(...args),
 
 	createRepetition: repetitionsController.createRepetition,
 	getUserRepetitions: repetitionsController.getUserRepetitions,

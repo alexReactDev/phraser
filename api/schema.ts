@@ -213,8 +213,11 @@ const schema = buildSchema(`
 
 	type Mutation {
 		deletePhrase(id: ID): String,
+		deletePhrasesMany(ids: [ID]): String,
 		deleteCollection(id: ID): String,
-		mutatePhrase(id: ID, input: PhraseInput, collection: ID): String,
+		mutatePhrase(id: ID, input: PhraseInput): String,
+		movePhrase(id: ID, destId: ID): String,
+		movePhrasesMany(ids: [ID], destId: ID): String,
 		mutatePhraseMeta(id: ID, input: PhraseMetaInput): String,
 		mutateCollection(id: ID, input: CollectionInput): String,
 		mutateCollectionMeta(id: ID, input: CollectionMetaInput): String,
