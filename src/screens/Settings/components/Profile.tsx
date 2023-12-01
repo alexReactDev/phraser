@@ -1,4 +1,4 @@
-import { Button, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { IProfile } from "../../../types/profiles";
 import { borderColor } from "../../../styles/variables";
 import { Ionicons } from '@expo/vector-icons';
@@ -10,6 +10,7 @@ import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "../../../query/settings"
 import { observer } from "mobx-react-lite";
 import session from "../../../store/session";
 import ErrorMessageModal from "../../../components/Errors/ErrorMessageModal";
+import ModalComponent from "@components/ModalComponent";
 
 const Profile = observer(function({ profile }: { profile: IProfile}) {
 	const [ showButtons, setShowButtons ] = useState(false);
@@ -75,31 +76,22 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 			{
 				errorMessage && <ErrorMessageModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
 			}
-			<Modal
-				visible={displayModal}
-				transparent={true}
-				animationType="slide"
-			>
-				<View style={styles.modalContainer}>
-					<TouchableOpacity style={styles.modalCross} onPress={() => setDisplayModal(false)}>
-						<Ionicons name="close" color="gray" size={32} />
-					</TouchableOpacity>
-					<View style={styles.modalBody}>
-						<Text style={styles.modalTitle}>
-							Profile name
-						</Text>
-						<TextInput
-							value={input}
-							onChangeText={(t) => setInput(t)}
-							style={styles.modalInput}
-						></TextInput>
-						<Button
-							title="Confirm"
-							onPress={mutateHandler}
-						></Button>
-					</View>
+			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+				<View style={styles.modalBody}>
+					<Text style={styles.modalTitle}>
+						Profile name
+					</Text>
+					<TextInput
+						value={input}
+						onChangeText={(t) => setInput(t)}
+						style={styles.modalInput}
+					></TextInput>
+					<Button
+						title="Confirm"
+						onPress={mutateHandler}
+					></Button>
 				</View>
-			</Modal>
+			</ModalComponent>
 			<TouchableOpacity 
 				style={styles.container} 
 				activeOpacity={0.7}

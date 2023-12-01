@@ -1,4 +1,4 @@
-import { View, StyleSheet, ScrollView, TouchableOpacity, Modal } from "react-native";
+import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { useQuery } from "@apollo/client/react";
 import { GET_PROFILE_COLLECTIONS } from "../../query/collections";
 import ErrorComponent from "../../components/Errors/ErrorComponent";
@@ -21,6 +21,7 @@ import AIGeneratedText from "./Learn/AIGeneratedText/AIGeneratedText";
 import AutoCollections from "./components/AutoCollections";
 import WarningMessage from "@components/Errors/WarningMessage";
 import ErrorMessage from "@components/Errors/ErrorMessage";
+import ModalComponent from "@components/ModalComponent";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
@@ -67,27 +68,9 @@ const Collections = observer(function ({ navigation }: Props) {
 
 	return (
 		<View style={styles.container}>
-			<Modal
-				visible={displayModal}
-				animationType="slide"
-				transparent={true}
-			>
-				<View
-					style={styles.modalContainer}
-				>
-					<View
-						style={styles.modal}
-					>
-						<TouchableOpacity
-							onPress={() => setDisplayModal(false)}
-							style={styles.modalBtn}
-						>
-							<Ionicons name="close" color="gray" size={24} />
-						</TouchableOpacity>
-						<EditCollection onReady={() => setDisplayModal(false)} />
-					</View>
-				</View>
-			</Modal>
+			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+				<EditCollection onReady={() => setDisplayModal(false)} />
+			</ModalComponent>
 			<ScrollView>
 				{
 					autoCollectionsError &&

@@ -63,7 +63,7 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 	}
 
 	return (
-		<View>
+		<View style={styles.container}>
 			<Text
 				style={styles.title}
 			>
@@ -166,6 +166,15 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 });
 
 const styles = StyleSheet.create({
+	container: {
+		width: 300,
+		borderWidth: 1,
+		borderColor: "gray",
+		borderStyle: "solid",
+		padding: 20,
+		position: "relative",
+		backgroundColor: "white"
+	},
 	title: {
 		fontSize: 18,
 		marginBottom: 15

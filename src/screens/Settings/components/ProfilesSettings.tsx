@@ -1,4 +1,4 @@
-import { Button, Modal, StyleSheet, Text, View, TextInput, TouchableOpacity } from "react-native";
+import { Button, StyleSheet, Text, View, TextInput } from "react-native";
 import ErrorComponent from "../../../components/Errors/ErrorComponent";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_PROFILE, GET_USER_PROFILES } from "../../../query/profiles";
@@ -8,9 +8,9 @@ import { IProfile } from "../../../types/profiles";
 import settings from "../../../store/settings";
 import { borderColor, fontColor } from "../../../styles/variables";
 import { observer } from "mobx-react-lite";
-import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
 import ErrorMessageModal from "../../../components/Errors/ErrorMessageModal";
+import ModalComponent from "@components/ModalComponent";
 
 const ProfilesSettings = observer(function() {
 	const [ displayModal, setDisplayModal ] = useState(false);
@@ -46,32 +46,23 @@ const ProfilesSettings = observer(function() {
 			{
 				errorMessage && <ErrorMessageModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
 			}
-			<Modal
-				visible={displayModal}
-				transparent={true}
-				animationType="slide"
-			>
-				<View style={styles.modalContainer}>
-					<TouchableOpacity style={styles.modalCross} onPress={() => setDisplayModal(false)}>
-						<Ionicons name="close" color="gray" size={32} />
-					</TouchableOpacity>
-					<View style={styles.modalBody}>
-						<Text style={styles.modalTitle}>
-							Profile name
-						</Text>
-						<TextInput
-							autoFocus
-							value={input}
-							onChangeText={(t) => setInput(t)}
-							style={styles.modalInput}
-						></TextInput>
-						<Button
-							title="Confirm"
-							onPress={createProfileHandler}
-						></Button>
-					</View>
+			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+				<View style={styles.modalBody}>
+					<Text style={styles.modalTitle}>
+						Profile name
+					</Text>
+					<TextInput
+						autoFocus
+						value={input}
+						onChangeText={(t) => setInput(t)}
+						style={styles.modalInput}
+					></TextInput>
+					<Button
+						title="Confirm"
+						onPress={createProfileHandler}
+					></Button>
 				</View>
-			</Modal>
+			</ModalComponent>
 			<Text style={styles.title}>
 				Profiles
 			</Text>

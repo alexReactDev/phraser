@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Alert, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { useMutation, useQuery } from "@apollo/client";
 import { CHANGE_COLLECTION_LOCK, DELETE_COLLECTION, GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "../../../query/collections";
 import EditCollection from "./EditCollection";
 import { fontColor } from "@styles/variables";
 import { useClickOutside } from "react-native-click-outside";
+import ModalComponent from "@components/ModalComponent";
 
 function CollectionHeaderButtons({ route, navigation }: any) {
 	const colId = route.params.colId;
@@ -62,27 +63,9 @@ function CollectionHeaderButtons({ route, navigation }: any) {
 
 	return (
 		<View style={styles.container}>
-			<Modal
-				visible={displayModal}
-				transparent={true}
-				animationType="slide"
-			>
-				<View
-					style={styles.modalContainer}
-				>
-					<View
-						style={styles.modal}
-					>
-						<TouchableOpacity
-							onPress={() => setDisplayModal(false)}
-							style={styles.modalBtn}
-						>
-							<Ionicons name="close" color="gray" size={24} />
-						</TouchableOpacity>
-						<EditCollection mutateId={data.getCollection.id} onReady={() => setDisplayModal(false)} />
-					</View>
-				</View>
-			</Modal>
+			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+				<EditCollection mutateId={data.getCollection.id} onReady={() => setDisplayModal(false)} />
+			</ModalComponent>
 			<TouchableOpacity
 				activeOpacity={0.75}
 				onPress={() => setDisplayMenu(true)}
@@ -117,7 +100,10 @@ function CollectionHeaderButtons({ route, navigation }: any) {
 								</TouchableOpacity>
 								<TouchableOpacity
 									activeOpacity={0.5}
-									onPress={() => setDisplayModal(true)}
+									onPress={() => {
+										setDisplayModal(true);
+										setDisplayMenu(false);
+									}}
 									style={styles.menuItem}
 								>
 									<Text style={styles.menuItemText}>
@@ -150,27 +136,6 @@ const styles = StyleSheet.create({
 		gap: 15,
 		paddingHorizontal: 15,
 		alignItems: "center"
-	},
-	modalContainer: {
-		width: "100%",
-		height: "100%",
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "#ffffff88"
-	},
-	modal: {
-		width: 300,
-		borderWidth: 1,
-		borderColor: "gray",
-		borderStyle: "solid",
-		padding: 20,
-		position: "relative",
-		backgroundColor: "white"
-	},
-	modalBtn: {
-		position: "absolute",
-		top: 5,
-		right: 5
 	},
 	menuContainer: {
 		position: "relative"
