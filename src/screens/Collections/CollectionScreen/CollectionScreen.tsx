@@ -33,7 +33,7 @@ function CollectionScreen({ route, navigation }: Props) {
 			<FlatList
 				style={styles.container}
 				data={data?.getCollectionPhrases}
-				renderItem={({ item: phrase }) => <CollectionPhrase key={phrase.id} phrase={phrase} navigation={navigation} />}
+				renderItem={({ item: phrase }) => <CollectionPhrase key={phrase.id} phrase={phrase} colId={colId} navigation={navigation} />}
 				keyExtractor={(phrase) => phrase.id}
 			></FlatList>
 		</>

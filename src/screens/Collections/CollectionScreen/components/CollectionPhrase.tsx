@@ -4,16 +4,24 @@ import { Ionicons } from "@expo/vector-icons";
 import { fontColorFaint } from "../../../../styles/variables";
 import { useMutation } from "@apollo/client";
 import { DELETE_PHRASE, GET_COLLECTION_PHRASES } from "../../../../query/phrases";
+import { useState } from "react";
+import { useClickOutside } from "react-native-click-outside";
+import ModalComponent from "@components/ModalComponent";
+import MovePhrase from "./MovePhrase";
 
 interface IProps {
 	phrase: IPhrase,
+	colId: string,
 	navigation: any
 }
 
-function CollectionPhrase({ phrase, navigation }: IProps) {
+function CollectionPhrase({ phrase, colId, navigation }: IProps) {
+	const [ showControls, setShowControls ] = useState(false);
+	const [ displayModal, setDisplayModal ] = useState(false);
+	const ref = useClickOutside(() => setShowControls(false));
 
 	const [ deletePhrase ] = useMutation(DELETE_PHRASE);
-	
+
 	function deleteHandler() {
 		deletePhrase({
 			variables: { id: phrase.id },
@@ -22,29 +30,45 @@ function CollectionPhrase({ phrase, navigation }: IProps) {
 	}
 
 	return (
-		<View style={styles.container}>
-			<View style={styles.info}>
+		<View style={styles.container} ref={ref}>
+			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+				<MovePhrase id={phrase.id} currentColId={colId} />
+			</ModalComponent>
+			<TouchableOpacity
+				style={styles.info}
+				onPress={() => setShowControls(!showControls)}
+				activeOpacity={0.7}
+			>
 				<Text style={styles.title}>
 					{phrase.value}
 				</Text>
 				<Text style={styles.subtitle}>
 					{phrase.translation}
 				</Text>
-			</View>
-			<View style={styles.controls}>
-				<TouchableOpacity
-					activeOpacity={0.5}
-					onLongPress={() => navigation.navigate("Add", { mutateId: phrase.id })}
-				>
-					<Ionicons name="pencil" size={24} color={"gray"} />
-				</TouchableOpacity>
-				<TouchableOpacity
-					activeOpacity={0.5}
-					onLongPress={deleteHandler}
-				>
-					<Ionicons name="trash-outline" size={24} color={"gray"} />
-				</TouchableOpacity>
-			</View>
+			</TouchableOpacity>
+			{
+				showControls &&
+				<View style={styles.controls}>
+					<TouchableOpacity
+						activeOpacity={0.5}
+						onPress={() => setDisplayModal(true)}
+					>
+						<Ionicons name="ios-return-up-forward" size={24} color="black" />
+					</TouchableOpacity>
+					<TouchableOpacity
+						activeOpacity={0.5}
+						onPress={() => navigation.navigate("Add", { mutateId: phrase.id })}
+					>
+						<Ionicons name="pencil" size={24} color={"gray"} />
+					</TouchableOpacity>
+					<TouchableOpacity
+						activeOpacity={0.5}
+						onPress={deleteHandler}
+					>
+						<Ionicons name="trash-outline" size={24} color={"gray"} />
+					</TouchableOpacity>
+				</View>
+			}
 		</View>
 	)
 }
@@ -57,16 +81,16 @@ const styles = StyleSheet.create({
 		borderColor: "gray",
 		borderStyle: "solid",
 		borderRadius: 8,
-		padding: 5,
 		backgroundColor: "#ededede"
 	},
 	info: {
-		flex: 1
+		flex: 1,
+		padding: 5
 	},
 	controls: {
-		width: "25%",
+		width: "30%",
 		flexDirection: "row",
-		gap: 20,
+		gap: 15,
 		justifyContent: "center",
 		alignItems: "center"
 	},
