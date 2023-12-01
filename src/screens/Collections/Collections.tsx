@@ -25,10 +25,10 @@ import ModalComponent from "@components/ModalComponent";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
-	Collection: { colId: number },
-	Learn: { colId: number },
-	Cards: { colId: number },
-	AIGeneratedText: { colId: number }
+	Collection: { colId: string },
+	Learn: { colId: string },
+	Cards: { colId: string },
+	AIGeneratedText: { colId: string }
 }
 
 const StackNavigator = createStackNavigator<StackNavigatorParams>();
