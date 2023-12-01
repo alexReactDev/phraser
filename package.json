@@ -28,7 +28,8 @@
     "react-native-click-outside": "^0.1.1",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-progress": "^5.0.1",
-    "react-native-select-dropdown": "^3.4.0"
+    "react-native-select-dropdown": "^3.4.0",
+    "expo-checkbox": "~2.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -67,6 +67,12 @@ export const MOVE_PHRASE = gql`
 	}
 `;
 
+export const MOVE_PHRASES_MANY = gql`
+	mutation movePhrasesMany($ids: [ID], $destId: ID) {
+		movePhrasesMany(ids: $ids, destId: $destId)
+	}
+`;
+
 export const MUTATE_PHRASE_META = gql`
 	mutation mutatePhraseMeta($id: ID, $input: PhraseMetaInput) {
 		mutatePhraseMeta(id: $id, input: $input)
@@ -76,5 +82,11 @@ export const MUTATE_PHRASE_META = gql`
 export const DELETE_PHRASE = gql`
 	mutation deletePhrase($id: ID) {
 		deletePhrase(id: $id)
+	}
+`;
+
+export const DELETE_PHRASES_MANY = gql`
+	mutation deletePhrasesMany($ids: [ID]) {
+		deletePhrasesMany(ids: $ids)
 	}
 `;

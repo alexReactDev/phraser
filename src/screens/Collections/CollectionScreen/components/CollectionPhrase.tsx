@@ -3,19 +3,24 @@ import { IPhrase } from "@ts/phrases";
 import { Ionicons } from "@expo/vector-icons";
 import { fontColorFaint } from "../../../../styles/variables";
 import { useMutation } from "@apollo/client";
-import { DELETE_PHRASE, GET_COLLECTION_PHRASES } from "../../../../query/phrases";
+import { DELETE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION } from "../../../../query/phrases";
 import { useState } from "react";
 import { useClickOutside } from "react-native-click-outside";
 import ModalComponent from "@components/ModalComponent";
 import MovePhrase from "./MovePhrase";
+import Checkbox from "expo-checkbox";
 
 interface IProps {
 	phrase: IPhrase,
 	colId: string,
-	navigation: any
+	navigation: any,
+	selectionEnabled: boolean,
+	isSelected: boolean,
+	enableSelection: () => void,
+	onChange: (selected: boolean) => void
 }
 
-function CollectionPhrase({ phrase, colId, navigation }: IProps) {
+function CollectionPhrase({ phrase, colId, navigation, selectionEnabled, isSelected, enableSelection, onChange }: IProps) {
 	const [ showControls, setShowControls ] = useState(false);
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const ref = useClickOutside(() => setShowControls(false));
@@ -25,7 +30,7 @@ function CollectionPhrase({ phrase, colId, navigation }: IProps) {
 	function deleteHandler() {
 		deletePhrase({
 			variables: { id: phrase.id },
-			refetchQueries: [GET_COLLECTION_PHRASES]
+			refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION]
 		})
 	}
 
@@ -34,9 +39,29 @@ function CollectionPhrase({ phrase, colId, navigation }: IProps) {
 			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<MovePhrase id={phrase.id} currentColId={colId} />
 			</ModalComponent>
+			{
+				selectionEnabled &&
+				<View style={styles.checkBoxContainer}>
+					<Checkbox
+						value={isSelected}
+						onValueChange={onChange}
+						color={isSelected ? "#81b0ff" : undefined}
+					/>
+				</View>
+			}
 			<TouchableOpacity
 				style={styles.info}
-				onPress={() => setShowControls(!showControls)}
+				onPress={() => {
+					if(selectionEnabled) {
+						onChange(isSelected ? false : true)
+					} else {
+						setShowControls(!showControls)
+					}
+				}}
+				onLongPress={() => {
+					enableSelection();
+					onChange(true);
+				}}
 				activeOpacity={0.7}
 			>
 				<Text style={styles.title}>
@@ -101,6 +126,11 @@ const styles = StyleSheet.create({
 	subtitle: {
 		fontSize: 14,
 		color: fontColorFaint
+	},
+	checkBoxContainer: {
+		width: "10%",
+		alignItems: "center",
+		justifyContent: "center"
 	}
 })
 

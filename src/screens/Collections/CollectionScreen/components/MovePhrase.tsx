@@ -6,32 +6,50 @@ import SelectDropdown from "react-native-select-dropdown";
 import { Ionicons } from '@expo/vector-icons';
 import { ICollection } from "@ts/collections";
 import { useState } from "react";
-import { GET_COLLECTION_PHRASES, MOVE_PHRASE } from "@query/phrases";
+import { GET_COLLECTION_PHRASES, MOVE_PHRASE, MOVE_PHRASES_MANY } from "@query/phrases";
 
 interface IProps {
-	id: string,
-	currentColId: string
+	id: string | string[],
+	currentColId: string,
+	moveMany?: boolean,
+	onSuccess?: () => void,
+	onError?: () => void
 }
 
-function MovePhrase({ id, currentColId }: IProps) {
+function MovePhrase({ id, currentColId, moveMany = false, onSuccess }: IProps) {
 	const { data: { getProfileCollections: collections = [] } = {} } = useQuery(GET_PROFILE_COLLECTIONS_FOR_PHRASES, { variables: { id: settings.settings.activeProfile } });
 	const [ selectedId, setSelected ] = useState();
 	const [ movePhrase ] = useMutation(MOVE_PHRASE);
+	const [ movePhrasesMany ] = useMutation(MOVE_PHRASES_MANY);
 
 	async function moveHandler() {
-		await movePhrase({
-			variables: {
-				id,
-				destId: selectedId
-			},
-			refetchQueries: [GET_COLLECTION_PHRASES]
-		})
+		if(moveMany) {
+			await movePhrasesMany({
+				variables: {
+					ids: id,
+					destId: selectedId
+				},
+				refetchQueries: [GET_COLLECTION_PHRASES]
+			})
+		} else {
+			await movePhrase({
+				variables: {
+					id,
+					destId: selectedId
+				},
+				refetchQueries: [GET_COLLECTION_PHRASES]
+			})
+		}
+
+		onSuccess && onSuccess();
 	}
 
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>
-				Move phrase
+				{
+					moveMany ? "Move phrases" : "Move phrase"
+				}
 			</Text>
 			<SelectDropdown
 				data={collections.filter((col: Partial<ICollection>) => !col.isLocked && !(col.id === currentColId))}
