@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import { fontColor, fontColorFaint } from "@styles/variables";
+import { bgColorAccent, fontColor, fontColorFaint } from "@styles/variables";
 
 function WarningMessage({ message = "" }) {
 	return (
@@ -11,9 +11,12 @@ function WarningMessage({ message = "" }) {
 					Something went wrong
 				</Text>
 			</View>
-			<Text style={styles.text}>
-				{message.toString()}
-			</Text>
+			{
+				message &&
+				<Text style={styles.text}>
+					{message.toString()}
+				</Text>
+			}
 		</View>
 	)
 }
@@ -24,7 +27,8 @@ const styles = StyleSheet.create({
 		borderStyle: "solid",
 		borderBlockColor: "gray",
 		borderRadius: 5,
-		padding: 10
+		padding: 10,
+		backgroundColor: bgColorAccent
 	},
 	titleContainer: {
 		flexDirection: "row",
