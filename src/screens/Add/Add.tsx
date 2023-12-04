@@ -15,12 +15,13 @@ import { observer } from "mobx-react-lite";
 import session from "@store/session";
 import loadingSpinner from "@store/loadingSpinner";
 import errorMessage from "@store/errorMessage";
+import LoaderModal from "@components/Loaders/LoaderModal";
 
 type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 
 const Add = observer(function ({ route, navigation }: Props) {
 	const { data: { getProfileCollections: collections = [] } = {} } = useQuery(GET_PROFILE_COLLECTIONS_FOR_PHRASES, { variables: { id: settings.settings.activeProfile } });
-	const { data: { getPhrase: phraseData, getPhraseCollection: phraseCollection } = {} } = useQuery(GET_PHRASE_WITH_COLLECTION, { variables: { id: route.params?.mutateId }, skip: !route.params?.mutateId });
+	const { data: { getPhrase: phraseData, getPhraseCollection: phraseCollection } = {}, loading: phraseLoading } = useQuery(GET_PHRASE_WITH_COLLECTION, { variables: { id: route.params?.mutateId }, skip: !route.params?.mutateId });
 	const [ createPhrase ] = useMutation(CREATE_PHRASE);
 	const [ mutatePhrase ] = useMutation(MUTATE_PHRASE);
 	const [ movePhrase ] = useMutation(MOVE_PHRASE);
@@ -106,6 +107,10 @@ const Add = observer(function ({ route, navigation }: Props) {
 		<View
 			style={styles.container}
 		>
+			{
+				phraseLoading &&
+				<LoaderModal />
+			}
 			<Text style={styles.inputLabel}>
 				Phrase
 			</Text>
