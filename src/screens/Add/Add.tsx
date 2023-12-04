@@ -22,14 +22,15 @@ const Add = observer(function ({ route, navigation }: Props) {
 	const [ createPhrase ] = useMutation(CREATE_PHRASE);
 	const [ mutatePhrase ] = useMutation(MUTATE_PHRASE);
 	const [ movePhrase ] = useMutation(MOVE_PHRASE);
-	const selectRef = useRef<any>({});
+	const selectRef = useRef<any>(null);
+	const translationInputRef = useRef<any>(null);
 
 	useEffect(() => {
 		if(phraseData && phraseCollection) {
 			formik.setFieldValue("value", phraseData.value);
 			formik.setFieldValue("translation", phraseData.translation);
 			formik.setFieldValue("collection", phraseCollection.id);
-			selectRef.current?.selectIndex(collections.findIndex((col: ICollection) => col.id == phraseCollection.id))
+			selectRef?.current?.selectIndex(collections.findIndex((col: ICollection) => col.id == phraseCollection.id))
 		}
 	}, [phraseData]);
 
@@ -76,7 +77,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 			}
 
 			formik.resetForm();
-			selectRef.current?.reset();
+			selectRef?.current?.reset();
 
 			if(route.params?.mutateId) navigation.setParams({ mutateId: undefined });
 		}
@@ -88,11 +89,16 @@ const Add = observer(function ({ route, navigation }: Props) {
 		>
 			<TextInput
 				onChangeText={formik.handleChange("value")}
-				onBlur={formik.handleBlur("value")}
+				onBlur={() => {
+					formik.handleBlur("value");
+					translationInputRef?.current?.focus();
+				}}
 				value={formik.values.value}
 				multiline={true}
 				style={styles.input}
 				placeholder="Enter phrase..."
+				autoFocus
+				blurOnSubmit
 			/>
 			<Ionicons name="arrow-down" size={24} color="gray" style={styles.icon} />
 			<TextInput
@@ -101,7 +107,9 @@ const Add = observer(function ({ route, navigation }: Props) {
 				value={formik.values.translation}
 				multiline={true}
 				style={styles.input}
+				ref={translationInputRef}
 				placeholder="Enter translation..."
+				blurOnSubmit
 			/>
 			<SelectDropdown
 				data={collections.filter((col: ICollection) => !col.isLocked)}
