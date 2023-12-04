@@ -6,7 +6,7 @@ import { fontColor } from "../../styles/variables";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "../../query/collections";
 import SelectDropdown from "react-native-select-dropdown";
-import { CREATE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE_WITH_COLLECTION, MUTATE_PHRASE } from "../../query/phrases";
+import { CREATE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE_WITH_COLLECTION, MOVE_PHRASE, MUTATE_PHRASE } from "../../query/phrases";
 import { ICollection } from "../../../types/collections";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { NavigatorParams } from "../../../App";
@@ -21,6 +21,7 @@ const Add = observer(function ({ route }: Props) {
 	const { data: { getPhrase: phraseData, getPhraseCollection: phraseCollection } = {} } = useQuery(GET_PHRASE_WITH_COLLECTION, { variables: { id: route.params?.mutateId }, skip: !route.params?.mutateId });
 	const [ createPhrase ] = useMutation(CREATE_PHRASE);
 	const [ mutatePhrase ] = useMutation(MUTATE_PHRASE);
+	const [ movePhrase ] = useMutation(MOVE_PHRASE);
 	const selectRef = useRef<any>({});
 
 	useEffect(() => {
@@ -45,11 +46,20 @@ const Add = observer(function ({ route }: Props) {
 				mutatePhrase({
 					variables: {
 						id: route.params.mutateId,
-						input: data,
-						collection
+						input: data
 					},
-					refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: collection } }]
+					refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: phraseCollection.id } }]
 				});
+
+				if(collection !== phraseCollection.id) {
+					movePhrase({
+						variables: {
+							id: route.params.mutateId,
+							destId: collection
+						},
+						refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: phraseCollection.id } }, { query: GET_COLLECTION_PHRASES, variables: { id: collection }}]
+					})
+				}
 			} else {
 				createPhrase({
 					variables: {
