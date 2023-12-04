@@ -9,12 +9,12 @@ const ErrorMessageToast = observer(function () {
 
 	return (
 		<View style={styles.body}>
-				<TouchableOpacity
-					onPress={() => errorMessage.dismissErrorMessage()}
-					style={styles.btn}
-				>
-					<Ionicons name="close" color="gray" size={24} />
-				</TouchableOpacity>
+			<TouchableOpacity
+				onPress={() => errorMessage.dismissErrorMessage()}
+				style={styles.btn}
+			>
+				<Ionicons name="close" color="gray" size={24} />
+			</TouchableOpacity>
 			<Ionicons style={styles.icon} name="alert-circle-outline" size={22} color="gray" />
 			<Text style={styles.message}>
 				{errorMessage.message}
@@ -29,9 +29,10 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		right: 15,
 		top: 30,
-		padding: 10,
-		paddingRight: 35,
-		width: 200,
+		paddingVertical: 10,
+		paddingLeft: 8,
+		paddingRight: 24,
+		width: 210,
 		borderWidth: 1,
 		borderStyle: "solid",
 		borderColor: "gray",
@@ -41,15 +42,18 @@ const styles = StyleSheet.create({
 		backgroundColor: bgColorAccent
 	},
 	icon: {
-		alignSelf: "flex-start"
+		alignSelf: "flex-start",
+		flexShrink: 0
 	},
 	message: {
+		flex: 1,
 		color: "darkgrey",
-		fontWeight: "bold"
+		fontWeight: "bold",
+		textAlign: "center"
 	},
 	btn: {
 		position: "absolute",
-		right: 2,
+		right: 3,
 		top: 9.5
 	}
 })
