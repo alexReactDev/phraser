@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useFormik } from "formik";
-import { TouchableOpacity, View, TextInput, StyleSheet } from "react-native";
+import { TouchableOpacity, View, TextInput, StyleSheet, Text } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { fontColor } from "../../styles/variables";
 import { useMutation, useQuery } from "@apollo/client";
@@ -87,6 +87,9 @@ const Add = observer(function ({ route, navigation }: Props) {
 		<View
 			style={styles.container}
 		>
+			<Text style={styles.inputLabel}>
+				Phrase
+			</Text>
 			<TextInput
 				onChangeText={formik.handleChange("value")}
 				onBlur={() => {
@@ -101,6 +104,9 @@ const Add = observer(function ({ route, navigation }: Props) {
 				blurOnSubmit
 			/>
 			<Ionicons name="arrow-down" size={24} color="gray" style={styles.icon} />
+			<Text style={styles.inputLabel}>
+				Translation
+			</Text>
 			<TextInput
 				onChangeText={formik.handleChange("translation")}
 				onBlur={formik.handleBlur("translation")}
@@ -135,16 +141,22 @@ const Add = observer(function ({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
 	container: {
-		padding: 10,
+		paddingHorizontal: 18,
+		paddingVertical: 10,
 		position: "relative",
 		height: "100%"
 	},
+	inputLabel: {
+		marginBottom: 8,
+		fontSize: 18,
+		color: fontColor
+	},
 	input: {
-		height: 150,
+		height: 120,
 		borderWidth: 1,
 		borderStyle: "solid",
 		borderColor: "gray",
-		borderRadius: 2,
+		borderRadius: 4,
 		padding: 7,
 		backgroundColor: "white",
 		textAlignVertical: "top",
@@ -153,7 +165,8 @@ const styles = StyleSheet.create({
 		color: fontColor
 	},
 	icon: {
-		marginVertical: 10,
+		marginTop: 10,
+		marginBottom: -20,
 		alignSelf: "center"
 	},
 	select: {
@@ -162,7 +175,9 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: "gray",
 		marginTop: 15,
-		borderRadius: 2
+		borderRadius: 4,
+		height: 45,
+		backgroundColor: "#f9f9f9"
 	},
 	selectText: {
 		color: "gray"
@@ -171,15 +186,21 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		bottom: 10,
 		right: 10,
-		borderRadius: 50,
-		backgroundColor: "white",
+		borderRadius: 12,
+		backgroundColor: "#f9f9f9",
 		width: 45,
 		height: 45,
 		justifyContent: "center",
 		alignItems: "center",
 		borderStyle: "solid",
 		borderColor: "gray",
-		borderWidth: 1
+		borderWidth: 1,
+		flexDirection: "row",
+		gap: 5
+	},
+	buttonText: {
+		color: "gray",
+		fontSize: 18
 	}
 })
 
