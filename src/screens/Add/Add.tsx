@@ -13,6 +13,8 @@ import { NavigatorParams } from "../../../App";
 import settings from "../../store/settings";
 import { observer } from "mobx-react-lite";
 import session from "@store/session";
+import loadingSpinner from "@store/loadingSpinner";
+import errorMessage from "@store/errorMessage";
 
 type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 
@@ -40,42 +42,59 @@ const Add = observer(function ({ route, navigation }: Props) {
 			translation: "",
 			collection: null
 		},
-		onSubmit(values) {
+		async onSubmit(values) {
 			const { collection, ...data } = values;
 
+			loadingSpinner.setLoading();
+
 			if(route.params?.mutateId) {
-				mutatePhrase({
+				let promises = [];
+
+				promises.push(mutatePhrase({
 					variables: {
 						id: route.params.mutateId,
 						input: data
 					},
 					refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: phraseCollection.id } }]
-				});
+				}));
 
 				if(collection !== phraseCollection.id) {
-					movePhrase({
+					promises.push(movePhrase({
 						variables: {
 							id: route.params.mutateId,
 							destId: collection
 						},
 						refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: phraseCollection.id } }, { query: GET_COLLECTION_PHRASES, variables: { id: collection }}]
-					})
+					}));
+				}
+
+				try {
+					await Promise.all(promises);
+				} catch (e: any) {
+					console.log(e);
+					errorMessage.setErrorMessage(`Failed to update phrase ${e.toString()}`)
 				}
 			} else {
-				createPhrase({
-					variables: {
-						input: data,
-						collection
-					},
-					context: {
-						headers: {
-							"Authorization": `Bearer ${session.data.token}`
-						}
-					},
-					refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: collection } }]
-				})
+				try {
+					await createPhrase({
+						variables: {
+							input: data,
+							collection
+						},
+						context: {
+							headers: {
+								"Authorization": `Bearer ${session.data.token}`
+							}
+						},
+						refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: collection } }]
+					})
+				} catch (e: any) {
+					console.log(e);
+					errorMessage.setErrorMessage(`Failed to create phrase ${e.toString()}`)
+				}
 			}
 
+			loadingSpinner.dismissLoading();
 			formik.resetForm();
 			selectRef?.current?.reset();
 
