@@ -11,6 +11,7 @@ import Profiles from "./src/components/Profiles";
 import { ClickOutsideProvider } from "react-native-click-outside";
 import { client } from "src/apollo";
 import ErrorMessageToast from "@components/Errors/ErrorMessageToast";
+import LoaderToast from "@components/Loaders/LoaderToast";
 
 export type NavigatorParams = {
   Add: { mutateId: number | undefined } | undefined,
@@ -28,6 +29,7 @@ export default function App() {
           <AuthorizationChecker>
             <>
               <ErrorMessageToast />
+              <LoaderToast />
               <Navigator.Navigator 
                 id="MainNavigator" 
                 screenOptions={{

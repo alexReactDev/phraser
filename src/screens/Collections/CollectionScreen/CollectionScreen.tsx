@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useMutation, useQuery } from "@apollo/client";
 import { DELETE_PHRASES_MANY, GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION } from "../../../query/phrases";
-import Loader from "../../../components/Loader";
+import Loader from "../../../components/Loaders/Loader";
 import ErrorComponent from "../../../components/Errors/ErrorComponent";
 import CollectionPhrase from "./components/CollectionPhrase";
 import { GET_COLLECTION } from "../../../query/collections";

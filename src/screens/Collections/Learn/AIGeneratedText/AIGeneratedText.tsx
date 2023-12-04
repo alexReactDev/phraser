@@ -2,7 +2,7 @@ import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
 import Highlight from "./components/Hightlight";
 import { IPair, IPhrase } from "@ts/phrases";
 import { useState, useEffect } from "react";
-import Loader from "@components/Loader";
+import Loader from "@components/Loaders/Loader";
 import { StackScreenProps } from "@react-navigation/stack";
 import { StackNavigatorParams } from "../../Collections";
 import { useQuery } from "@apollo/client";

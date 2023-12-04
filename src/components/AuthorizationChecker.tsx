@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { getAuthToken, setAuthToken } from "../utils/authToken";
 import { useQuery } from "@apollo/client";
 import { GET_SESSION } from "../query/authorization";
-import Loader from "./Loader";
+import Loader from "./Loaders/Loader";
 import Welcome from "../screens/Welcome/Welcome";
 import { IAuthData } from "../types/authorization";
 import session from "../store/session";

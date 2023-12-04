@@ -6,7 +6,7 @@ import session from "../../../store/session";
 import ErrorComponent from "../../../components/Errors/ErrorComponent";
 import { borderColor, fontColor, fontColorFaint } from "../../../styles/variables";
 import moment from "moment";
-import Loader from "../../../components/Loader";
+import Loader from "../../../components/Loaders/Loader";
 
 const UserInfo = observer(function () {
 	const { data, error, loading } = useQuery(GET_USER, { variables: { id: session.data.userId }});

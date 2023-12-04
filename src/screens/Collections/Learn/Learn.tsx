@@ -3,7 +3,7 @@ import { GET_COLLECTION_META } from "@query/collections";
 import { StackScreenProps } from "@react-navigation/stack";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { StackNavigatorParams } from "../Collections";
-import Loader from "@components/Loader";
+import Loader from "@components/Loaders/Loader";
 import ErrorComponent from "@components/Errors/ErrorComponent";
 import moment from "moment";
 import { borderColor, fontColor, fontColorFaint } from "@styles/variables";
