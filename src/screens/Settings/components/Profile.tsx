@@ -9,8 +9,8 @@ import { DELETE_PROFILE, GET_USER_PROFILES, MUTATE_PROFILE } from "../../../quer
 import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "../../../query/settings";
 import { observer } from "mobx-react-lite";
 import session from "../../../store/session";
-import ErrorMessageModal from "../../../components/Errors/ErrorMessageModal";
 import ModalComponent from "@components/ModalComponent";
+import errorMessage from "@store/errorMessage";
 
 const Profile = observer(function({ profile }: { profile: IProfile}) {
 	const [ showButtons, setShowButtons ] = useState(false);
@@ -19,7 +19,6 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 	const [ mutateProfile ] = useMutation(MUTATE_PROFILE);
 	const [ deleteProfile ] = useMutation(DELETE_PROFILE);
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
-	const [ errorMessage, setErrorMessage ] = useState("");
 
 	if(!profile) return "";
 
@@ -33,7 +32,7 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 			})
 		} catch (e: any) {
 			console.log(e);
-			setErrorMessage(e.toString());
+			errorMessage.setErrorMessage(e.toString());
 		}
 	}
 
@@ -48,7 +47,7 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 			})
 		} catch (e: any) {
 			console.log(e);
-			setErrorMessage(e.toString());
+			errorMessage.setErrorMessage(e.toString());
 		}
 
 		setDisplayModal(false);
@@ -67,15 +66,12 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 			})
 		} catch (e: any) {
 			console.log(e);
-			setErrorMessage(e.toString());
+			errorMessage.setErrorMessage(e.toString());
 		}
 	}
 
 	return (
 		<>
-			{
-				errorMessage && <ErrorMessageModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
-			}
 			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<View style={styles.modalBody}>
 					<Text style={styles.modalTitle}>

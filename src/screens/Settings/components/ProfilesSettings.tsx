@@ -9,15 +9,14 @@ import settings from "../../../store/settings";
 import { borderColor, fontColor } from "../../../styles/variables";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import ErrorMessageModal from "../../../components/Errors/ErrorMessageModal";
 import ModalComponent from "@components/ModalComponent";
+import errorMessage from "@store/errorMessage";
 
 const ProfilesSettings = observer(function() {
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const [ input, setInput ] = useState("");
 	const { data: { getUserProfiles: profiles = []} = {}, error } = useQuery(GET_USER_PROFILES, { variables: { id: session.data.userId }});
 	const [ createProfile ] = useMutation(CREATE_PROFILE);
-	const [ errorMessage, setErrorMessage ] = useState("");
 
 	async function createProfileHandler() {
 		try {
@@ -32,7 +31,7 @@ const ProfilesSettings = observer(function() {
 			})
 		} catch (e: any) {
 			console.log(e);
-			setErrorMessage(e.toString());
+			errorMessage.setErrorMessage(e.toString());
 		}
 
 		setInput("");
@@ -43,9 +42,6 @@ const ProfilesSettings = observer(function() {
 
 	return (
 		<View style={styles.container}>
-			{
-				errorMessage && <ErrorMessageModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
-			}
 			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<View style={styles.modalBody}>
 					<Text style={styles.modalTitle}>

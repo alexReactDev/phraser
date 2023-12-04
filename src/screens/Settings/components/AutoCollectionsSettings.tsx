@@ -1,5 +1,4 @@
 import { useMutation } from "@apollo/client";
-import ErrorMessageModal from "@components/Errors/ErrorMessageModal";
 import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "@query/settings";
 import { borderColor, fontColor, nondescriptColor } from "@styles/variables";
 import { useState } from "react";
@@ -11,13 +10,13 @@ import { observer } from "mobx-react-lite";
 import session from "@store/session";
 import Tip from "@components/Tip";
 import { TIntervalRepetitionDates } from "@ts/settings";
+import errorMessage from "@store/errorMessage";
 
 const autoCollectionSizeOptions = [{ text: "30 phrases", value: 30 }, { text: "50 phrases", value: 50 }, { text: "70 phrases", value: 70 }];
 const intervalRepetitionDatesOptions = ["auto", "exact", "extended"];
 
 const AutoCollectionsSettings = observer(function() {
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
-	const [ errorMessage, setErrorMessage ] = useState("");
 
 	async function autoCollectionSizeHandler(value: number) {
 		try {
@@ -30,7 +29,7 @@ const AutoCollectionsSettings = observer(function() {
 			})
 		} catch (e: any) {
 			console.log(e);
-			setErrorMessage(e.toString());
+			errorMessage.setErrorMessage(e.toString());
 		}
 	}
 
@@ -45,7 +44,7 @@ const AutoCollectionsSettings = observer(function() {
 			})
 		} catch (e: any) {
 			console.log(e);
-			setErrorMessage(e.toString());
+			errorMessage.setErrorMessage(e.toString());
 		}
 	}
 
@@ -60,15 +59,12 @@ const AutoCollectionsSettings = observer(function() {
 			})
 		} catch (e: any) {
 			console.log(e);
-			setErrorMessage(e.toString());
+			errorMessage.setErrorMessage(e.toString());
 		}
 	}
 
 	return (
 		<View style={styles.container}>
-			{
-				errorMessage && <ErrorMessageModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
-			}
 			<Text style={styles.title}>
 				Auto collections
 			</Text>

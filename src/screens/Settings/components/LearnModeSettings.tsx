@@ -7,15 +7,14 @@ import settings from "../../../store/settings";
 import { useMutation } from "@apollo/client";
 import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "../../../query/settings";
 import session from "../../../store/session";
-import ErrorMessageModal from "../../../components/Errors/ErrorMessageModal";
 import { useState } from "react";
+import errorMessage from "@store/errorMessage";
 
 const orderOptions = ["default", "random"];
 const repetitionOptions = [1, 2, 3, 5, 10];
 
 const LearnModeSettings = observer(function() {
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
-	const [ errorMessage, setErrorMessage ] = useState("");
 
 	async function orderOptionHandler(selected: string) {
 		try {
@@ -28,7 +27,7 @@ const LearnModeSettings = observer(function() {
 			})
 		} catch (e: any) {
 			console.log(e);
-			setErrorMessage(e.toString());
+			errorMessage.setErrorMessage(e.toString());
 		}
 	}
 
@@ -43,15 +42,12 @@ const LearnModeSettings = observer(function() {
 			})
 		} catch (e: any) {
 			console.log(e);
-			setErrorMessage(e.toString());
+			errorMessage.setErrorMessage(e.toString());
 		}
 	}
 
 	return (
 		<View style={styles.container}>
-			{
-				errorMessage && <ErrorMessageModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
-			}
 			<Text style={styles.title}>
 				Learn mode settings
 			</Text>

@@ -9,14 +9,13 @@ import { removeAuthToken } from "../../utils/authToken";
 import { LOGOUT } from "../../query/authorization";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import ErrorMessageModal from "../../components/Errors/ErrorMessageModal";
 import AutoCollectionsSettings from "./components/AutoCollectionsSettings";
 import AISettings from "./components/AISettings";
+import errorMessage from "@store/errorMessage";
 
 const Settings = observer(function() {
 	const [ deleteUser ] = useMutation(DELETE_USER);
 	const [ logout ] = useMutation(LOGOUT);
-	const [ errorMessage, setErrorMessage ] = useState("");
 
 	async function deleteUserHandler() {
 		Alert.alert("Are you sure?", "This action will delete your account permanently", [
@@ -44,7 +43,7 @@ const Settings = observer(function() {
 						session.logout();
 					} catch (e: any) {
 						console.log(e);
-						setErrorMessage(e.toString());
+						errorMessage.setErrorMessage(e.toString());
 					}
 				}
 			}
@@ -65,15 +64,12 @@ const Settings = observer(function() {
 			session.logout();
 		} catch (e: any) {
 			console.log(e);
-			setErrorMessage(e.toString());
+			errorMessage.setErrorMessage(e.toString());
 		}
 	}
 
 	return (
 		<ScrollView>
-			{
-				errorMessage && <ErrorMessageModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
-			}
 			<UserInfo />
 			<ProfilesSettings />
 			<LearnModeSettings />

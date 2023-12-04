@@ -1,5 +1,4 @@
 import { useMutation } from "@apollo/client";
-import ErrorMessageModal from "@components/Errors/ErrorMessageModal";
 import Tip from "@components/Tip";
 import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "@query/settings";
 import settings from "@store/settings";
@@ -10,12 +9,12 @@ import { StyleSheet, Switch, Text, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import { Ionicons } from '@expo/vector-icons';
 import session from "@store/session";
+import errorMessage from "@store/errorMessage";
 
 const textDifficultyValues = [{ text: "Not specified", value: "default"}, { text: "Simple", value: "simple"}, { text: "Average", value: "average"}, { text: "Advanced", value: "advanced" }];
 
 function AISettings() {
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
-	const [ errorMessage, setErrorMessage ] = useState("");
 
 	async function useGPT3Handler(value: boolean) {
 		try {
@@ -28,7 +27,7 @@ function AISettings() {
 			})
 		} catch (e: any) {
 			console.log(e);
-			setErrorMessage(e.toString());
+			errorMessage.setErrorMessage(e.toString());
 		}
 	}
 
@@ -43,15 +42,12 @@ function AISettings() {
 			})
 		} catch (e: any) {
 			console.log(e);
-			setErrorMessage(e.toString());
+			errorMessage.setErrorMessage(e.toString());
 		}
 	}
 
 	return (
 		<View style={styles.container}>
-			{
-				errorMessage && <ErrorMessageModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
-			}
 			<Text style={styles.title}>
 				AI settings
 			</Text>

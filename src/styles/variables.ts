@@ -17,3 +17,6 @@ export const pink = "#da89ae";
 export const violet = "#9949ce";
 
 export const faintBlue = "#71bfff"
+
+export const bgColor = "#eee";
+export const bgColorAccent = "#f9f9f9"
