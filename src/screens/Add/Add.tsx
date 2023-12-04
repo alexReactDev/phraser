@@ -16,7 +16,7 @@ import session from "@store/session";
 
 type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 
-const Add = observer(function ({ route }: Props) {
+const Add = observer(function ({ route, navigation }: Props) {
 	const { data: { getProfileCollections: collections = [] } = {} } = useQuery(GET_PROFILE_COLLECTIONS_FOR_PHRASES, { variables: { id: settings.settings.activeProfile } });
 	const { data: { getPhrase: phraseData, getPhraseCollection: phraseCollection } = {} } = useQuery(GET_PHRASE_WITH_COLLECTION, { variables: { id: route.params?.mutateId }, skip: !route.params?.mutateId });
 	const [ createPhrase ] = useMutation(CREATE_PHRASE);
@@ -74,6 +74,11 @@ const Add = observer(function ({ route }: Props) {
 					refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: collection } }]
 				})
 			}
+
+			formik.resetForm();
+			selectRef.current?.reset();
+
+			if(route.params?.mutateId) navigation.setParams({ mutateId: undefined });
 		}
 	})
 
