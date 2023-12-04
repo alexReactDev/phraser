@@ -43,6 +43,15 @@ const Add = observer(function ({ route, navigation }: Props) {
 			translation: "",
 			collection: null
 		},
+		validate(values) {
+			const errors: { [key: string]: string } = {};
+
+			if(!values.value) errors.value = "Please, provide value";
+			if(!values.translation) errors.translation = "Please, provide a translation";
+			if(!values.collection) errors.collection = "Please, choose collection";
+			
+			return errors;
+		},
 		async onSubmit(values) {
 			const { collection, ...data } = values;
 
