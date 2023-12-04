@@ -3,8 +3,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { observer } from "mobx-react-lite";
 import errorMessage from "@store/errorMessage";
 import { bgColorAccent } from "@styles/variables";
+import { useEffect } from "react";
 
 const ErrorMessageToast = observer(function () {
+	useEffect(() => {
+		if(errorMessage.displayMessage) {
+			const timeout = setTimeout(() => errorMessage.dismissErrorMessage(), 3000);
+			
+			return () => clearTimeout(timeout);
+		}
+	}, [errorMessage.displayMessage])
+	
 	if(!errorMessage.displayMessage) return "";
 
 	return (
