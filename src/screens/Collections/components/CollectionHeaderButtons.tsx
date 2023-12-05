@@ -100,6 +100,7 @@ const CollectionHeaderButtons = observer(function({ route, navigation }: any) {
 							activeOpacity={0.5}
 							onPress={() => navigation.navigate("Learn", { colId })}
 							style={styles.menuItem}
+							disabled={data.getCollection.phrases.length === 0}
 						>
 							<Text style={styles.menuItemText}>
 								Learn
