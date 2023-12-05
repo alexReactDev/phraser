@@ -7,8 +7,11 @@ import EditCollection from "./EditCollection";
 import { fontColor } from "@styles/variables";
 import { useClickOutside } from "react-native-click-outside";
 import ModalComponent from "@components/ModalComponent";
+import { observer } from "mobx-react-lite";
+import errorMessage from "@store/errorMessage";
+import loadingSpinner from "@store/loadingSpinner";
 
-function CollectionHeaderButtons({ route, navigation }: any) {
+const CollectionHeaderButtons = observer(function({ route, navigation }: any) {
 	const colId = route.params.colId;
 	const { data, refetch } = useQuery(GET_COLLECTION, { variables: { id: colId } });
 	const [ displayModal, setDisplayModal ] = useState(false);
@@ -38,27 +41,45 @@ function CollectionHeaderButtons({ route, navigation }: any) {
 			},
 			{
 				text: "Delete",
-				onPress: () => {
-					deleteCollection({
-						variables: { id: colId },
-						refetchQueries: [GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES]
-					});
+				onPress: async () => {
+					loadingSpinner.setLoading();
+
+					try {
+						await deleteCollection({
+							variables: { id: colId },
+							refetchQueries: [GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES]
+						});
+					} catch (e: any) {
+						console.log(e);
+						errorMessage.setErrorMessage(`Failed to delete collection ${e.toString()}`)
+					}
+
+					loadingSpinner.dismissLoading();
 					navigation.navigate("Collections");
 				}
 			}
 		])
 	}
 
-	function setLockHandler() {
-		changeCollectionLock({
-			variables: { 
-				id: colId,
-				input: {
-					isLocked: !data.getCollection.isLocked
+	async function setLockHandler() {
+		loadingSpinner.setLoading();
+
+		try {
+			await changeCollectionLock({
+				variables: { 
+					id: colId,
+					input: {
+						isLocked: !data.getCollection.isLocked
+					}
 				}
-			}
-		})
-		refetch();
+			});
+		} catch (e: any) {
+			console.log(e);
+			errorMessage.setErrorMessage(`Failed to set collection lock ${e.toString()}`)
+		}
+
+		await refetch();
+		loadingSpinner.dismissLoading();
 	}
 
 	return (
@@ -128,7 +149,7 @@ function CollectionHeaderButtons({ route, navigation }: any) {
 			</TouchableOpacity>
 		</View>
 	)
-}
+});
 
 const styles = StyleSheet.create({
 	container: {
