@@ -1,4 +1,4 @@
-import { ISettings } from "@ts/settings";
+import { ISettings, IUserSettings } from "@ts/settings";
 
 const db = require("../model/db.ts");
 const generateId = require("../utils/generateId");
@@ -6,23 +6,31 @@ const globalErrorHandler = require("../service/globalErrorHandler");
 
 class SettingsController {
 	async createSettings({ id }: { id: string }) {
+		const settings: IUserSettings = {
+			id: generateId(),
+			userId: id,
+			settings: {
+				theme: "default",
+				phrasesOrder: "default",
+				repetitionsAmount: 1,
+				activeProfile: "",
+				disableAutoCollections: false,
+				autoCollectionsSize: 30,
+				intervalRepetitionDates: "auto",
+				useGPT3: false,
+				textDifficulty: "default"
+			}
+		}
+
 		try {
-			await db.collection("settings").insertOne({
-				id: generateId(),
-				userId: id,
-				settings: {
-					theme: "default",
-					phrasesOrder: "default",
-					repetitionsAmount: 1
-				}
-			});
+			await db.collection("settings").insertOne(settings);
 		}
 		catch(e: any) {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to create settings. ${e}`);
 		}
 
-		return "OK";
+		return settings;
 	}
 
 	async getUserSettings({ id }: { id: string }) {

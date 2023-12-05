@@ -3,8 +3,8 @@ export type TIntervalRepetitionDates = "exact" | "extended" | "auto";
 export type TTextDifficulty = "simple" | "average" | "advanced" | "default"
 
 export interface IUserSettings {
-	id: number,
-	userId: number,
+	id: string,
+	userId: string,
 	settings: ISettings
 }
 
