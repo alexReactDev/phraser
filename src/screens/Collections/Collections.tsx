@@ -82,7 +82,7 @@ const Collections = observer(function ({ navigation }: Props) {
 					style={styles.list}
 				>
 					{
-						!settings.settings.disableAutoCollections &&
+						(!settings.settings.disableAutoCollections && data.getProfileCollections.length !== 0) &&
 						<AutoCollections navigation={navigation} onError={autoCollectionsErrorHandler} />
 					}
 					{
