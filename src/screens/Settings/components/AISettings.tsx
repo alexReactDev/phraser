@@ -4,12 +4,12 @@ import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "@query/settings";
 import settings from "@store/settings";
 import { borderColor, fontColor, nondescriptColor } from "@styles/variables";
 import { TTextDifficulty } from "@ts/settings";
-import { useState } from "react";
 import { StyleSheet, Switch, Text, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import { Ionicons } from '@expo/vector-icons';
 import session from "@store/session";
 import errorMessage from "@store/errorMessage";
+import loadingSpinner from "@store/loadingSpinner";
 
 const textDifficultyValues = [{ text: "Not specified", value: "default"}, { text: "Simple", value: "simple"}, { text: "Average", value: "average"}, { text: "Advanced", value: "advanced" }];
 
@@ -17,6 +17,8 @@ function AISettings() {
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
 
 	async function useGPT3Handler(value: boolean) {
+		loadingSpinner.setLoading();
+
 		try {
 			await updateUserSettings({
 				variables: {
@@ -29,9 +31,13 @@ function AISettings() {
 			console.log(e);
 			errorMessage.setErrorMessage(e.toString());
 		}
+
+		loadingSpinner.dismissLoading();
 	}
 
 	async function textDifficultyHandler(value: TTextDifficulty) {
+		loadingSpinner.setLoading();
+
 		try {
 			await updateUserSettings({
 				variables: {
@@ -44,6 +50,8 @@ function AISettings() {
 			console.log(e);
 			errorMessage.setErrorMessage(e.toString());
 		}
+
+		loadingSpinner.dismissLoading();
 	}
 
 	return (

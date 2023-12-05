@@ -11,6 +11,7 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import ModalComponent from "@components/ModalComponent";
 import errorMessage from "@store/errorMessage";
+import loadingSpinner from "@store/loadingSpinner";
 
 const ProfilesSettings = observer(function() {
 	const [ displayModal, setDisplayModal ] = useState(false);
@@ -19,6 +20,8 @@ const ProfilesSettings = observer(function() {
 	const [ createProfile ] = useMutation(CREATE_PROFILE);
 
 	async function createProfileHandler() {
+		loadingSpinner.setLoading();
+
 		try {
 			await createProfile({
 				variables: {
@@ -36,6 +39,7 @@ const ProfilesSettings = observer(function() {
 
 		setInput("");
 		setDisplayModal(false);
+		loadingSpinner.dismissLoading();
 	}
 
 	if(error) return <ErrorComponent message="Failed to load profiles data" />

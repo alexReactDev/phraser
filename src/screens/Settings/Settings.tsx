@@ -8,7 +8,6 @@ import session from "../../store/session";
 import { removeAuthToken } from "../../utils/authToken";
 import { LOGOUT } from "../../query/authorization";
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
 import AutoCollectionsSettings from "./components/AutoCollectionsSettings";
 import AISettings from "./components/AISettings";
 import errorMessage from "@store/errorMessage";

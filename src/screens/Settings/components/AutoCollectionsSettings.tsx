@@ -11,6 +11,7 @@ import session from "@store/session";
 import Tip from "@components/Tip";
 import { TIntervalRepetitionDates } from "@ts/settings";
 import errorMessage from "@store/errorMessage";
+import loadingSpinner from "@store/loadingSpinner";
 
 const autoCollectionSizeOptions = [{ text: "30 phrases", value: 30 }, { text: "50 phrases", value: 50 }, { text: "70 phrases", value: 70 }];
 const intervalRepetitionDatesOptions = ["auto", "exact", "extended"];
@@ -19,6 +20,8 @@ const AutoCollectionsSettings = observer(function() {
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
 
 	async function autoCollectionSizeHandler(value: number) {
+		loadingSpinner.setLoading();
+
 		try {
 			await updateUserSettings({
 				variables: {
@@ -31,9 +34,13 @@ const AutoCollectionsSettings = observer(function() {
 			console.log(e);
 			errorMessage.setErrorMessage(e.toString());
 		}
+
+		loadingSpinner.dismissLoading();
 	}
 
 	async function intervalRepetitionDatesHandler(value: TIntervalRepetitionDates) {
+		loadingSpinner.setLoading();
+
 		try {
 			await updateUserSettings({
 				variables: {
@@ -46,9 +53,13 @@ const AutoCollectionsSettings = observer(function() {
 			console.log(e);
 			errorMessage.setErrorMessage(e.toString());
 		}
+
+		loadingSpinner.dismissLoading();
 	}
 
 	async function disableAutoCollectionsHandler(value: boolean) {
+		loadingSpinner.setLoading();
+
 		try {
 			await updateUserSettings({
 				variables: {
@@ -61,6 +72,8 @@ const AutoCollectionsSettings = observer(function() {
 			console.log(e);
 			errorMessage.setErrorMessage(e.toString());
 		}
+
+		loadingSpinner.dismissLoading();
 	}
 
 	return (

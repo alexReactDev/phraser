@@ -9,6 +9,7 @@ import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "../../../query/settings"
 import session from "../../../store/session";
 import { useState } from "react";
 import errorMessage from "@store/errorMessage";
+import loadingSpinner from "@store/loadingSpinner";
 
 const orderOptions = ["default", "random"];
 const repetitionOptions = [1, 2, 3, 5, 10];
@@ -17,6 +18,8 @@ const LearnModeSettings = observer(function() {
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
 
 	async function orderOptionHandler(selected: string) {
+		loadingSpinner.setLoading();
+
 		try {
 			await updateUserSettings({
 				variables: {
@@ -29,9 +32,13 @@ const LearnModeSettings = observer(function() {
 			console.log(e);
 			errorMessage.setErrorMessage(e.toString());
 		}
+
+		loadingSpinner.dismissLoading();
 	}
 
 	async function repetitionOptionHandler(selected: number) {
+		loadingSpinner.setLoading();
+
 		try {
 			await updateUserSettings({
 				variables: {
@@ -44,6 +51,8 @@ const LearnModeSettings = observer(function() {
 			console.log(e);
 			errorMessage.setErrorMessage(e.toString());
 		}
+
+		loadingSpinner.dismissLoading();
 	}
 
 	return (

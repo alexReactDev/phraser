@@ -11,6 +11,7 @@ import { observer } from "mobx-react-lite";
 import session from "../../../store/session";
 import ModalComponent from "@components/ModalComponent";
 import errorMessage from "@store/errorMessage";
+import loadingSpinner from "@store/loadingSpinner";
 
 const Profile = observer(function({ profile }: { profile: IProfile}) {
 	const [ showButtons, setShowButtons ] = useState(false);
@@ -23,6 +24,8 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 	if(!profile) return "";
 
 	async function deleteHandler() {
+		loadingSpinner.setLoading();
+
 		try {
 			await deleteProfile({
 				variables: {
@@ -34,9 +37,13 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 			console.log(e);
 			errorMessage.setErrorMessage(e.toString());
 		}
+
+		loadingSpinner.dismissLoading();
 	}
 
 	async function mutateHandler() {
+		loadingSpinner.setLoading();
+
 		try {
 			await mutateProfile({
 				variables: {
@@ -51,9 +58,12 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 		}
 
 		setDisplayModal(false);
+		loadingSpinner.dismissLoading();
 	}
 
 	async function selectHandler() {
+		loadingSpinner.setLoading();
+
 		try {
 			await updateUserSettings({
 				variables: {
@@ -68,6 +78,8 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 			console.log(e);
 			errorMessage.setErrorMessage(e.toString());
 		}
+
+		loadingSpinner.dismissLoading();
 	}
 
 	return (
