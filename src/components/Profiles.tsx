@@ -10,6 +10,8 @@ import settings from "../store/settings";
 import { borderColor, fontColor, nondescriptColor } from "../styles/variables";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
+import errorMessage from "@store/errorMessage";
+import loadingSpinner from "@store/loadingSpinner";
 
 const Profiles = observer(function () {
 	const { data, loading, error } = useQuery(GET_USER_PROFILES, {
@@ -29,14 +31,20 @@ const Profiles = observer(function () {
 	}, [settings.settings.activeProfile, loading])
 
 	async function profileSelectHandler(selected: IProfile) {
-		const res = await updateUserSettings({
-			variables: {
-				id: session.data.userId,
-				input: { activeProfile: selected.id }
-			}
-		});
+		if(selected.id === settings.settings.activeProfile) return;
 
-		settings.settingsLoaded(res.data.updateUserSettings);
+		try {
+			const res = await updateUserSettings({
+				variables: {
+					id: session.data.userId,
+					input: { activeProfile: selected.id }
+				}
+			});
+			settings.settingsLoaded(res.data.updateUserSettings);
+		} catch (e: any) {
+			console.log(e);
+			errorMessage.setErrorMessage(`Failed to switch profile ${e.toString()}`);
+		}
 	}
 
 	if(error) return (
