@@ -16,10 +16,13 @@ import CollectionHeaderButtons from "../components/CollectionHeaderButtons";
 import { IPhrase } from "@ts/phrases";
 import ModalComponent from "@components/ModalComponent";
 import MovePhrase from "./components/MovePhrase";
+import { observer } from "mobx-react-lite";
+import errorMessage from "@store/errorMessage";
+import loadingSpinner from "@store/loadingSpinner";
 
 type Props = StackScreenProps<StackNavigatorParams, "Collection", "collectionsNavigator">;
 
-function CollectionScreen({ route, navigation }: Props) {
+const CollectionScreen = observer(function({ route, navigation }: Props) {
 	const colId = route.params.colId;
 
 	const { data, loading, error } = useQuery(GET_COLLECTION_PHRASES, { variables: { id: colId } });
@@ -48,12 +51,21 @@ function CollectionScreen({ route, navigation }: Props) {
 	}, [selectionEnabled, selectedItems])
 
 	async function deleteManyHandler() {
-		await deleteMany({
-			variables: {
-				ids: selectedItems
-			},
-			refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION]
-		});
+		loadingSpinner.setLoading();
+
+		try {
+			await deleteMany({
+				variables: {
+					ids: selectedItems
+				},
+				refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION]
+			});
+		} catch (e: any) {
+			console.log(e);
+			errorMessage.setErrorMessage(`Failed to delete phrases ${e.toString()}`);
+		}
+
+		loadingSpinner.dismissLoading();
 		setSelectedItems([]);
 		setSelectionEnabled(false);
 	}
@@ -140,7 +152,7 @@ function CollectionScreen({ route, navigation }: Props) {
 			></FlatList>
 		</>
 	)
-}
+});
 
 const styles = StyleSheet.create({
 	container: {
