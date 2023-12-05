@@ -9,6 +9,9 @@ import { useClickOutside } from "react-native-click-outside";
 import ModalComponent from "@components/ModalComponent";
 import MovePhrase from "./MovePhrase";
 import Checkbox from "expo-checkbox";
+import { observer } from "mobx-react-lite";
+import errorMessage from "@store/errorMessage";
+import loadingSpinner from "@store/loadingSpinner";
 
 interface IProps {
 	phrase: IPhrase,
@@ -20,18 +23,27 @@ interface IProps {
 	onChange: (selected: boolean) => void
 }
 
-function CollectionPhrase({ phrase, colId, navigation, selectionEnabled, isSelected, enableSelection, onChange }: IProps) {
+const CollectionPhrase = observer(function({ phrase, colId, navigation, selectionEnabled, isSelected, enableSelection, onChange }: IProps) {
 	const [ showControls, setShowControls ] = useState(false);
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const ref = useClickOutside(() => setShowControls(false));
 
 	const [ deletePhrase ] = useMutation(DELETE_PHRASE);
 
-	function deleteHandler() {
-		deletePhrase({
-			variables: { id: phrase.id },
-			refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION]
-		})
+	async function deleteHandler() {
+		loadingSpinner.setLoading();
+
+		try {
+			await deletePhrase({
+				variables: { id: phrase.id },
+				refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION]
+			})
+		} catch (e: any) {
+			console.log(e);
+			errorMessage.setErrorMessage(`Failed to delete phrase ${e.toString()}`);
+		}
+
+		loadingSpinner.dismissLoading();
 	}
 
 	return (
@@ -96,7 +108,7 @@ function CollectionPhrase({ phrase, colId, navigation, selectionEnabled, isSelec
 			}
 		</View>
 	)
-}
+});
 
 const styles = StyleSheet.create({
 	container: {
