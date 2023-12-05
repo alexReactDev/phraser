@@ -112,6 +112,7 @@ class AutoCollectionsController {
 			const max = maxDate.getTime();
 			
 			const cursor = await db.collection("phrases").find({
+				profile: userSettings.settings.activeProfile,
 				"meta.lastRepetition": {
 					$gte: min,
 					$lte: max
@@ -136,6 +137,7 @@ class AutoCollectionsController {
 			const max = maxDate.getTime();
 			
 			const cursor = await db.collection("phrases").find({
+				profile: userSettings.settings.activeProfile,
 				"meta.lastRepetition": {
 					$gte: min,
 					$lte: max
@@ -160,6 +162,7 @@ class AutoCollectionsController {
 			const max = maxDate.getTime();
 			
 			const cursor = await db.collection("phrases").find({
+				profile: userSettings.settings.activeProfile,
 				"meta.lastRepetition": {
 					$gte: min,
 					$lte: max
@@ -184,6 +187,7 @@ class AutoCollectionsController {
 			const max = maxDate.getTime();
 			
 			const cursor = await db.collection("phrases").find({
+				profile: userSettings.settings.activeProfile,
 				"meta.lastRepetition": {
 					$gte: min,
 					$lte: max
