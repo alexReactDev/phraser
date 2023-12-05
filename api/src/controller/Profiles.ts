@@ -6,9 +6,11 @@ const globalErrorHandler = require("../service/globalErrorHandler");
 
 class ProfilesController {
 	async createProfile({ input }: { input: IProfileInput }) {
+		const id = generateId();
+		
 		try {
 			await db.collection("profiles").insertOne({
-				id: generateId(),
+				id,
 				name: input.name,
 				userId: input.userId
 			})
@@ -18,7 +20,7 @@ class ProfilesController {
 			throw new Error(`Server Error. Failed to create profile. ${e.toString()}`);
 		}
 
-		return "OK";
+		return id;
 	}
 
 	async getUserProfiles({ id }: { id: string }) {

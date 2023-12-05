@@ -4,6 +4,7 @@ const db = require("../model/db.ts");
 const settingsController = require("./Settings.ts");
 const generateId = require("../utils/generateId.ts");
 const globalErrorHandler = require("../service/globalErrorHandler");
+const profilesController = require("./Profiles");
 
 class UsersController {
 	async getUser({ id }: { id: string }) {
@@ -55,6 +56,9 @@ class UsersController {
 			globalErrorHandler(e);
 			throw new Error(`Server Error. Failed to create user settings. ${e.toString()}`);
 		}
+
+		const profileId = await profilesController.createProfile({ input: { name: "Default", userId: id } });
+		await settingsController.updateUserSettings({ id, input: { activeProfile: profileId} });
 
 		return id;
 	}
