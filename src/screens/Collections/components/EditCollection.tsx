@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import { Button, StyleSheet, Text, View, TextInput } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import colors from "../../../Colors";
 import { useMutation, useQuery } from "@apollo/client";

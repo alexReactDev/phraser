@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { TouchableOpacity, View, TextInput, StyleSheet, Text } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
@@ -16,6 +16,8 @@ import session from "@store/session";
 import loadingSpinner from "@store/loadingSpinner";
 import errorMessage from "@store/errorMessage";
 import LoaderModal from "@components/Loaders/LoaderModal";
+import ModalComponent from "@components/ModalComponent";
+import EditCollection from "../Collections/components/EditCollection";
 
 type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 
@@ -27,6 +29,8 @@ const Add = observer(function ({ route, navigation }: Props) {
 	const [ movePhrase ] = useMutation(MOVE_PHRASE);
 	const selectRef = useRef<any>(null);
 	const translationInputRef = useRef<any>(null);
+
+	const [ displayModal, setDisplayModal ] = useState(false);
 
 	useEffect(() => {
 		if(phraseData && phraseCollection) {
@@ -120,6 +124,9 @@ const Add = observer(function ({ route, navigation }: Props) {
 				phraseLoading &&
 				<LoaderModal />
 			}
+			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+				<EditCollection onReady={() => setDisplayModal(false)} />
+			</ModalComponent>
 			<Text style={styles.inputLabel}>
 				Phrase
 			</Text>
@@ -151,15 +158,36 @@ const Add = observer(function ({ route, navigation }: Props) {
 				blurOnSubmit
 			/>
 			<SelectDropdown
-				data={collections.filter((col: ICollection) => !col.isLocked)}
+				data={collections.filter((col: ICollection) => !col.isLocked).concat({ id: "CREATE" })}
 				ref={selectRef as any}
 				onSelect={(selectedItem) => formik.setFieldValue("collection", selectedItem.id)}
-				rowTextForSelection={(item) => item.name}
 				buttonTextAfterSelection={(item) => item.name}
 				defaultButtonText="Select collection"
 				buttonStyle={styles.select}
 				buttonTextStyle={styles.selectText}
 				renderDropdownIcon={() => <Ionicons name="caret-down" size={20} color="gray" />}
+				renderCustomizedRowChild={(item) => {
+					if(item.id !== "CREATE") {
+						return (
+							<View style={styles.selectItem}>
+								<Text style={styles.selectItemText}>
+									{item.name}
+								</Text>
+							</View>
+						)
+					} else {
+						return (
+							<TouchableOpacity style={styles.selectItem}
+								onPress={(e) => {
+									e.stopPropagation();
+									setDisplayModal(true);
+								}}
+							>
+								<Ionicons name="add" size={28} color="gray" />
+							</TouchableOpacity>
+						)
+					}
+				}}
 
 			></SelectDropdown>
 			<TouchableOpacity
@@ -214,6 +242,14 @@ const styles = StyleSheet.create({
 	},
 	selectText: {
 		color: "gray"
+	},
+	selectItem: {
+		flexDirection: "row",
+		justifyContent: "center"
+	},
+	selectItemText: {
+		fontSize: 16,
+		color: fontColor
 	},
 	button: {
 		position: "absolute",
