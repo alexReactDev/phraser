@@ -10,10 +10,11 @@ import { Ionicons } from '@expo/vector-icons';
 import session from "@store/session";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
+import { observer } from "mobx-react-lite";
 
 const textDifficultyValues = [{ text: "Not specified", value: "default"}, { text: "Simple", value: "simple"}, { text: "Average", value: "average"}, { text: "Advanced", value: "advanced" }];
 
-function AISettings() {
+const AISettings = observer(function () {
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
 
 	async function useGPT3Handler(value: boolean) {
@@ -91,7 +92,7 @@ function AISettings() {
 			</View>
 		</View>
 	)
-}
+});
 
 const styles = StyleSheet.create({
 	container: {
