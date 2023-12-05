@@ -7,6 +7,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { ICollection } from "@ts/collections";
 import { useState } from "react";
 import { GET_COLLECTION_PHRASES, MOVE_PHRASE, MOVE_PHRASES_MANY } from "@query/phrases";
+import { observer } from "mobx-react-lite";
+import errorMessage from "@store/errorMessage";
+import loadingSpinner from "@store/loadingSpinner";
 
 interface IProps {
 	id: string | string[],
@@ -16,32 +19,45 @@ interface IProps {
 	onError?: () => void
 }
 
-function MovePhrase({ id, currentColId, moveMany = false, onSuccess }: IProps) {
+const MovePhrase = observer(function({ id, currentColId, moveMany = false, onSuccess }: IProps) {
 	const { data: { getProfileCollections: collections = [] } = {} } = useQuery(GET_PROFILE_COLLECTIONS_FOR_PHRASES, { variables: { id: settings.settings.activeProfile } });
 	const [ selectedId, setSelected ] = useState();
 	const [ movePhrase ] = useMutation(MOVE_PHRASE);
 	const [ movePhrasesMany ] = useMutation(MOVE_PHRASES_MANY);
 
 	async function moveHandler() {
+		loadingSpinner.setLoading();
+
 		if(moveMany) {
-			await movePhrasesMany({
-				variables: {
-					ids: id,
-					destId: selectedId
-				},
-				refetchQueries: [GET_COLLECTION_PHRASES]
-			})
+			try {
+				await movePhrasesMany({
+					variables: {
+						ids: id,
+						destId: selectedId
+					},
+					refetchQueries: [GET_COLLECTION_PHRASES]
+				})
+			} catch (e: any) {
+				console.log(e);
+				errorMessage.setErrorMessage(`Failed to move phrases ${e.toString()}`);
+			}
 		} else {
-			await movePhrase({
-				variables: {
-					id,
-					destId: selectedId
-				},
-				refetchQueries: [GET_COLLECTION_PHRASES]
-			})
+			try {
+				await movePhrase({
+					variables: {
+						id,
+						destId: selectedId
+					},
+					refetchQueries: [GET_COLLECTION_PHRASES]
+				})
+			} catch (e: any) {
+				console.log(e);
+				errorMessage.setErrorMessage(`Failed to move phrase ${e.toString()}`);
+			}
 		}
 
 		onSuccess && onSuccess();
+		loadingSpinner.dismissLoading();
 	}
 
 	return (
@@ -72,7 +88,7 @@ function MovePhrase({ id, currentColId, moveMany = false, onSuccess }: IProps) {
 			</View>
 		</View>
 	)
-}
+});
 
 const styles = StyleSheet.create({
 	container: {
