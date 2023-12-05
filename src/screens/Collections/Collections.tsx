@@ -97,7 +97,7 @@ const Collections = observer(function ({ navigation }: Props) {
 				onPress={() => setDisplayModal(true)}
 				style={styles.button}
 			>
-				<Ionicons name="add" size={24} color="gray" />
+				<Ionicons name="add" size={28} color="gray" />
 			</TouchableOpacity>
 		</View>
 	)
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		bottom: 10,
 		right: 10,
-		borderRadius: 50,
+		borderRadius: 12,
 		backgroundColor: "white",
 		width: 45,
 		height: 45,
