@@ -7,6 +7,8 @@ import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_COLLECTION, GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES, MUTATE_COLLECTION } from "../../../query/collections";
 import settings from "../../../store/settings";
 import { observer } from "mobx-react-lite";
+import errorMessage from "@store/errorMessage";
+import loadingSpinner from "@store/loadingSpinner";
 
 interface IProps {
 	mutateId?: number,
@@ -31,35 +33,48 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 		selectRef.current?.selectIndex(colors.findIndex((item) => item.value === data.getCollection.color));
 	}, [data])
 
-	function pressHandler() {
-		if(mutateId) {
-			mutateCollection({
-				variables: {
-					id: mutateId,
-					input: {
-						name,
-						color,
-						profile: settings.settings.activeProfile
-					}
-				},
-				refetchQueries: [GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES]
-			})
-		} else {
-			if(!name || !color) return;
+	async function pressHandler() {
+		if(!name || !color) return;
 
-			createCollection({
-				variables: {
-					input: {
-						name,
-						color,
-						profile: settings.settings.activeProfile
-					}
-				},
-				refetchQueries: [GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES]
-			})
+		loadingSpinner.setLoading();
+
+		if(mutateId) {
+			try {
+				await mutateCollection({
+					variables: {
+						id: mutateId,
+						input: {
+							name,
+							color,
+							profile: settings.settings.activeProfile
+						}
+					},
+					refetchQueries: [GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES]
+				})
+			} catch(e: any) {
+				console.log(e);
+				errorMessage.setErrorMessage(`Failed to update collection ${e.toString()}`);
+			}
+		} else {
+			try {
+				await createCollection({
+					variables: {
+						input: {
+							name,
+							color,
+							profile: settings.settings.activeProfile
+						}
+					},
+					refetchQueries: [GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES]
+				})
+			} catch(e: any) {
+				console.log(e);
+				errorMessage.setErrorMessage(`Failed to create collection ${e.toString()}`);
+			}
 		}
 
 		onReady && onReady();
+		loadingSpinner.dismissLoading();
 	}
 
 	return (
