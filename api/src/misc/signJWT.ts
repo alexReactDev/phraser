@@ -20,7 +20,7 @@ export async function signJWT(data: any) {
 		await db.collection("active_sessions").insertOne({
 			sid,
 			created: new Date().getTime(),
-			expiresIn: 60 * 60 * 24 * 30 //1 month
+			expiresAt: new Date().getTime() + 1000 * 60 * 60 * 24 * 30 //1 month
 		})
 	} catch (e: any) {
 		globalErrorHandler(e);

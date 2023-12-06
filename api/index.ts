@@ -10,6 +10,7 @@ dotenv.config();
 import rootSchema from "./schema";
 import rootResolver from "./src/rootResolver";
 import throttleMiddleware from "./src/middleware/throttleMiddleware";
+import sessionsCleanup from "./src/misc/sessionsCleanUp";
 
 const PORT = 4500;
 
@@ -29,3 +30,5 @@ app.use("/graphql", graphqlHTTP((req: any) => ({
 })))
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+
+setInterval(sessionsCleanup, 1000 * 60 * 60 * 24); //Once per day
