@@ -1,5 +1,6 @@
 import { Request } from "express";
 import { isTokenRevoked } from "./src/utils/isTokenRevoked";
+import { IJWT } from "@ts-backend/authorization";
 
 const dotenv = require("dotenv");
 const express = require("express");
@@ -17,7 +18,7 @@ const PORT = 4500;
 const app = express();
 
 interface IReq extends Request {
-	auth: any
+	auth: IJWT
 }
 
 app.use(throttleMiddleware);
