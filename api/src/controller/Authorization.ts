@@ -21,15 +21,15 @@ class AuthorizationController {
 
 		if(input.password !== user.password) throw new Error(`403. Access denied`);
 
-		const token = signJWT({ login: user.login, userId: user.id });
+		const token = await signJWT({ login: user.login, userId: user.id });
 
 		return {...token};
 	}
 
 	async logout({}, context: { auth: IJWT }) {
 		try {
-			await db.collection("revoked_sessions").insertOne({
-				value: context.auth.sid
+			await db.collection("active_sessions").deleteOne({
+				sid: context.auth.sid
 			})
 		}
 		catch(e: any) {
@@ -51,7 +51,7 @@ class AuthorizationController {
 			throw new Error(`Server error. Failed to create user. ${e}`);
 		}
 
-		const token = signJWT({ login: input.login, userId });
+		const token = await signJWT({ login: input.login, userId });
 
 		return {...token};
 	}

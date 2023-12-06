@@ -8,13 +8,15 @@ export async function isTokenRevoked(req: any, jwt: Jwt | undefined) {
 	let session;
 
 	try {
-		session = await db.collection("revoked_sessions").findOne({ value: (jwt.payload as JwtPayload).sid });
+		session = await db.collection("active_sessions").findOne({
+			sid: (jwt.payload as JwtPayload).sid
+		})
 	} catch (e) {
 		console.log(e);
 		return true;
 	}
 
-	if(session) return true;
+	if(!session) return true;
 
 
 	return false;
