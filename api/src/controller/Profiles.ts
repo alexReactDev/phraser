@@ -5,6 +5,23 @@ import generateId from "../misc/generateId";
 import globalErrorHandler from "../misc/globalErrorHandler";
 
 class ProfilesController {
+	async getProfile({ id }: { id: string }) {
+		let profile;
+
+		try {
+			profile = await db.collection("profiles").findOne({
+				id: id
+			})
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Failed to get profile into. ${e.toString()}`);
+		}
+
+		if(!profile) throw new Error("404. Profile not found");
+
+		return profile;
+	}
+
 	async createProfile({ input }: { input: IProfileInput }) {
 		const id = generateId();
 		
