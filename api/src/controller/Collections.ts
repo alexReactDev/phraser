@@ -2,8 +2,8 @@ import { ICollection } from "types/collections";
 import { Collection } from "../Classes/Collection";
 import { IChangeCollectionLockInput, ICollectionInput, ICollectionMetaInput } from "../types/collections";
 
-const db = require("../model/db.ts");
-const globalErrorHandler = require("../service/globalErrorHandler");
+import db from "../model/db";
+import globalErrorHandler from "../service/globalErrorHandler";
 
 class CollectionsController {
 	async getCollection({ id }: { id: string }) {
@@ -140,4 +140,4 @@ class CollectionsController {
 	}
 }
 
-module.exports = new CollectionsController();
+export default new CollectionsController();

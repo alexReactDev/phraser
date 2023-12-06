@@ -1,10 +1,10 @@
 import { IUserInput } from "../types/users";
 
-const db = require("../model/db.ts");
-const settingsController = require("./Settings.ts");
-const generateId = require("../utils/generateId.ts");
-const globalErrorHandler = require("../service/globalErrorHandler");
-const profilesController = require("./Profiles");
+import db from "../model/db";
+import settingsController from "./Settings";
+import generateId from "../utils/generateId";
+import globalErrorHandler from "../service/globalErrorHandler";
+import profilesController from "./Profiles";
 
 class UsersController {
 	async getUser({ id }: { id: string }) {
@@ -77,4 +77,4 @@ class UsersController {
 	}
 }
 
-module.exports = new UsersController();
+export default new UsersController();

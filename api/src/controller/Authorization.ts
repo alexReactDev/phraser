@@ -1,9 +1,9 @@
 import { IJWT, ILoginInput, ISignUpInput } from "../types/authorization";
 import { signJWT } from "../utils/signJWT";
 
-const db = require("../model/db.ts");
-const usersController = require("./Users");
-const globalErrorHandler = require("../service/globalErrorHandler");
+import db from "../model/db";
+import usersController from "./Users";
+import globalErrorHandler from "../service/globalErrorHandler";
 
 class AuthorizationController {
 	async login({ input }: { input: ILoginInput }) {
@@ -63,4 +63,4 @@ class AuthorizationController {
 	}
 }
 
-module.exports = new AuthorizationController();
+export default new AuthorizationController();

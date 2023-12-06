@@ -1,14 +1,16 @@
+//@ts-nocheck
+
 import { IJWT } from "./types/authorization";
 
-const collectionsController = require("./controller/Collections");
-const phrasesController = require("./controller/Phrases");
-const profilesController = require("./controller/Profiles");
-const usersController = require("./controller/Users");
-const authController = require("./controller/Authorization");
-const settingsController = require("./controller/Settings");
-const repetitionsController = require("./controller/Repetitions");
-const autoCollectionsController = require("./controller/AutoCollections");
-const AIGeneratedTextController = require("./controller/AIGeneratedText");
+import collectionsController from "./controller/Collections";
+import phrasesController from "./controller/Phrases";
+import profilesController from "./controller/Profiles";
+import usersController from "./controller/Users";
+import authController from "./controller/Authorization";
+import settingsController from "./controller/Settings";
+import repetitionsController from "./controller/Repetitions";
+import autoCollectionsController from "./controller/AutoCollections";
+import AIGeneratedTextController from "./controller/AIGeneratedText";
 
 const root = {
 	login: (...args: any) => authController.login(...args),
@@ -64,4 +66,4 @@ const root = {
 	getGeneratedSentences: (...args: any) => AIGeneratedTextController.generateSentences(...args)
 }
 
-module.exports = root;
+export default root;

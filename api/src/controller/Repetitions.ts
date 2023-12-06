@@ -1,8 +1,8 @@
 import { IRepetitionInput } from "@ts/repetitions";
 
-const db = require("../model/db");
-const generateId = require("../utils/generateId");
-const globalErrorHandler = require("../service/globalErrorHandler");
+import db from "../model/db";
+import generateId from "../utils/generateId";
+import globalErrorHandler from "../service/globalErrorHandler";
 
 class RepetitionsController {
 	async createRepetition({ input }: { input: IRepetitionInput }) {
@@ -39,4 +39,4 @@ class RepetitionsController {
 	}
 }
 
-module.exports = new RepetitionsController();
+export default new RepetitionsController();

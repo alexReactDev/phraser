@@ -1,9 +1,9 @@
 import { IJWT } from "@ts-backend/authorization";
 import { IUserSettings } from "@ts/settings";
 
-const { openai, models } = require("../../openai");
-const globalErrorHandler = require("../service/globalErrorHandler");
-const settingsController = require("./Settings");
+import { openai, models } from "../../openai";
+import globalErrorHandler from "../service/globalErrorHandler";
+import settingsController from "./Settings";
 
 class AIGeneratedTextController {
 	async generateText({ phrases }: { phrases: string[] }, context: { auth: IJWT }) {
@@ -45,7 +45,7 @@ class AIGeneratedTextController {
 			throw new Error(`Server error. Failed to get response from chatGPT. ${e}`);
 		}
 
-		return JSON.parse(completion.choices[0].message.content);
+		return JSON.parse((completion.choices[0].message.content as string));
 	}
 
 	_getDifficultyLevel(userSettings: IUserSettings) {
@@ -58,4 +58,4 @@ class AIGeneratedTextController {
 	}
 }
 
-module.exports = new AIGeneratedTextController();
+export default new AIGeneratedTextController();

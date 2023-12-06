@@ -1,8 +1,8 @@
 import { ISettings, IUserSettings } from "@ts/settings";
 
-const db = require("../model/db.ts");
-const generateId = require("../utils/generateId");
-const globalErrorHandler = require("../service/globalErrorHandler");
+import db from "../model/db";
+import generateId from "../utils/generateId";
+import globalErrorHandler from "../service/globalErrorHandler";
 
 class SettingsController {
 	async createSettings({ id }: { id: string }) {
@@ -106,4 +106,4 @@ class SettingsController {
 	}
 }
 
-module.exports = new SettingsController();
+export default new SettingsController();

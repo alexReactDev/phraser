@@ -1,8 +1,10 @@
 import { Jwt, JwtPayload } from "jsonwebtoken";
 
-const db = require("../model/db.ts");
+import db from "../model/db";
 
-export async function isTokenRevoked(req: Request, jwt: Jwt) {
+export async function isTokenRevoked(req: any, jwt: Jwt | undefined) {
+	if(!jwt) return false;
+
 	let session;
 
 	try {

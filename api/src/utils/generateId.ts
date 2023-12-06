@@ -1,5 +1,5 @@
-const uuid = require("uuid");
+import * as uuid from "uuid";
 
-module.exports = function () {
+export default function () {
 	return uuid.v4();
 }

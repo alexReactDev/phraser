@@ -1,6 +1,6 @@
-const logger = require("./logger");
+import logger from "./logger";
 
-module.exports = function (e: any) {
+export default function (e: any) {
 	//Some global error handling here
 	logger(e);
 }

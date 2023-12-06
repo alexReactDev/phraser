@@ -3,9 +3,9 @@ import { IJWT } from "../types/authorization";
 import { Collection } from "../Classes/Collection";
 import { ICollection } from "../../../types/collections";
 
-const settingsController = require("./Settings");
-const globalErrorHandler = require("../service/globalErrorHandler");
-const db = require("../model/db");
+import settingsController from "./Settings";
+import globalErrorHandler from "../service/globalErrorHandler";
+import db from "../model/db";
 
 class AutoCollectionsController {
 	async createAutoCollection({}, context: { auth: IJWT }) {
@@ -302,4 +302,4 @@ class AutoCollectionsController {
 	}
 }
 
-module.exports = new AutoCollectionsController();
+export default new AutoCollectionsController();

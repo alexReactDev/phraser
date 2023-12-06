@@ -1,8 +1,8 @@
 import { IProfileInput } from "../types/profiles";
 
-const db = require("../model/db.ts");
-const generateId = require("../utils/generateId.ts");
-const globalErrorHandler = require("../service/globalErrorHandler");
+import db from "../model/db";
+import generateId from "../utils/generateId";
+import globalErrorHandler from "../service/globalErrorHandler";
 
 class ProfilesController {
 	async createProfile({ input }: { input: IProfileInput }) {
@@ -70,4 +70,4 @@ class ProfilesController {
 	}
 }
 
-module.exports = new ProfilesController();
+export default new ProfilesController();

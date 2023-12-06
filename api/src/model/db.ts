@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+import { MongoClient, ServerApiVersion } from "mongodb";
 
 const uri = "mongodb://127.0.0.1:27017/vocabulary";
 
@@ -25,4 +25,4 @@ async function run() {
 
 run();
 
-module.exports = client.db();
+export default (client.db() as any);

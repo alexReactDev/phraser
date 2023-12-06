@@ -1,15 +1,10 @@
-const OpenAI = require("openai");
+import OpenAI from "openai";
 
-const openai = new OpenAI({
+export const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY
 })
 
-const models = {
+export const models = {
 	gpt3: "gpt-3.5-turbo",
 	gpt4: "gpt-4"
 }
-
-module.exports = {
-	openai,
-	models
-};

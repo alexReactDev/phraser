@@ -1,10 +1,10 @@
 import { IJWT } from "../types/authorization";
 import { IPhraseInput, IPhraseRepetitionInput } from "../types/phrases";
 
-const db = require("../model/db.ts");
-const generateId = require("../utils/generateId");
-const globalErrorHandler = require("../service/globalErrorHandler");
-const settingsController = require("./Settings");
+import db from "../model/db";
+import generateId from "../utils/generateId";
+import globalErrorHandler from "../service/globalErrorHandler";
+import settingsController from "./Settings";
 
 class PhrasesController {
 	async getPhrase({ id }: { id: string }) {
@@ -289,4 +289,4 @@ class PhrasesController {
 	}
 }
 
-module.exports = new PhrasesController();
+export default new PhrasesController();
