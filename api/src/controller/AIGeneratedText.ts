@@ -2,7 +2,7 @@ import { IJWT } from "@ts-backend/authorization";
 import { IUserSettings } from "@ts/settings";
 
 import { openai, models } from "../../openai";
-import globalErrorHandler from "../service/globalErrorHandler";
+import globalErrorHandler from "../misc/globalErrorHandler";
 import settingsController from "./Settings";
 
 class AIGeneratedTextController {

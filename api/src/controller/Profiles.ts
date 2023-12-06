@@ -1,8 +1,8 @@
 import { IProfileInput } from "../types/profiles";
 
 import db from "../model/db";
-import generateId from "../utils/generateId";
-import globalErrorHandler from "../service/globalErrorHandler";
+import generateId from "../misc/generateId";
+import globalErrorHandler from "../misc/globalErrorHandler";
 
 class ProfilesController {
 	async createProfile({ input }: { input: IProfileInput }) {

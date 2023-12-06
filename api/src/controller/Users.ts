@@ -2,8 +2,8 @@ import { IUserInput } from "../types/users";
 
 import db from "../model/db";
 import settingsController from "./Settings";
-import generateId from "../utils/generateId";
-import globalErrorHandler from "../service/globalErrorHandler";
+import generateId from "../misc/generateId";
+import globalErrorHandler from "../misc/globalErrorHandler";
 import profilesController from "./Profiles";
 
 class UsersController {

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import generateId from "./generateId";
-import globalErrorHandler from "../service/globalErrorHandler";
+import globalErrorHandler from "./globalErrorHandler";
 import db from "../model/db";
 
 export async function signJWT(data: any) {

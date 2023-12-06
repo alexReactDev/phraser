@@ -3,7 +3,7 @@ import { Collection } from "../Classes/Collection";
 import { IChangeCollectionLockInput, ICollectionInput, ICollectionMetaInput } from "../types/collections";
 
 import db from "../model/db";
-import globalErrorHandler from "../service/globalErrorHandler";
+import globalErrorHandler from "../misc/globalErrorHandler";
 
 class CollectionsController {
 	async getCollection({ id }: { id: string }) {

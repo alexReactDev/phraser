@@ -1,9 +1,9 @@
 import { IJWT, ILoginInput, ISignUpInput } from "../types/authorization";
-import { signJWT } from "../utils/signJWT";
+import { signJWT } from "../misc/signJWT";
 
 import db from "../model/db";
 import usersController from "./Users";
-import globalErrorHandler from "../service/globalErrorHandler";
+import globalErrorHandler from "../misc/globalErrorHandler";
 
 class AuthorizationController {
 	async login({ input }: { input: ILoginInput }) {

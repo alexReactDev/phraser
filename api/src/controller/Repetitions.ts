@@ -1,8 +1,8 @@
 import { IRepetitionInput } from "@ts/repetitions";
 
 import db from "../model/db";
-import generateId from "../utils/generateId";
-import globalErrorHandler from "../service/globalErrorHandler";
+import generateId from "../misc/generateId";
+import globalErrorHandler from "../misc/globalErrorHandler";
 
 class RepetitionsController {
 	async createRepetition({ input }: { input: IRepetitionInput }) {

@@ -1,4 +1,4 @@
-import { isTokenRevoked } from "./src/utils/isTokenRevoked";
+import { isTokenRevoked } from "./src/misc/isTokenRevoked";
 
 import dotenv from "dotenv";
 import express from "express";

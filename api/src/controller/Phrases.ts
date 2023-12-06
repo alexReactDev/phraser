@@ -2,8 +2,8 @@ import { IJWT } from "../types/authorization";
 import { IPhraseInput, IPhraseRepetitionInput } from "../types/phrases";
 
 import db from "../model/db";
-import generateId from "../utils/generateId";
-import globalErrorHandler from "../service/globalErrorHandler";
+import generateId from "../misc/generateId";
+import globalErrorHandler from "../misc/globalErrorHandler";
 import settingsController from "./Settings";
 
 class PhrasesController {

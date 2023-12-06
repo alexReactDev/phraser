@@ -4,7 +4,7 @@ import { Collection } from "../Classes/Collection";
 import { ICollection } from "../../../types/collections";
 
 import settingsController from "./Settings";
-import globalErrorHandler from "../service/globalErrorHandler";
+import globalErrorHandler from "../misc/globalErrorHandler";
 import db from "../model/db";
 
 class AutoCollectionsController {
