@@ -57,7 +57,8 @@ class PhrasesController {
 				guessed: 0,
 				forgotten: 0
 			},
-			profile: userSettings.settings.activeProfile
+			profile: userSettings.settings.activeProfile,
+			userId: context.auth.userId
 		}
 
 		try {

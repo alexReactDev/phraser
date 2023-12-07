@@ -11,7 +11,8 @@ export interface IPhrase {
 	crated: bigint,
 	lastUpdate: bigint,
 	meta: IPhraseMeta,
-	profile: string
+	profile: string,
+	userId: string
 }
 
 export interface IPair {

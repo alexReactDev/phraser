@@ -7,6 +7,7 @@ import globalErrorHandler from "../misc/globalErrorHandler";
 
 class AuthorizationController {
 	async login({ input }: { input: ILoginInput }) {
+		console.log("LOGIN");
 		let user;
 
 		try {
@@ -40,7 +41,7 @@ class AuthorizationController {
 		return "OK";
 	}
 
-	async signUp({ input }: { input: ISignUpInput }) {
+	async signUp({ input }: { input: ISignUpInput }) { 		console.log(input);
 		let userId;
 		
 		try {

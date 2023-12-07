@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const UPDATE_USER_SETTINGS = gql`
-	mutation updateUserSettings($id: ID, $input: PartialSettingsInput) {
+	mutation updateUserSettings($id: ID!, $input: PartialSettingsInput!) {
 		updateUserSettings(id: $id, input: $input) {
 			id,
 			userId,
@@ -16,7 +16,7 @@ export const UPDATE_USER_SETTINGS = gql`
 `;
 
 export const GET_USER_SETTING = gql`
-	query getUserSettings($id: ID) {
+	query getUserSettings($id: ID!) {
 		getUserSettings(id: $id) {
 			id,
 			userId,

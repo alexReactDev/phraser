@@ -1,6 +1,6 @@
 export type TPhrasesOrder = "default" | "random";
 export type TIntervalRepetitionDates = "exact" | "extended" | "auto";
-export type TTextDifficulty = "simple" | "average" | "advanced" | "default"
+export type TTextDifficulty = "simple" | "average" | "advanced" | "default";
 
 export interface IUserSettings {
 	id: string,

@@ -9,7 +9,7 @@ export const GET_SESSION = gql`
 `;
 
 export const LOGIN = gql`
-	mutation login($input: LoginInput) {
+	mutation login($input: LoginInput!) {
 		login(input: $input) {
 			token,
 			sid,
@@ -19,7 +19,7 @@ export const LOGIN = gql`
 `;
 
 export const SIGNUP = gql`
-	mutation signUp($input: SignUpInput) {
+	mutation signUp($input: SignUpInput!) {
 		signUp(input: $input) {
 			token,
 			sid,

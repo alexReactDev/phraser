@@ -6,7 +6,7 @@ export interface PhraseRepetition {
 
 export interface IRepetition {
 	id: string,
-	userId: number,
+	userId: string,
 	phrasesCount: number,
 	totalForgotten: number,
 	collectionName: string,

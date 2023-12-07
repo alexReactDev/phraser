@@ -44,8 +44,7 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 						id: mutateId,
 						input: {
 							name,
-							color,
-							profile: settings.settings.activeProfile
+							color
 						}
 					},
 					refetchQueries: [GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES]

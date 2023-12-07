@@ -72,6 +72,8 @@ const AuthorizationChecker = observer(function ({ children }: any) {
 
 	if(!session.data.token || !session.data.sid) return <Welcome updateCredentials={updateCredentials} />
 
+	if(settings.loading || (!settings.loaded && !settings.error)) console.log("Settings loading");
+	console.log(settings.settings);
 	if(settings.loading || (!settings.loaded && !settings.error)) return <Loader />
 
 	return children;

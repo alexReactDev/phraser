@@ -56,7 +56,7 @@ type Props = StackScreenProps<StackNavigatorParams, "Collections", "collectionsN
 const Collections = observer(function ({ navigation }: Props) {
 	const { data = [], loading, error } = useQuery(GET_PROFILE_COLLECTIONS, { variables: { id: settings.settings.activeProfile } });
 	const [ displayModal, setDisplayModal ] = useState(false);
-	const [ autoCollectionsError, setAutoCollectionsError ] = useState("");
+	const [ autoCollectionsError, setAutoCollectionsError ] = useState<any>("");
 
 	if(loading) return <Loader />
 
@@ -75,7 +75,7 @@ const Collections = observer(function ({ navigation }: Props) {
 				{
 					autoCollectionsError &&
 					<View style={styles.errorContainer}>
-						<WarningMessage message={autoCollectionsError} />
+						<WarningMessage message={`Failed to load auto collections ${autoCollectionsError.toString()}`} />
 					</View>
 				}
 				<View

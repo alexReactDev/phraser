@@ -4,9 +4,10 @@ import { IChangeCollectionLockInput, ICollectionInput, ICollectionMetaInput } fr
 
 import db from "../model/db";
 import globalErrorHandler from "../misc/globalErrorHandler";
+import { IJWT } from "@ts-backend/authorization";
 
 class CollectionsController {
-	async getCollection({ id }: { id: string }) {
+	async getCollection({ id }: { id: string }): Promise<ICollection> {
 		let result;
 
 		try {
@@ -22,7 +23,7 @@ class CollectionsController {
 		return result;
 	}
 
-	async getCollectionsByProfile({ id }: { id: string }) {
+	async getCollectionsByProfile({ id }: { id: string }): Promise<ICollection[]> {
 		let result;
 		
 		try {
@@ -40,7 +41,7 @@ class CollectionsController {
 		return result;
 	}
 
-	async getCollectionByPhrase({ id }: { id: string }) {
+	async getCollectionByPhrase({ id }: { id: string }): Promise<ICollection> {
 		let result;
 
 		try {
@@ -57,8 +58,9 @@ class CollectionsController {
 		return result;
 	}
 
-	async createCollection({ input }: {input: ICollectionInput}) {
-		const collection = new Collection(input.name, input.color, input.profile);
+	async createCollection({ input }: {input: ICollectionInput}, context: { auth: IJWT }) {
+		const collection: Partial<ICollection> = new Collection(input.name, input.color, input.profile, context.auth.userId);
+		collection.userId = context.auth.userId;
 
 		try {
 			await db.collection("collections").insertOne(collection);

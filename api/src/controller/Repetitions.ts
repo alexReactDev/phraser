@@ -21,7 +21,7 @@ class RepetitionsController {
 		return "OK"
 	}
 
-	async getUserRepetitions({ userId }: { userId: string | number }) {
+	async getUserRepetitions({ userId }: { userId: string }) {
 		let repetitions;
 
 		try {

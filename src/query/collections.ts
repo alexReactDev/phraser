@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_COLLECTION = gql`
-	query getCollection($id: ID) {
+	query getCollection($id: ID!) {
 		getCollection(id: $id) {
 			id,
 			name,
@@ -23,7 +23,7 @@ export const GET_COLLECTION = gql`
 `;
 
 export const GET_PROFILE_COLLECTIONS = gql`
-	query getProfileCollections($id: ID) {
+	query getProfileCollections($id: ID!) {
 		getProfileCollections(id: $id) {
 			id,
 			name,
@@ -42,7 +42,7 @@ export const GET_PROFILE_COLLECTIONS = gql`
 `;
 
 export const GET_PROFILE_COLLECTIONS_FOR_PHRASES = gql`
-	query getProfileCollections($id: ID) {
+	query getProfileCollections($id: ID!) {
 		getProfileCollections(id: $id) {
 			id,
 			name,
@@ -53,7 +53,7 @@ export const GET_PROFILE_COLLECTIONS_FOR_PHRASES = gql`
 
 
 export const GET_COLLECTION_NAMEID = gql`
-	query getCollection($id: ID) {
+	query getCollection($id: ID!) {
 		getCollection(id: $id) {
 			id,
 			name
@@ -62,7 +62,7 @@ export const GET_COLLECTION_NAMEID = gql`
 `;
 
 export const GET_COLLECTION_META = gql`
-	query getCollection($id: ID) {
+	query getCollection($id: ID!) {
 		getCollection(id: $id) {
 			id,
 			name,
@@ -76,38 +76,38 @@ export const GET_COLLECTION_META = gql`
 `;
 
 export const CREATE_COLLECTION = gql`
-	mutation createCollection($input: CollectionInput) {
+	mutation createCollection($input: CollectionInput!) {
 		createCollection(input: $input)
 	}
 `;
 
 export const MUTATE_COLLECTION = gql`
-	mutation mutateCollection($id: ID, $input: CollectionInput) {
+	mutation mutateCollection($id: ID!, $input: MutateCollectionInput!) {
 		mutateCollection(id: $id, input: $input) 
 	}
 `;
 
 export const MUTATE_COLLECTION_META = gql`
-	mutation mutateCollectionMeta($id: ID, $input: CollectionMetaInput) {
+	mutation mutateCollectionMeta($id: ID!, $input: CollectionMetaInput!) {
 		mutateCollectionMeta(id: $id, input: $input)
 	}
 `;
 
 export const CHANGE_COLLECTION_LOCK = gql`
-	mutation changeCollectionLock($id: ID, $input: ChangeCollectionLockInput) {
+	mutation changeCollectionLock($id: ID!, $input: ChangeCollectionLockInput!) {
 		changeCollectionLock(id: $id, input: $input)
 	}
 `;
 
 
 export const DELETE_COLLECTION = gql`
-	mutation deleteCollection($id: ID) {
+	mutation deleteCollection($id: ID!) {
 		deleteCollection(id: $id) 
 	}
 `;
 
 export const GENERATE_AUTO_COLLECTION = gql`
-	mutation generateAutoCollection($type: String) {
+	mutation generateAutoCollection($type: String!) {
 		generateAutoCollection(type: $type) {
 			id,
 			name,
