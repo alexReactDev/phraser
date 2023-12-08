@@ -15,7 +15,7 @@ class RepetitionsController {
 			})
 		} catch (e) {
 			globalErrorHandler(e);
-			return `Error! Failed to create repetition.\n${e}`;
+			throw new Error(`Error! Failed to create repetition.\n${e}`);
 		}
 
 		return "OK"
@@ -32,7 +32,7 @@ class RepetitionsController {
 			repetitions = await cursor.toArray();
 		} catch (e) {
 			globalErrorHandler(e);
-			return `Error! Failed to create repetition.\n${e}`;
+			throw new Error(`Error! Failed to create repetition.\n${e}`);
 		}
 
 		return repetitions;
