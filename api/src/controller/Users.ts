@@ -66,8 +66,18 @@ class UsersController {
 
 	async deleteUser({ id }: { id: string }, context: IContext) {
 		try {
-			await db.collection("users").deleteOne({ id: id });
-			await db.collection("settings").deleteOne({ userId: id });
+			const promises = [];
+
+			promises.push(db.collection("users").deleteOne({ id: id }));
+			promises.push(db.collection("settings").deleteOne({ userId: id }));
+			promises.push(db.collection("profiles").deleteMany({ userId: id }));
+			promises.push(db.collection("collections").deleteMany({ userId: id }));
+			promises.push(db.collection("phrases").deleteMany({ userId: id }));
+			promises.push(db.collection("repetitions").deleteMany({ userId: id }));
+			promises.push(db.collection("premium").deleteOne({ userId: id }));
+			promises.push(db.collection("active_sessions").deleteOne({ sid: context.auth.sid }));
+
+			await Promise.all(promises);
 		}
 		catch(e: any) {
 			globalErrorHandler(e);
