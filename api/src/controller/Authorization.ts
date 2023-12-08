@@ -1,9 +1,10 @@
-import { IJWT, ILoginInput, ISignUpInput } from "../types/authorization";
+import { ILoginInput, ISignUpInput } from "../types/authorization";
 import { signJWT } from "../misc/signJWT";
 
 import db from "../model/db";
 import usersController from "./Users";
 import globalErrorHandler from "../misc/globalErrorHandler";
+import { IContext } from "@ts-backend/context";
 
 class AuthorizationController {
 	async login({ input }: { input: ILoginInput }) {
@@ -27,7 +28,7 @@ class AuthorizationController {
 		return {...token};
 	}
 
-	async logout({}, context: { auth: IJWT }) {
+	async logout({}, context: IContext) {
 		try {
 			await db.collection("active_sessions").deleteOne({
 				sid: context.auth.sid
@@ -57,7 +58,7 @@ class AuthorizationController {
 		return {...token};
 	}
 
-	async getSession({}, context: { auth: IJWT }) {
+	async getSession({}, context: IContext) {
 		if(context?.auth?.sid) return { sid: context.auth.sid, userId: context.auth.userId };
 
 		return "";

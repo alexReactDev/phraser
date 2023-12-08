@@ -1,10 +1,10 @@
-import { IJWT } from "../types/authorization";
 import { IPhraseInput, IPhraseRepetitionInput } from "../types/phrases";
 
 import db from "../model/db";
 import generateId from "../misc/generateId";
 import globalErrorHandler from "../misc/globalErrorHandler";
 import settingsController from "./Settings";
+import { IContext } from "@ts-backend/context";
 
 class PhrasesController {
 	async getPhrase({ id }: { id: string }) {
@@ -41,7 +41,7 @@ class PhrasesController {
 		return phrases;
 	}
 
-	async createPhrase({ input, collection }: { input: IPhraseInput, collection: string }, context: { auth: IJWT }) {
+	async createPhrase({ input, collection }: { input: IPhraseInput, collection: string }, context: IContext) {
 		const timestamp = new Date().getTime();
 		const id = generateId();
 

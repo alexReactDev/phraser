@@ -1,12 +1,12 @@
-import { IJWT } from "@ts-backend/authorization";
 import { IUserSettings } from "@ts/settings";
 
 import { openai, models } from "../../openai";
 import globalErrorHandler from "../misc/globalErrorHandler";
 import settingsController from "./Settings";
+import { IContext } from "@ts-backend/context";
 
 class AIGeneratedTextController {
-	async generateText({ phrases }: { phrases: string[] }, context: { auth: IJWT }) {
+	async generateText({ phrases }: { phrases: string[] }, context: IContext) {
 		const userSettings = await settingsController.getUserSettings({ id: context.auth.userId });
 
 		let completion;
@@ -27,7 +27,7 @@ class AIGeneratedTextController {
 		return completion.choices[0].message.content;
 	}
 
-	async generateSentences({ phrases }: { phrases: string[]}, context: { auth: IJWT }) {
+	async generateSentences({ phrases }: { phrases: string[]}, context: IContext) {
 		const userSettings = await settingsController.getUserSettings({ id: context.auth.userId });
 
 		let completion;

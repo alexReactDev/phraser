@@ -1,14 +1,14 @@
 import { IPhrase } from "@ts/phrases";
-import { IJWT } from "../types/authorization";
 import { Collection } from "../Classes/Collection";
 import { ICollection } from "../../../types/collections";
 
 import settingsController from "./Settings";
 import globalErrorHandler from "../misc/globalErrorHandler";
 import db from "../model/db";
+import { IContext } from "@ts-backend/context";
 
 class AutoCollectionsController {
-	async createAutoCollection({}, context: { auth: IJWT }) {
+	async createAutoCollection({}, context: IContext) {
 		const userSettings = await settingsController.getUserSettings({ id: context.auth.userId });
 
 		try {
@@ -87,7 +87,7 @@ class AutoCollectionsController {
 		return collection;
 	}
 
-	async createIntervalCollection({extended = false}, context: { auth: IJWT }): Promise<ICollection> {
+	async createIntervalCollection({extended = false}, context: IContext): Promise<ICollection> {
 		const userSettings = await settingsController.getUserSettings({ id: context.auth.userId });
 		const currentTime = new Date().getTime();
 		if(userSettings.settings.intervalRepetitionDates === "extended") extended = true;
@@ -231,7 +231,7 @@ class AutoCollectionsController {
 		return await this.createIntervalCollection({ extended: true }, context);
 	}
 
-	async createHardToMemorizeCollection({}, context: { auth: IJWT }) {
+	async createHardToMemorizeCollection({}, context: IContext) {
 		const userSettings = await settingsController.getUserSettings({ id: context.auth.userId });
 
 		try {

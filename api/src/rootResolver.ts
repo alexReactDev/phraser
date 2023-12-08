@@ -16,19 +16,20 @@ import { IProfileInput } from "@ts-backend/profiles";
 import { IRepetitionInput } from "@ts/repetitions";
 import { ISettings } from "@ts/settings";
 import { IntervalRepetitionDatesValues, PhrasesOrderValues, TextDifficultyValues } from "./types/settingsValues";
+import { IContext } from "@ts-backend/context";
 
 const root = {
 	login: authController.login,
 	signUp: authController.signUp.bind(authController),
 	getSession: authController.getSession.bind(authController),
-	logout: async (params: {}, context: { auth: IJWT }) => {
+	logout: async (params: {}, context: IContext) => {
 		if(!context.auth) return "OK";
 
 		return await authController.logout(params, context);
 	},
 
 	
-	getUser: async (params: { id: string }, context: { auth: IJWT }) => {
+	getUser: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.id !== context.auth.userId) throw new Error("403. Access denied");
@@ -36,15 +37,15 @@ const root = {
 		return await usersController.getUser(params);
 	},
 
-	deleteUser: async (params: { id: string }, context: { auth: IJWT }) => {
+	deleteUser: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.id !== context.auth.userId) throw new Error("403. Access denied");
 
-		return await usersController.deleteUser(params);
+		return await usersController.deleteUser(params, context);
 	},
 
-	getUserSettings: async (params: { id: string }, context: { auth: IJWT }) => {
+	getUserSettings: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.id !== context.auth.userId) throw new Error("403. Access denied");
@@ -54,7 +55,7 @@ const root = {
 		return await settingsController.getUserSettings(params);
 	},
 
-	setUserSettings: async (params: { id: string, input: ISettings}, context: { auth: IJWT }) => {
+	setUserSettings: async (params: { id: string, input: ISettings}, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.id !== context.auth.userId) throw new Error("403. Access denied");
@@ -71,7 +72,7 @@ const root = {
 	},
 
 
-	updateUserSettings: async (params: { id: string, input: Partial<ISettings>}, context: { auth: IJWT }) => {
+	updateUserSettings: async (params: { id: string, input: Partial<ISettings>}, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.id !== context.auth.userId) throw new Error("403. Access denied");
@@ -97,7 +98,7 @@ const root = {
 		return settingsController.updateUserSettings(params);
 	},
 
-	createProfile: async (params: { input: IProfileInput }, context: { auth: IJWT }) => {
+	createProfile: async (params: { input: IProfileInput }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.input.userId !== context.auth.userId) throw new Error("403. Access denied");
@@ -106,7 +107,7 @@ const root = {
 	},
 
 
-	getUserProfiles: async (params: { id: string }, context: { auth: IJWT }) => {
+	getUserProfiles: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.id !== context.auth.userId) throw new Error("403. Access denied");
@@ -115,7 +116,7 @@ const root = {
 	},
 
 
-	mutateProfile: async (params: { id: string, input: { name: string }}, context: { auth: IJWT }) => {
+	mutateProfile: async (params: { id: string, input: { name: string }}, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		const profile = await profilesController.getProfile({ id: params.id });
@@ -125,7 +126,7 @@ const root = {
 		return await profilesController.mutateProfile(params);
 	},
 
-	deleteProfile: async (params: { id: string }, context: { auth: IJWT }) => {
+	deleteProfile: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		const profile = await profilesController.getProfile({ id: params.id });
@@ -135,7 +136,7 @@ const root = {
 		return await profilesController.deleteProfile(params);
 	},
 
-	createCollection: async (params: { input: ICollectionInput }, context: { auth: IJWT }) => {
+	createCollection: async (params: { input: ICollectionInput }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		let profile = await profilesController.getProfile({ id: params.input.profile });
@@ -157,7 +158,7 @@ const root = {
 			throw new Error("400. Bad request");
 		}
 	},
-	getCollection: async (params: { id: string }, context: { auth: IJWT }) => {
+	getCollection: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		const collection = await collectionsController.getCollection(params);
@@ -166,7 +167,7 @@ const root = {
 
 		return collection;
 	},
-	getProfileCollections: async (params: { id: string }, context: { auth: IJWT }) => {
+	getProfileCollections: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		let profile = await profilesController.getProfile({ id: params.id });
@@ -176,7 +177,7 @@ const root = {
 		return collectionsController.getCollectionsByProfile(params);
 	},
 	
-	deleteCollection: async (params: { id: string }, context: { auth: IJWT }) => {
+	deleteCollection: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		let collection = await collectionsController.getCollection(params);
@@ -187,7 +188,7 @@ const root = {
 	},
 
 	
-	mutateCollection: async (params: { id: string, input: ICollectionInput}, context: { auth: IJWT }) => {
+	mutateCollection: async (params: { id: string, input: ICollectionInput}, context: IContext) => {
 		console.log("COL1")
 		if(!context.auth) throw new Error("401. Authorization required");
 
@@ -198,7 +199,7 @@ const root = {
 		return await collectionsController.mutateCollection(params);
 	},
 
-	mutateCollectionMeta: async (params: { id: string, input: ICollectionMetaInput }, context: { auth: IJWT }) => {
+	mutateCollectionMeta: async (params: { id: string, input: ICollectionMetaInput }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		let collection = await collectionsController.getCollection(params);
@@ -209,7 +210,7 @@ const root = {
 	},
 
 	
-	changeCollectionLock: async (params: { id: string, input: IChangeCollectionLockInput }, context: { auth: IJWT }) => {
+	changeCollectionLock: async (params: { id: string, input: IChangeCollectionLockInput }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		let collection = await collectionsController.getCollection(params);
@@ -220,7 +221,7 @@ const root = {
 	},
 
 	
-	getPhraseCollection: async (params: { id: string }, context: { auth: IJWT }) => {
+	getPhraseCollection: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		const collection = await collectionsController.getCollectionByPhrase(params);
@@ -230,7 +231,7 @@ const root = {
 		return collection;
 	},
 
-	getPhrase: async (params: { id: string }, context: { auth: IJWT }) => {
+	getPhrase: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		const phrase = await phrasesController.getPhrase(params);
@@ -240,7 +241,7 @@ const root = {
 		return phrase;
 	},
 
-	getCollectionPhrases: async (params: { id: string }, context: { auth: IJWT }) => {
+	getCollectionPhrases: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		const collection = await collectionsController.getCollection({ id: params.id });
@@ -250,7 +251,7 @@ const root = {
 		return await phrasesController.getPhrasesByCollection(params);
 	},
 	
-	createPhrase: async (params: { input: IPhraseInput, collection: string }, context: { auth: IJWT }) => {
+	createPhrase: async (params: { input: IPhraseInput, collection: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		const collection = await collectionsController.getCollection({ id: params.collection });
@@ -261,7 +262,7 @@ const root = {
 	},
 
 	
-	mutatePhrase: async (params: { id: string, input: IPhraseInput }, context: { auth: IJWT }) => {
+	mutatePhrase: async (params: { id: string, input: IPhraseInput }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		const phrase = await phrasesController.getPhrase({ id: params.id });
@@ -271,7 +272,7 @@ const root = {
 		return phrasesController.mutatePhrase(params);
 	},
 
-	mutatePhraseMeta: async (params: { id: string, input: IPhraseRepetitionInput }, context: { auth: IJWT }) => {
+	mutatePhraseMeta: async (params: { id: string, input: IPhraseRepetitionInput }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		const phrase = await phrasesController.getPhrase({ id: params.id });
@@ -282,7 +283,7 @@ const root = {
 	},
 
 	
-	movePhrase: async (params: { id: string, destId: string }, context: { auth: IJWT }) => {
+	movePhrase: async (params: { id: string, destId: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		const phrase = await phrasesController.getPhrase({ id: params.id });
@@ -296,7 +297,7 @@ const root = {
 		return await phrasesController.movePhrase(params);
 	},
 
-	movePhrasesMany: async (params: { ids: string[], destId: string}, context: { auth: IJWT }) => {
+	movePhrasesMany: async (params: { ids: string[], destId: string}, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.ids.length === 0) throw new Error("400. Received empty phrases array");
@@ -329,7 +330,7 @@ const root = {
 		return await phrasesController.moveMany(params);
 	},
 
-	deletePhrase: async (params: { id: string }, context: { auth: IJWT }) => {
+	deletePhrase: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		const phrase = await phrasesController.getPhrase({ id: params.id });
@@ -339,7 +340,7 @@ const root = {
 		return await phrasesController.deletePhrase(params);
 	},
 	
-	deletePhrasesMany: async (params: { ids: string[] }, context: { auth: IJWT }) => {
+	deletePhrasesMany: async (params: { ids: string[] }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.ids.length === 0) throw new Error("400. Received empty phrases array");
@@ -368,7 +369,7 @@ const root = {
 		return phrasesController.deleteMany(params);
 	},
 
-	createRepetition: async (params: { input: IRepetitionInput }, context: { auth: IJWT }) => {
+	createRepetition: async (params: { input: IRepetitionInput }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.input.userId !== context.auth.userId) throw new Error("403. Access denied");
@@ -382,7 +383,7 @@ const root = {
 		return await repetitionsController.createRepetition(params);
 	},
 
-	getUserRepetitions: async (params: { userId: string }, context: { auth: IJWT }) => {
+	getUserRepetitions: async (params: { userId: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.userId !== context.auth.userId) throw new Error("403. Access denied");
@@ -390,7 +391,7 @@ const root = {
 		return await repetitionsController.getUserRepetitions(params);
 	},
 
-	getGeneratedText: async (params: { phrases: string[] }, context: { auth: IJWT }) => {
+	getGeneratedText: async (params: { phrases: string[] }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		let premium;
@@ -410,7 +411,7 @@ const root = {
 
 		return await AIGeneratedTextController.generateText(params, context);
 	},
-	getGeneratedSentences: async (params: { phrases: string[] }, context: { auth: IJWT }) => {
+	getGeneratedSentences: async (params: { phrases: string[] }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		let premium;

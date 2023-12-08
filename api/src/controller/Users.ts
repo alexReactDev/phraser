@@ -5,6 +5,7 @@ import settingsController from "./Settings";
 import generateId from "../misc/generateId";
 import globalErrorHandler from "../misc/globalErrorHandler";
 import profilesController from "./Profiles";
+import { IContext } from "@ts-backend/context";
 
 class UsersController {
 	async getUser({ id }: { id: string }) {
@@ -63,7 +64,7 @@ class UsersController {
 		return id;
 	}
 
-	async deleteUser({ id }: { id: string }) {
+	async deleteUser({ id }: { id: string }, context: IContext) {
 		try {
 			await db.collection("users").deleteOne({ id: id });
 			await db.collection("settings").deleteOne({ userId: id });
