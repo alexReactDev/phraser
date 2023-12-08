@@ -10,7 +10,7 @@ dotenv.config();
 import rootSchema from "./schema";
 import rootResolver from "./src/rootResolver";
 import throttleMiddleware from "./src/middleware/throttleMiddleware";
-import sessionsCleanup from "./src/misc/sessionsCleanUp";
+import sessionsCleanup from "./src/misc/sessionsCleanup";
 
 const PORT = 4500;
 

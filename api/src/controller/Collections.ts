@@ -1,4 +1,4 @@
-import { ICollection } from "types/collections";
+import { ICollection } from "@ts/collections";
 import { Collection } from "../Classes/Collection";
 import { IChangeCollectionLockInput, ICollectionInput, ICollectionMetaInput } from "../types/collections";
 
