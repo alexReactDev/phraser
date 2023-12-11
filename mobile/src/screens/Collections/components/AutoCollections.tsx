@@ -6,7 +6,7 @@ import { StackNavigatorParams } from "../Collections";
 import session from "@store/session";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
-import { ICollection } from "types/collections";
+import { ICollection } from "@ts/collections";
 
 type TNavigation = StackNavigationProp<StackNavigatorParams, "Collections", "collectionsNavigator">;
 

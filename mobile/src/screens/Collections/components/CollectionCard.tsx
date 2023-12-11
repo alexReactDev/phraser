@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { ICollection } from "../../../../types/collections";
+import { ICollection } from "@ts/collections";
 import moment from "moment";
 import { fontColorFaintLight, fontColorLight } from "../../../styles/variables";
 import { Ionicons } from '@expo/vector-icons';

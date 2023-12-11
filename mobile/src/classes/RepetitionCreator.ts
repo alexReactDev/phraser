@@ -3,7 +3,7 @@ import { IRepetition, PhraseRepetition } from "@ts/repetitions"
 type TProps = Omit<IRepetition, "id" | "created">
 
 export default class Repetition implements Omit<IRepetition, "id"> {
-	userId: number;
+	userId: string;
 	phrasesCount: number;
 	totalForgotten: number;
 	collectionName: string;

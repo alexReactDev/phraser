@@ -1,11 +1,11 @@
 export interface IAuthData {
 	sid: number,
 	token: string,
-	userId: number
+	userId: string
 }
 
 export interface IAuthInitialData {
 	sid: number | null,
 	token: string | null,
-	userId: number | null
+	userId: string | null
 }

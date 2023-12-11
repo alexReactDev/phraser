@@ -8,7 +8,8 @@
     "start-api": "cd ./api && nodemon index.ts",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "fuck": "tsc --traceResolution"
   },
   "dependencies": {
     "@apollo/client": "^3.8.7",

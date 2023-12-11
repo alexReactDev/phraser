@@ -7,7 +7,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "../../query/collections";
 import SelectDropdown from "react-native-select-dropdown";
 import { CREATE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE_WITH_COLLECTION, MOVE_PHRASE, MUTATE_PHRASE } from "../../query/phrases";
-import { ICollection } from "../../../types/collections";
+import { ICollection } from "@ts/collections";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { NavigatorParams } from "../../../App";
 import settings from "../../store/settings";
