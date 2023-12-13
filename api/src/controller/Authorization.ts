@@ -42,7 +42,7 @@ class AuthorizationController {
 		return "OK";
 	}
 
-	async signUp({ input }: { input: ISignUpInput }) { 		console.log(input);
+	async signUp({ input }: { input: ISignUpInput }) {
 		let userId;
 		
 		try {
