@@ -12,7 +12,7 @@ import rootResolver from "./src/rootResolver";
 import throttleMiddleware from "./src/middleware/throttleMiddleware";
 import sessionsCleanup from "./src/misc/sessionsCleanup";
 
-const PORT = 4500;
+const PORT = process.env.PORT;
 
 const app = express();
 
