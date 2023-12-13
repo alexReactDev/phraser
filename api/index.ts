@@ -1,12 +1,10 @@
-import { isTokenRevoked } from "./src/misc/isTokenRevoked";
-
 import dotenv from "dotenv";
+dotenv.config();
+
+import { isTokenRevoked } from "./src/misc/isTokenRevoked";
 import express from "express";
 import { graphqlHTTP } from "express-graphql";
 import { expressjwt } from "express-jwt";
-
-dotenv.config();
-
 import rootSchema from "./schema";
 import rootResolver from "./src/rootResolver";
 import throttleMiddleware from "./src/middleware/throttleMiddleware";

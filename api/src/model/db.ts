@@ -1,6 +1,9 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-const uri = "mongodb://127.0.0.1:27017/vocabulary";
+const host = process.env.DB_HOST;
+const port = process.env.DB_PORT;
+
+const uri = `mongodb://${host}:${port}/vocabulary`;
 
 const client = new MongoClient(uri,  {
         serverApi: {
