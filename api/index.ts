@@ -9,11 +9,13 @@ import rootSchema from "./schema";
 import rootResolver from "./src/rootResolver";
 import throttleMiddleware from "./src/middleware/throttleMiddleware";
 import sessionsCleanup from "./src/misc/sessionsCleanup";
+import logMiddleware from "./src/misc/logMiddleware";
 
 const PORT = process.env.PORT;
 
 const app = express();
 
+app.use("*", logMiddleware);
 app.use(throttleMiddleware);
 app.use(expressjwt({ 
 	secret: (process.env.JWT_SECRET as string), 
