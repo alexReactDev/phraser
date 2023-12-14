@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { isTokenRevoked } from "./src/misc/isTokenRevoked";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { graphqlHTTP } from "express-graphql";
 import { expressjwt } from "express-jwt";
 import rootSchema from "./schema";
@@ -21,6 +21,9 @@ app.use(expressjwt({
 	credentialsRequired: false, 
 	isRevoked: isTokenRevoked
 }));
+app.use("/test", (req: Request, res: Response, next: NextFunction) => {
+	return res.send(`Connection test successful. Current time: ${new Date().toString()}`);
+})
 app.use("/graphql", graphqlHTTP((req: any) => ({
 	schema: rootSchema,
 	rootValue: rootResolver,
