@@ -8,7 +8,6 @@ import { IContext } from "@ts-backend/context";
 
 class AuthorizationController {
 	async login({ input }: { input: ILoginInput }) {
-		console.log("LOGIN");
 		let user;
 
 		try {
