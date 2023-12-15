@@ -16,6 +16,12 @@ import { ErrorBoundary } from "react-error-boundary";
 import ErrorComponent from "@components/Errors/ErrorComponent";
 import { setJSExceptionHandler } from "react-native-exception-handler";
 import { useEffect, useState } from "react";
+import * as Sentry from '@sentry/react-native';
+
+Sentry.init({
+  dsn: 'https://b2d6cb5760f1c202f6e86948d4378569@o4506399434080256.ingest.sentry.io/4506399492341760',
+  debug: true
+});
 
 export type NavigatorParams = {
   Add: { mutateId: number | undefined } | undefined,
@@ -25,11 +31,12 @@ export type NavigatorParams = {
 
 const Navigator = createBottomTabNavigator<NavigatorParams>();
 
-export default function App() {
+function App() {
   const [ error, setError ] = useState<any>(null);
 
   useEffect(() => {
     setJSExceptionHandler((error, isFatal) => {
+      Sentry.captureException(error);
       if(isFatal) setError(error);
     });
   }, []);
@@ -37,7 +44,7 @@ export default function App() {
   if(error) return <ErrorComponent message="Fatal error. Try restarting the app" />
 
   return (
-    <ErrorBoundary fallback={<ErrorComponent message="Fatal error. Try restarting the app" />}>
+    <ErrorBoundary fallback={<ErrorComponent message="Fatal error. Try restarting the app" />} onError={(e: any) => Sentry.captureException(e)}>
       <ClickOutsideProvider>
         <ApolloProvider client={client}>
           <NavigationContainer>
@@ -71,3 +78,5 @@ export default function App() {
     </ErrorBoundary>
   );
 }
+
+export default App;

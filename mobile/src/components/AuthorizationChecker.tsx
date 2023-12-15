@@ -66,14 +66,18 @@ const AuthorizationChecker = observer(function ({ children }: any) {
 		session.dataLoaded(data);
 	}
 
-	if(session.error) return <ErrorComponent message={session.error.toString()} />
+	if(session.error) {
+		return <ErrorComponent message={`Failed to load session. \n ${session.error}`} />
+	}
+
+	if(settingsError) {
+		return <ErrorComponent message={`Failed to load settings. \n ${settingsError}`} />
+	}
 
 	if(session.loading || (!session.loaded && !session.error)) return <Loader />
 
 	if(!session.data.token || !session.data.sid) return <Welcome updateCredentials={updateCredentials} />
 
-	if(settings.loading || (!settings.loaded && !settings.error)) console.log("Settings loading");
-	console.log(settings.settings);
 	if(settings.loading || (!settings.loaded && !settings.error)) return <Loader />
 
 	return children;
