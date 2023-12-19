@@ -75,7 +75,7 @@ class UsersController {
 			promises.push(db.collection("phrases").deleteMany({ userId: id }));
 			promises.push(db.collection("repetitions").deleteMany({ userId: id }));
 			promises.push(db.collection("premium").deleteOne({ userId: id }));
-			promises.push(db.collection("active_sessions").deleteOne({ sid: context.auth.sid }));
+			promises.push(db.collection("active_sessions").deleteMany({ userId: id }));
 
 			await Promise.all(promises);
 		}
