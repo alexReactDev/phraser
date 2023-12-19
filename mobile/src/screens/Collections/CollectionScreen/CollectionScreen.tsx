@@ -19,6 +19,7 @@ import MovePhrase from "./components/MovePhrase";
 import { observer } from "mobx-react-lite";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
+import LearnButton from "./components/LearnButton";
 
 type Props = StackScreenProps<StackNavigatorParams, "Collection", "collectionsNavigator">;
 
@@ -113,9 +114,12 @@ const CollectionScreen = observer(function({ route, navigation }: Props) {
 	if(loading || colDataLoading) return <Loader />
 	if(error || colDataError) return <ErrorComponent message="Failed to load collection data" />
 	return (
-		<>
+		<View style={styles.container}>
 			{
 				data.getCollectionPhrases?.length === 0 && <NoPhrases />
+			}
+			{
+				data.getCollectionPhrases?.length !== 0 && <LearnButton colId={colId} color={colData.getCollection.color} navigation={navigation} />
 			}
 			{
 				displayModal &&
@@ -128,7 +132,7 @@ const CollectionScreen = observer(function({ route, navigation }: Props) {
 				</ModalComponent>
 			}
 			<FlatList
-				style={styles.container}
+				style={styles.list}
 				data={data?.getCollectionPhrases}
 				renderItem={({ item: phrase }) => 
 					<CollectionPhrase 
@@ -150,12 +154,16 @@ const CollectionScreen = observer(function({ route, navigation }: Props) {
 				}
 				keyExtractor={(phrase) => phrase.id}
 			></FlatList>
-		</>
+		</View>
 	)
 });
 
 const styles = StyleSheet.create({
 	container: {
+		position: "relative",
+		height: "100%"
+	},
+	list: {
 		padding: 10
 	},
 	selectionContainer: {
