@@ -10,8 +10,12 @@ import ModalComponent from "@components/ModalComponent";
 import { observer } from "mobx-react-lite";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
+import { StackScreenProps } from "@react-navigation/stack";
+import { StackNavigatorParams } from "../Collections";
 
-const CollectionHeaderButtons = observer(function({ route, navigation }: any) {
+type TProps = StackScreenProps<StackNavigatorParams, "Collection", "collectionsNavigator">;
+
+const CollectionHeaderButtons = observer(function({ route, navigation }: TProps) {
 	const colId = route.params.colId;
 	const { data, refetch } = useQuery(GET_COLLECTION, { variables: { id: colId } });
 	const [ displayModal, setDisplayModal ] = useState(false);
