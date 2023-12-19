@@ -19,7 +19,7 @@ import { IntervalRepetitionDatesValues, PhrasesOrderValues, TextDifficultyValues
 import { IContext } from "@ts-backend/context";
 
 const root = {
-	login: authController.login,
+	login: authController.login.bind(authController),
 	signUp: authController.signUp.bind(authController),
 	getSession: authController.getSession.bind(authController),
 	logout: async (params: {}, context: IContext) => {

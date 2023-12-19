@@ -5,6 +5,7 @@ import db from "../model/db";
 import usersController from "./Users";
 import globalErrorHandler from "../misc/globalErrorHandler";
 import { IContext } from "@ts-backend/context";
+import generateId from "../misc/generateId";
 
 class AuthorizationController {
 	async login({ input }: { input: ILoginInput }) {
@@ -22,7 +23,13 @@ class AuthorizationController {
 
 		if(input.password !== user.password) throw new Error(`403. Access denied`);
 
-		const token = await signJWT({ login: user.login, userId: user.id });
+		const session = await this._createSession({ userId: user.id });
+
+		const token = await signJWT({
+			sid: session.sid,
+			login: input.login,
+			userId: user.id
+		});
 
 		return {...token};
 	}
@@ -52,7 +59,13 @@ class AuthorizationController {
 			throw new Error(`Server error. Failed to create user. ${e}`);
 		}
 
-		const token = await signJWT({ login: input.login, userId });
+		const session = await this._createSession({ userId });
+
+		const token = await signJWT({
+			sid: session.sid,
+			login: input.login,
+			userId 
+		});
 
 		return {...token};
 	}
@@ -61,6 +74,26 @@ class AuthorizationController {
 		if(context?.auth?.sid) return { sid: context.auth.sid, userId: context.auth.userId };
 
 		return "";
+	}
+
+	async _createSession({ userId }: { userId: string }) {
+		const sid = generateId();
+
+		const session = {
+			sid,
+			userId,
+			created: new Date().getTime(),
+			expiresAt: new Date().getTime() + 1000 * 60 * 60 * 24 * 30 //1 month
+		};
+
+		try {
+			await db.collection("active_sessions").insertOne(session);
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Failed to save session ${e.toString()}`);
+		}
+	
+		return session;
 	}
 }
 
