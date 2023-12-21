@@ -10,6 +10,11 @@ import rootResolver from "./src/rootResolver";
 import throttleMiddleware from "./src/middleware/throttleMiddleware";
 import sessionsCleanup from "./src/misc/sessionsCleanup";
 import logMiddleware from "./src/misc/logMiddleware";
+import * as Sentry from "@sentry/node";
+
+Sentry.init({
+  dsn: "https://ca86ddc5e4849db752f5adcba30af61c@o4506399434080256.ingest.sentry.io/4506433288077312"
+});
 
 const PORT = process.env.PORT;
 
