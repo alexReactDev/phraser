@@ -74,7 +74,7 @@ const Learn = observer(function ({ route, navigation }: Props) {
 			setFinished(true);
 		}
 
-		setPreviousPhrase(`Previous phrase: ${currentPhrase?.value}: ${currentPhrase?.translation}`);
+		setPreviousPhrase(`${currentPhrase?.value}: ${currentPhrase?.translation}`);
 		setCurrentPhrase(nextData?.value);
 		setProgress((controller!).getProgress());
 	}
@@ -132,6 +132,9 @@ const Learn = observer(function ({ route, navigation }: Props) {
 			<View
 				style={style.adjacentPhrasesContainer}
 			>
+				<Text style={style.adjacentPhrasesTitle}>
+					Previous phrase
+				</Text>
 				<Text
 					style={style.ajacentPhrases}
 				>
@@ -174,11 +177,18 @@ const style = StyleSheet.create({
 	},
 	adjacentPhrasesContainer: {
 		height: "10%",
-		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center"
 	},
+	adjacentPhrasesTitle: {
+		marginBottom: 2,
+		lineHeight: 20,
+		color: fontColorFaint
+	},
 	ajacentPhrases: {
+		paddingHorizontal: 10,
+		textAlign: "center",
+		lineHeight: 20,
 		color: fontColorFaint
 	},
 	buttonsContainer: {
@@ -213,6 +223,9 @@ const style = StyleSheet.create({
 		backgroundColor: "#fdfdfd"
 	},
 	currentPhraseText: {
+		padding: 10,
+		textAlign: "center",
+		lineHeight: 21,
 		color: fontColor
 	},
 	currentPhraseIcon: {
