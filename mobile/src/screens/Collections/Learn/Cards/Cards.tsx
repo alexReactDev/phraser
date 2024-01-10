@@ -77,6 +77,7 @@ const Learn = observer(function ({ route, navigation }: Props) {
 		setPreviousPhrase(`${currentPhrase?.value}: ${currentPhrase?.translation}`);
 		setCurrentPhrase(nextData?.value);
 		setProgress((controller!).getProgress());
+		setShowTranslation(false);
 	}
 
 	if (!started) return <Loader />
