@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { IRepetitionInput } from "@ts/repetitions";
 import Result from "../components/Result";
 import { faintBlue, fontColor } from "@styles/variables";
+import ShowHidePhrase from "./components/ShowHidePhrase";
 
 type Props = StackScreenProps<StackNavigatorParams, "AIGeneratedText", "collectionsNavigator">;
 
@@ -185,10 +186,10 @@ const AIGeneratedText = observer(function ({ route, navigation }: Props) {
 				{
 					currentValue.phrases.map((phrase: IPhrase) => {
 						return (
-							<View style={styles.phraseContainer}>
-								<Text style={styles.phraseText}>
-									{phrase.value}
-								</Text>
+							<View style={styles.phraseContainer} key={phrase.id}>
+								<View style={styles.phraseContent}>
+									<ShowHidePhrase phrase={phrase} />
+								</View>
 								<View style={styles.phraseButtons}>
 									<TouchableOpacity
 										onPress={() => setStepResults({
@@ -243,13 +244,13 @@ function highlightPhrases(phrases: IPair[], string: string): any {
 	const phrase = phrases[0].value;
 
 	const expression = `\\b${phrase}\\b`;
-	const regex = new RegExp(expression);
+	const regex = new RegExp(expression, "i");
 	const idx = string.search(regex);
 
 	if(idx !== -1) {
 		const firstPiece = string.slice(0, idx);
 		const secondPiece = string.slice(idx + phrase.length);
-		const highlighted = <Highlight value={phrase} translation={phrases[0].translation} />
+		const highlighted = <Highlight value={string.slice(idx, idx + phrase.length)} />
 
 		if(phrases.length === 1) return [firstPiece, highlighted, secondPiece];
 
@@ -287,26 +288,24 @@ const styles = StyleSheet.create({
 		gap: 5
 	},
 	phraseContainer: {
-		paddingHorizontal: 15,
+		paddingHorizontal: 11,
 		paddingVertical: 10,
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center"
 	},
-	phraseText: {
-		fontSize: 16,
-		color: fontColor
+	phraseContent: {
+		width: "65%"
 	},
 	phraseButtons: {
+		width: "35%",
 		flexDirection: "row",
 		gap: 20
 	},
 	button: {
 		alignItems: "center"
 	},
-	buttonText: {
-
-	},
+	buttonText: {},
 	bottomBtnContainer: {
 		height: "10%",
 		flexDirection: "row",
