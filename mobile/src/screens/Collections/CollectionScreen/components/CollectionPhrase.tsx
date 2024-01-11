@@ -17,13 +17,14 @@ interface IProps {
 	phrase: IPhrase,
 	colId: string,
 	navigation: any,
+	editable: boolean,
 	selectionEnabled: boolean,
 	isSelected: boolean,
 	enableSelection: () => void,
 	onChange: (selected: boolean) => void
 }
 
-const CollectionPhrase = observer(function({ phrase, colId, navigation, selectionEnabled, isSelected, enableSelection, onChange }: IProps) {
+const CollectionPhrase = observer(function({ phrase, colId, navigation, editable, selectionEnabled, isSelected, enableSelection, onChange }: IProps) {
 	const [ showControls, setShowControls ] = useState(false);
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const ref = useClickOutside(() => setShowControls(false));
@@ -64,6 +65,8 @@ const CollectionPhrase = observer(function({ phrase, colId, navigation, selectio
 			<TouchableOpacity
 				style={styles.info}
 				onPress={() => {
+					if(!editable) return;
+
 					if(selectionEnabled) {
 						onChange(isSelected ? false : true)
 					} else {
@@ -71,6 +74,8 @@ const CollectionPhrase = observer(function({ phrase, colId, navigation, selectio
 					}
 				}}
 				onLongPress={() => {
+					if(!editable) return;
+					
 					enableSelection();
 					onChange(true);
 				}}
