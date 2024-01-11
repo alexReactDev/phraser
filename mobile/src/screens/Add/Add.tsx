@@ -47,15 +47,6 @@ const Add = observer(function ({ route, navigation }: Props) {
 			translation: "",
 			collection: null
 		},
-		validate(values) {
-			const errors: { [key: string]: string } = {};
-
-			if(!values.value) errors.value = "Please, provide value";
-			if(!values.translation) errors.translation = "Please, provide a translation";
-			if(!values.collection) errors.collection = "Please, choose collection";
-			
-			return errors;
-		},
 		async onSubmit(values) {
 			const { collection, ...data } = values;
 
@@ -112,6 +103,21 @@ const Add = observer(function ({ route, navigation }: Props) {
 			reset();
 		}
 	})
+
+	function submitHandler() {
+		if(!formik.values.value) {
+			errorMessage.setErrorMessage("Please, provide a value");
+			return;
+		} else if (!formik.values.translation) {
+			errorMessage.setErrorMessage("Please, provide a translation");
+			return;
+		} else if (!formik.values.collection) {
+			errorMessage.setErrorMessage("Please, choose a collection");
+			return;
+		}
+
+		formik.handleSubmit();
+	}
 
 	function reset() {
 		formik.resetForm();
@@ -215,7 +221,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 
 			></SelectDropdown>
 			<TouchableOpacity
-				onPress={() => formik.handleSubmit()}
+				onPress={submitHandler}
 				style={styles.button}
 			>
 				<Ionicons name="save" size={24} color="gray" />
