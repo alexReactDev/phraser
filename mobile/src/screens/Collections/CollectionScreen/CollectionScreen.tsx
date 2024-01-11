@@ -40,13 +40,17 @@ const CollectionScreen = observer(function({ route, navigation }: Props) {
 
 
 	useEffect(() => {
+		if(!colData) return; //First render precaution
+
 		if(selectionEnabled) {
 			navigation.setOptions({
-				headerRight: renderSelectionInfo
+				headerRight: renderSelectionInfo,
+				title: ""
 			})
 		} else {
 			navigation.setOptions({
-				headerRight: () => <CollectionHeaderButtons route={route} navigation={navigation} />
+				headerRight: () => <CollectionHeaderButtons route={route} navigation={navigation} />,
+				title: colData.getCollection.name
 			})
 		}
 	}, [selectionEnabled, selectedItems])
