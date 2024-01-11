@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { TouchableOpacity, View, TextInput, StyleSheet, Text } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import { fontColor } from "../../styles/variables";
+import { fontColor, fontColorFaint, nondescriptColor } from "../../styles/variables";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "../../query/collections";
 import SelectDropdown from "react-native-select-dropdown";
@@ -109,12 +109,16 @@ const Add = observer(function ({ route, navigation }: Props) {
 			}
 
 			loadingSpinner.dismissLoading();
-			formik.resetForm();
-			selectRef?.current?.reset();
-
-			if(route.params?.mutateId) navigation.setParams({ mutateId: undefined });
+			reset();
 		}
 	})
+
+	function reset() {
+		formik.resetForm();
+		selectRef?.current?.reset();
+
+		if(route.params?.mutateId) navigation.setParams({ mutateId: undefined });
+	}
 
 	return (
 		<View
@@ -127,9 +131,29 @@ const Add = observer(function ({ route, navigation }: Props) {
 			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<EditCollection onReady={() => setDisplayModal(false)} />
 			</ModalComponent>
-			<Text style={styles.inputLabel}>
-				Phrase
-			</Text>
+			<View style={styles.labelContainer}>
+				<Text style={styles.inputLabel}>
+					Phrase
+				</Text>
+				{
+					formik.values.value ||
+					formik.values.translation ||
+					formik.values.collection
+					?
+					<TouchableOpacity 
+						style={styles.close}
+						onPress={reset}
+						activeOpacity={0.7}
+					>
+						<Text style={styles.closeText}>
+							CLEAR
+						</Text>
+						<Ionicons name="close-outline" size={21} color={fontColorFaint} />
+					</TouchableOpacity>
+					:
+					null
+				}
+			</View>
 			<TextInput
 				onChangeText={formik.handleChange("value")}
 				onBlur={() => {
@@ -207,8 +231,12 @@ const styles = StyleSheet.create({
 		position: "relative",
 		height: "100%"
 	},
-	inputLabel: {
+	labelContainer: {
 		marginBottom: 8,
+		flexDirection: "row",
+		justifyContent: "space-between"
+	},
+	inputLabel: {
 		fontSize: 18,
 		color: fontColor
 	},
@@ -229,6 +257,16 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 		marginBottom: -20,
 		alignSelf: "center"
+	},
+	close: {
+		flexDirection: "row",
+		alignItems: "center",
+		paddingRight: 1
+	},
+	closeText: {
+		color: fontColorFaint,
+		textTransform: "uppercase",
+		fontSize: 13
 	},
 	select: {
 		width: "100%",
