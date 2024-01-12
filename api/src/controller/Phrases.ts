@@ -32,7 +32,7 @@ class PhrasesController {
 
 			const cursor = await db.collection("phrases").find({ id: { $in: collection.phrases }});
 
-			phrases = await cursor.toArray();
+			phrases = await cursor.sort({ created: -1 }).toArray();
 		} catch (e) {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to get phrases. ${e}`);
