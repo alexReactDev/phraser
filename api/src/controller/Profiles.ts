@@ -3,6 +3,8 @@ import { IProfileInput } from "../types/profiles";
 import db from "../model/db";
 import generateId from "../misc/generateId";
 import globalErrorHandler from "../misc/globalErrorHandler";
+import { IContext } from "@ts-backend/context";
+import SettingsController from "../controller/Settings";
 
 class ProfilesController {
 	async getProfile({ id }: { id: string }) {
@@ -74,7 +76,11 @@ class ProfilesController {
 		return "OK";
 	}
 
-	async deleteProfile({ id }: { id: string }) {
+	async deleteProfile({ id }: { id: string }, context: IContext) {
+		const settings = await SettingsController.getUserSettings({ id: context.auth.userId });
+
+		if(settings.settings.activeProfile === id) throw new Error("400 Bad request. Cannot delete active profile");
+
 		try {
 			await db.collection("profiles").deleteOne({ id });
 		}

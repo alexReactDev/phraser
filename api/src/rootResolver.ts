@@ -133,7 +133,7 @@ const root = {
 
 		if(profile.userId !== context.auth.userId) throw new Error("403. Access denied");
 
-		return await profilesController.deleteProfile(params);
+		return await profilesController.deleteProfile(params, context);
 	},
 
 	createCollection: async (params: { input: ICollectionInput }, context: IContext) => {
