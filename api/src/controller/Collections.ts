@@ -140,6 +140,7 @@ class CollectionsController {
 				}
 			})
 		} catch (e) {
+			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to delete collection phrases. ${e}`);
 		}
 
