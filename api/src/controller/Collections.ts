@@ -131,6 +131,18 @@ class CollectionsController {
 	}
 
 	async deleteCollection({ id }: { id: string }) {
+		let collection = await this.getCollection({ id });
+
+		try {
+			await db.collection("phrases").deleteMany({
+				id: {
+					$in: collection.phrases
+				}
+			})
+		} catch (e) {
+			throw new Error(`Server error. Failed to delete collection phrases. ${e}`);
+		}
+
 		try {
 			await db.collection("collections").deleteOne({ id });
 		} catch (e) {
