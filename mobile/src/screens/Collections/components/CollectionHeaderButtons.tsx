@@ -38,13 +38,14 @@ const CollectionHeaderButtons = observer(function({ route, navigation }: TProps)
 	if(!data) return null;
 
 	function deleteHandler() {
-		Alert.alert(`Delete collection ${data.getCollection.name}?`, "", [
+		Alert.alert(`Delete collection "${data.getCollection.name}" ?`, "The collection will be deleted with all it's phrases", [
 			{
 				text: "Cancel",
 				style: "cancel"
 			},
 			{
 				text: "Delete",
+				style: "destructive",
 				onPress: async () => {
 					loadingSpinner.setLoading();
 
