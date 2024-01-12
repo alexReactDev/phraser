@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { IProfile } from "../../../types/profiles";
 import { borderColor } from "../../../styles/variables";
 import { Ionicons } from '@expo/vector-icons';
@@ -24,21 +24,33 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 	if(!profile) return "";
 
 	async function deleteHandler() {
-		loadingSpinner.setLoading();
+		Alert.alert(`Delete profile "${profile.name}" ?`, "The profile will be deleted with all it's collections", [
+			{
+				text: "Cancel",
+				style: "cancel"
+			},
+			{
+				text: "Delete",
+				style: "destructive",
+				onPress: async () => {
+					loadingSpinner.setLoading();
 
-		try {
-			await deleteProfile({
-				variables: {
-					id: profile.id
-				},
-				refetchQueries: [GET_USER_PROFILES]
-			})
-		} catch (e: any) {
-			console.log(e);
-			errorMessage.setErrorMessage(e.toString());
-		}
-
-		loadingSpinner.dismissLoading();
+					try {
+						await deleteProfile({
+							variables: {
+								id: profile.id
+							},
+							refetchQueries: [GET_USER_PROFILES]
+						})
+					} catch (e: any) {
+						console.log(e);
+						errorMessage.setErrorMessage(e.toString());
+					}
+			
+					loadingSpinner.dismissLoading();
+				}
+			}
+		])
 	}
 
 	async function mutateHandler() {
