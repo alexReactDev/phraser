@@ -15,6 +15,7 @@ function ModalComponent({ visible, onClose, children }: IProps) {
 			transparent={true}
 			animationType="slide"
 			statusBarTranslucent
+			onRequestClose={onClose}
 		>
 			<View style={styles.modalContainer}>
 				<TouchableOpacity style={styles.modalCross} onPress={onClose}>
