@@ -1,10 +1,11 @@
-import { Text, View, TextInput, Button, StyleSheet } from "react-native";
+import { Text, View, TextInput, Button, StyleSheet, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { faintBlue, fontColor } from "../../styles/variables";
 import { useMutation } from "@apollo/client";
 import { LOGIN, SIGNUP } from "../../query/authorization";
 import { IAuthData } from "../../types/authorization";
 import ErrorMessage from "../../components/Errors/ErrorMessage";
+import { Ionicons } from '@expo/vector-icons';
 
 function Welcome({ updateCredentials }: { updateCredentials: (data: IAuthData) => void }) {
 	const [ showSignUp, setShowSignUp ] = useState(false);
@@ -27,6 +28,7 @@ function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, up
 	const [ login, setLogin ] = useState("");
 	const [ password, setPassword ] = useState("");
 	const [ errorMessage, setErrorMessage ] = useState("");
+	const [ showPassword, setShowPassword ] = useState(false);
 
 	const [ tryLogin ] = useMutation(LOGIN);
 
@@ -67,12 +69,25 @@ function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, up
 				placeholder="Login"
 				style={style.input}
 			/>
-			<TextInput
-				value={password}
-				onChangeText={setPassword}
-				placeholder="Password"
-				style={style.input}
-			/>
+			<View style={style.inputContainer}>
+				<TouchableOpacity 
+					style={style.inputIconContainer}
+					activeOpacity={0.7}
+					onPress={() => setShowPassword(!showPassword)}
+				>
+					<Ionicons name={showPassword ? "eye" : "eye-off"} size={24} color="grey" />
+				</TouchableOpacity>
+				<TextInput
+					value={password}
+					onChangeText={setPassword}
+					placeholder="Password"
+					style={{ ...style.input, paddingRight: 45 }}
+					secureTextEntry={!showPassword}
+					autoCapitalize="none"
+					autoComplete="off"
+					autoCorrect={false}
+				/>
+			</View>
 			<Button title="Login" onPress={loginHandler}></Button>
 			<Button title="Sign up" onPress={changeRoute} color={faintBlue}></Button>
 		</View>
@@ -84,6 +99,7 @@ function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, u
 	const [ password, setPassword ] = useState("");
 	const [ name, setName ] = useState("");
 	const [ errorMessage, setErrorMessage ] = useState("");
+	const [ showPassword, setShowPassword ] = useState(false);
 
 	const [ trySignUp ] = useMutation(SIGNUP);
 
@@ -131,12 +147,25 @@ function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, u
 				placeholder="Login"
 				style={style.input}
 			/>
-			<TextInput
-				value={password}
-				onChangeText={setPassword}
-				placeholder="Password"
-				style={style.input}
-			/>
+			<View style={style.inputContainer}>
+				<TouchableOpacity 
+					style={style.inputIconContainer}
+					activeOpacity={0.7}
+					onPress={() => setShowPassword(!showPassword)}
+				>
+					<Ionicons name={showPassword ? "eye" : "eye-off"} size={24} color="grey" />
+				</TouchableOpacity>
+				<TextInput
+					value={password}
+					onChangeText={setPassword}
+					placeholder="Password"
+					style={{ ...style.input, paddingRight: 45 }}
+					secureTextEntry={!showPassword}
+					autoCapitalize="none"
+					autoComplete="off"
+					autoCorrect={false}
+				/>
+			</View>
 			<Button title="Sign up" onPress={signUpHandler}></Button>
 			<Button title="Login" onPress={changeRoute} color={faintBlue}></Button>
 		</View>
@@ -163,6 +192,18 @@ const style = StyleSheet.create({
 		textAlign: "center",
 		fontSize: 21,
 		color: fontColor
+	},
+	inputContainer: {
+		position: "relative"
+	},
+	inputIconContainer: {
+		zIndex: 1,
+		position: "absolute",
+		right: 12,
+		top: 10
+	},
+	inputIcon: {
+
 	},
 	input: {
 		borderWidth: 1,
