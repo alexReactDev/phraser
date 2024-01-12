@@ -82,6 +82,13 @@ class ProfilesController {
 		if(settings.settings.activeProfile === id) throw new Error("400 Bad request. Cannot delete active profile");
 
 		try {
+			await db.collection("collections").deleteMany({ profile: id });
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server Error. Failed to delete profile collections. ${e.toString()}`);
+		}
+
+		try {
 			await db.collection("profiles").deleteOne({ id });
 		}
 		catch(e: any) {
