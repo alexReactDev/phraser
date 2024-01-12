@@ -11,7 +11,6 @@ import { borderColor, fontColor, nondescriptColor } from "../styles/variables";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
 import errorMessage from "@store/errorMessage";
-import loadingSpinner from "@store/loadingSpinner";
 
 const Profiles = observer(function () {
 	const { data, loading, error } = useQuery(GET_USER_PROFILES, {
@@ -20,15 +19,15 @@ const Profiles = observer(function () {
 		}
 	});
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
-	
+
 	const selectDropdownRef = useRef(null);
 
-	useEffect(() => {		
+	useEffect(() => {
 		if(!selectDropdownRef.current) return;
 
 		//@ts-ignore TS doesn't recognize SelectDropdown ref methods
 		selectDropdownRef.current.selectIndex(data.getUserProfiles.findIndex((profile: IProfile) => profile.id === settings.settings.activeProfile));
-	}, [settings.settings.activeProfile, loading])
+	}, [settings.settings.activeProfile, data?.getUserProfiles]);
 
 	async function profileSelectHandler(selected: IProfile) {
 		if(selected.id === settings.settings.activeProfile) return;
