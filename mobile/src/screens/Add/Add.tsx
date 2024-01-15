@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
-import { TouchableOpacity, View, TextInput, StyleSheet, Text } from "react-native";
+import { TouchableOpacity, View, TextInput, StyleSheet, Text, ActivityIndicator } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { fontColor, fontColorFaint, nondescriptColor } from "../../styles/variables";
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "../../query/collections";
 import SelectDropdown from "react-native-select-dropdown";
 import { CREATE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE_WITH_COLLECTION, MOVE_PHRASE, MUTATE_PHRASE } from "../../query/phrases";
@@ -18,10 +18,12 @@ import errorMessage from "@store/errorMessage";
 import LoaderModal from "@components/Loaders/LoaderModal";
 import ModalComponent from "@components/ModalComponent";
 import EditCollection from "../Collections/components/EditCollection";
+import { GET_TRANSLATED_TEXT } from "@query/translation";
 
 type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 
 const Add = observer(function ({ route, navigation }: Props) {
+	const [ showSuggestion, setShowSuggestion ] = useState(false);
 	const { data: { getProfileCollections: collections = [] } = {} } = useQuery(GET_PROFILE_COLLECTIONS_FOR_PHRASES, { variables: { id: settings.settings.activeProfile } });
 	const { data: { getPhrase: phraseData, getPhraseCollection: phraseCollection } = {}, loading: phraseLoading } = useQuery(GET_PHRASE_WITH_COLLECTION, { variables: { id: route.params?.mutateId }, skip: !route.params?.mutateId });
 	const [ createPhrase ] = useMutation(CREATE_PHRASE);
@@ -29,7 +31,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 	const [ movePhrase ] = useMutation(MOVE_PHRASE);
 	const selectRef = useRef<any>(null);
 	const translationInputRef = useRef<any>(null);
-
+	
 	const [ displayModal, setDisplayModal ] = useState(false);
 
 	useEffect(() => {
@@ -62,7 +64,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 					},
 					refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: phraseCollection.id } }]
 				}));
-
+				
 				if(collection !== phraseCollection.id) {
 					promises.push(movePhrase({
 						variables: {
@@ -72,7 +74,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 						refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: phraseCollection.id } }, { query: GET_COLLECTION_PHRASES, variables: { id: collection }}]
 					}));
 				}
-
+				
 				try {
 					await Promise.all(promises);
 				} catch (e: any) {
@@ -98,11 +100,27 @@ const Add = observer(function ({ route, navigation }: Props) {
 					errorMessage.setErrorMessage(`Failed to create phrase ${e.toString()}`)
 				}
 			}
-
+			
 			loadingSpinner.dismissLoading();
 			reset();
 		}
 	})
+	
+	const [ getSuggestion, { data: suggestionData, loading: suggestionLoading }] = useLazyQuery(GET_TRANSLATED_TEXT);
+
+	useEffect(() => {
+		if(!formik.values.value || formik.values.translation) {
+			if(showSuggestion) setShowSuggestion(false);
+			return;
+		}
+
+		const timer = setTimeout(() => {
+			if(!showSuggestion) setShowSuggestion(true);
+			getSuggestion({ variables: { input: formik.values.value }});
+		}, 500);
+
+		return () => clearTimeout(timer);
+	}, [formik.values.value, formik.values.translation])
 
 	function submitHandler() {
 		if(!formik.values.value) {
@@ -177,16 +195,43 @@ const Add = observer(function ({ route, navigation }: Props) {
 			<Text style={styles.inputLabel}>
 				Translation
 			</Text>
-			<TextInput
-				onChangeText={formik.handleChange("translation")}
-				onBlur={formik.handleBlur("translation")}
-				value={formik.values.translation}
-				multiline={true}
-				style={styles.input}
-				ref={translationInputRef}
-				placeholder="Enter translation..."
-				blurOnSubmit
-			/>
+			<View>
+				<TextInput
+					onChangeText={formik.handleChange("translation")}
+					onBlur={formik.handleBlur("translation")}
+					value={formik.values.translation}
+					multiline={true}
+					style={styles.input}
+					ref={translationInputRef}
+					placeholder="Enter translation..."
+					blurOnSubmit
+				/>
+				{
+					showSuggestion &&
+					<View style={styles.suggestion}>
+						<View style={styles.suggestionBody}>
+							<Text style={styles.suggestionTitle}>
+								Suggestion:
+							</Text>
+							<TouchableOpacity
+								style={styles.suggestionValue}
+								activeOpacity={0.7}
+								onPress={() => formik.setFieldValue("translation", suggestionData.getTranslatedText)}
+							>
+								<Text style={styles.suggestionValueText}>
+									{suggestionData?.getTranslatedText}
+								</Text>
+							</TouchableOpacity>
+						</View>
+						<View style={styles.suggestionInfo}>
+							{
+								suggestionLoading &&
+								<ActivityIndicator size="small" color="gray"></ActivityIndicator>
+							}
+						</View>
+					</View>
+				}
+			</View>
 			<SelectDropdown
 				data={collections.filter((col: ICollection) => !col.isLocked).concat({ id: "CREATE" })}
 				ref={selectRef as any}
@@ -246,6 +291,9 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		color: fontColor
 	},
+	inputContainer: {
+		position: "relative"	
+	},
 	input: {
 		height: 120,
 		borderWidth: 1,
@@ -258,6 +306,37 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		lineHeight: 24,
 		color: fontColor
+	},
+	suggestion: {
+		position: "absolute",
+		bottom: 14,
+		left: 0,
+		width: "100%",
+		paddingHorizontal: 8,
+		flexDirection: "row",
+		justifyContent: "space-between"
+	},
+	suggestionBody: {
+		flexDirection: "row",
+		gap: 5,
+		alignItems: "center"
+	},
+	suggestionInfo: {
+
+	},
+	suggestionValue: {
+
+	},
+	suggestionValueText: {
+		color: "grey",
+		textDecorationLine: "underline",
+		fontStyle: "italic",
+		fontSize: 15
+	},
+	suggestionTitle: {
+		fontSize: 16,
+		color: "grey",
+		fontStyle: "italic"
 	},
 	icon: {
 		marginTop: 10,
