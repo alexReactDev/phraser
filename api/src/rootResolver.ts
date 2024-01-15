@@ -9,6 +9,7 @@ import repetitionsController from "./controller/Repetitions";
 import autoCollectionsController from "./controller/AutoCollections";
 import AIGeneratedTextController from "./controller/AIGeneratedText";
 import globalErrorHandler from "./misc/globalErrorHandler";
+import TranslationController from "./controller/Translation";
 import db from "./model/db";
 import { IChangeCollectionLockInput, ICollectionInput, ICollectionMetaInput } from "@ts-backend/collections";
 import { IPhraseInput, IPhraseRepetitionInput } from "@ts-backend/phrases";
@@ -411,6 +412,7 @@ const root = {
 
 		return await AIGeneratedTextController.generateText(params, context);
 	},
+
 	getGeneratedSentences: async (params: { phrases: string[] }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
@@ -430,6 +432,27 @@ const root = {
 		if(params.phrases.length === 0) throw new Error("400. Bad request - phrases array is empty");
 
 		return await AIGeneratedTextController.generateSentences(params, context);
+	},
+
+	getTranslatedText: async (params: { input: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		let premium;
+
+		try {
+			premium = await db.collection("premium").findOne({
+				userId: context.auth.userId
+			})
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to get premium information ${e.toString()}`);
+		}
+
+		if(!premium) throw new Error("403. Access denied - premium subscription is required");
+
+		if(!params.input) throw new Error("400. Bad request - received empty query");
+
+		return await TranslationController.getTranslatedText(params);
 	}
 }
 

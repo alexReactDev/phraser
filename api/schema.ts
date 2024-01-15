@@ -117,7 +117,8 @@ const schema = buildSchema(`
 		getUser(id: ID!): User,
 		getUserRepetitions(userId: ID!): [Repetition],
 		getGeneratedText(phrases: [String]!): String,
-		getGeneratedSentences(phrases: [String]!): [String]
+		getGeneratedSentences(phrases: [String]!): [String],
+		getTranslatedText(input: String!): String
 	}
 
 	input ProfileInput {
