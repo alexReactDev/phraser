@@ -1,5 +1,4 @@
 import { Alert, Button, ScrollView, StyleSheet, View } from "react-native";
-import UserInfo from "./components/UserInfo";
 import ProfilesSettings from "./components/ProfilesSettings";
 import LearnModeSettings from "./components/LearnModeSettings";
 import { useMutation } from "@apollo/client";
@@ -69,7 +68,6 @@ const Settings = observer(function() {
 
 	return (
 		<ScrollView>
-			<UserInfo />
 			<ProfilesSettings />
 			<LearnModeSettings />
 			<AutoCollectionsSettings />
