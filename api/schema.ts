@@ -100,13 +100,6 @@ const schema = buildSchema(`
 		userId: String
 	}
 
-	type User {
-		id: ID,
-		name: String,
-		login: String,
-		created: Float
-	}
-
 	type Language {
 		value: String,
 		name: String
@@ -121,7 +114,6 @@ const schema = buildSchema(`
 		getUserProfiles(id: ID!): [Profile],
 		getSession: Session,
 		getUserSettings(id: ID!): UserSettings,
-		getUser(id: ID!): User,
 		getUserRepetitions(userId: ID!): [Repetition],
 		getGeneratedText(phrases: [String]!): String,
 		getGeneratedSentences(phrases: [String]!): [String],
@@ -204,13 +196,12 @@ const schema = buildSchema(`
 	}
 
 	input LoginInput {
-		login: String!,
+		email: String!,
 		password: String!
 	}
 
 	input SignUpInput {
-		name: String!,
-		login: String!,
+		email: String!,
 		password: String!
 	}
 

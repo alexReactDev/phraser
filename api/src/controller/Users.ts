@@ -6,6 +6,8 @@ import generateId from "../misc/generateId";
 import globalErrorHandler from "../misc/globalErrorHandler";
 import profilesController from "./Profiles";
 import { IContext } from "@ts-backend/context";
+import bcrypt from "bcrypt";
+import { User } from "../Classes/User";
 
 class UsersController {
 	async getUser({ id }: { id: string }) {
@@ -27,23 +29,19 @@ class UsersController {
 		return user;
 	}
 
-	async createUser({ input }: { input: IUserInput}) {
+	async createUser({ input }: { input: IUserInput }) {
 		const user = await db.collection("users").findOne({
-			login: input.login
+			email: input.email
 		})
 
-		if(user) throw new Error("400. Bad request. Login already taken");
+		if(user) throw new Error("400. Bad request. Email already in use");
+		
+		const hash = await bcrypt.hash(input.password, 3);
 
-		const id = generateId();
+		const createdUser = new User(input.email, hash);
 
 		try {
-			await db.collection("users").insertOne({
-				id,
-				name: input.name,
-				login: input.login,
-				password: input.password,
-				created: new Date().getTime()
-			})
+			await db.collection("users").insertOne(createdUser);
 		}
 		catch(e: any) {
 			globalErrorHandler(e);
@@ -51,17 +49,17 @@ class UsersController {
 		}
 
 		try {
-			await settingsController.createSettings({ id });
+			await settingsController.createSettings({ id: createdUser.id });
 		}
 		catch(e: any) {
 			globalErrorHandler(e);
 			throw new Error(`Server Error. Failed to create user settings. ${e.toString()}`);
 		}
 
-		const profileId = await profilesController.createProfile({ input: { name: "Default", userId: id } });
-		await settingsController.updateUserSettings({ id, input: { activeProfile: profileId} });
+		const profileId = await profilesController.createProfile({ input: { name: "Default", userId: createdUser.id } });
+		await settingsController.updateUserSettings({ id: createdUser.id, input: { activeProfile: profileId } });
 
-		return id;
+		return createdUser.id;
 	}
 
 	async deleteUser({ id }: { id: string }, context: IContext) {

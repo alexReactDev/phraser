@@ -1,4 +1,4 @@
-import { ILoginInput, ISignUpInput } from "../types/authorization";
+import { ILoginInput } from "../types/authorization";
 import { signJWT } from "../misc/signJWT";
 
 import db from "../model/db";
@@ -6,13 +6,15 @@ import usersController from "./Users";
 import globalErrorHandler from "../misc/globalErrorHandler";
 import { IContext } from "@ts-backend/context";
 import generateId from "../misc/generateId";
+import { IUserInput } from "@ts-backend/users";
+import bcrypt from "bcrypt";
 
 class AuthorizationController {
 	async login({ input }: { input: ILoginInput }) {
 		let user;
 
 		try {
-			user = await db.collection("users").findOne({ login: input.login });
+			user = await db.collection("users").findOne({ email: input.email });
 
 			if(!user) throw new Error("404. User not found");
 		}
@@ -21,13 +23,12 @@ class AuthorizationController {
 			throw new Error(`Server error. Failed to log in. ${e}`);
 		}
 
-		if(input.password !== user.password) throw new Error(`403. Access denied`);
+		if(!bcrypt.compareSync(input.password, user.password)) throw new Error(`403. Wrong password`);
 
 		const session = await this._createSession({ userId: user.id });
 
 		const token = await signJWT({
 			sid: session.sid,
-			login: input.login,
 			userId: user.id
 		});
 
@@ -48,7 +49,7 @@ class AuthorizationController {
 		return "OK";
 	}
 
-	async signUp({ input }: { input: ISignUpInput }) {
+	async signUp({ input }: { input: IUserInput }) {
 		let userId;
 		
 		try {
@@ -63,7 +64,6 @@ class AuthorizationController {
 
 		const token = await signJWT({
 			sid: session.sid,
-			login: input.login,
 			userId 
 		});
 

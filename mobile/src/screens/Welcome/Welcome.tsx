@@ -25,7 +25,7 @@ function Welcome({ updateCredentials }: { updateCredentials: (data: IAuthData) =
 }
 
 function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, updateCredentials: (data: IAuthData) => void }) {
-	const [ login, setLogin ] = useState("");
+	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 	const [ errorMessage, setErrorMessage ] = useState("");
 	const [ showPassword, setShowPassword ] = useState(false);
@@ -33,7 +33,7 @@ function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, up
 	const [ tryLogin ] = useMutation(LOGIN);
 
 	async function loginHandler() {
-		if(!login || !password) return;
+		if(!email || !password) return;
 
 		let data;
 
@@ -41,7 +41,7 @@ function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, up
 			data = await tryLogin({
 				variables: {
 					input: {
-						login,
+						email,
 						password
 					}
 				}
@@ -64,9 +64,10 @@ function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, up
 				<ErrorMessage message={errorMessage} />
 			}
 			<TextInput
-				value={login}
-				onChangeText={setLogin}
-				placeholder="Login"
+				value={email}
+				onChangeText={setEmail}
+				placeholder="Email"
+				inputMode="email"
 				style={style.input}
 			/>
 			<View style={style.inputContainer}>
@@ -95,16 +96,15 @@ function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, up
 }
 
 function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, updateCredentials: (data: IAuthData) => void }) {
-	const [ login, setLogin ] = useState("");
+	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
-	const [ name, setName ] = useState("");
 	const [ errorMessage, setErrorMessage ] = useState("");
 	const [ showPassword, setShowPassword ] = useState(false);
 
 	const [ trySignUp ] = useMutation(SIGNUP);
 
 	async function signUpHandler() {
-		if(!login || !password || !name) return;
+		if(!email || !password) return;
 
 		let res;
 
@@ -112,9 +112,8 @@ function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, u
 			res = await trySignUp({
 				variables: {
 					input: {
-						login,
-						password,
-						name
+						email,
+						password
 					}
 				}
 			})
@@ -136,15 +135,10 @@ function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, u
 				<ErrorMessage message={errorMessage} />
 			}
 			<TextInput
-				value={name}
-				onChangeText={setName}
-				placeholder="Visible name"
-				style={style.input}
-			/>
-			<TextInput
-				value={login}
-				onChangeText={setLogin}
-				placeholder="Login"
+				value={email}
+				onChangeText={setEmail}
+				placeholder="Email"
+				inputMode="email"
 				style={style.input}
 			/>
 			<View style={style.inputContainer}>
