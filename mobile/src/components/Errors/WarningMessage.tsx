@@ -23,11 +23,12 @@ function WarningMessage({ message = "" }) {
 
 const styles = StyleSheet.create({
 	container: {
+		width: "100%",
 		borderWidth: 1,
 		borderStyle: "solid",
 		borderBlockColor: "gray",
 		borderRadius: 5,
-		padding: 10,
+		padding: 7,
 		backgroundColor: bgColorAccent
 	},
 	titleContainer: {
@@ -37,12 +38,13 @@ const styles = StyleSheet.create({
 		gap: 8
 	},
 	title: {
-		fontSize: 18,
+		fontSize: 17,
 		color: fontColor
 	}, 
 	text: {
 		textAlign: "center",
-		color: fontColorFaint
+		color: fontColorFaint,
+		fontSize: 12.5
 	}
 })
 

@@ -19,7 +19,8 @@ function ErrorMessage({ message = "" }) {
 
 const styles = StyleSheet.create({
 	errorContainer: {
-		padding: 10,
+		width: "100%",
+		padding: 7,
 		borderWidth: 1,
 		borderStyle: "solid",
 		borderColor: "red",
@@ -35,12 +36,13 @@ const styles = StyleSheet.create({
 	title: {
 		textAlign: "center",
 		color: "#b41111",
-		fontSize: 18,
+		fontSize: 17,
 		fontWeight: "bold"
 	},
 	message: {
 		textAlign: "center",
-		color: "#9c1e1e"
+		color: "#9c1e1e",
+		fontSize: 12.5
 	}
 })
 
