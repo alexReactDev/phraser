@@ -11,6 +11,7 @@ import session from "@store/session";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import { observer } from "mobx-react-lite";
+import SettingsGroup from "./SettingsGroup";
 
 const textDifficultyValues = [{ text: "Not specified", value: "default"}, { text: "Simple", value: "simple"}, { text: "Average", value: "average"}, { text: "Advanced", value: "advanced" }];
 
@@ -56,10 +57,7 @@ const AISettings = observer(function () {
 	}
 
 	return (
-		<View style={styles.container}>
-			<Text style={styles.title}>
-				AI settings
-			</Text>
+		<SettingsGroup title="AI settings">
 			<View style={styles.optionContainer}>
 				<View style={styles.optionTitleContainer}>
 					<Text style={styles.optionTitle}>
@@ -90,25 +88,11 @@ const AISettings = observer(function () {
 					renderDropdownIcon={() => <Ionicons name="caret-down" size={20} color={nondescriptColor} />}
 				></SelectDropdown>
 			</View>
-		</View>
+		</SettingsGroup>
 	)
 });
 
 const styles = StyleSheet.create({
-	container: {
-		margin: 10,
-		padding: 10,
-		borderStyle: "solid",
-		borderWidth: 1,
-		borderColor: borderColor,
-		borderRadius: 5,
-		backgroundColor: "#fefefe"
-	},
-	title: {
-		fontSize: 21,
-		color: fontColor,
-		marginBottom: 10
-	},
 	optionContainer: {
 		marginBottom: 10,
 		flexDirection: "row",

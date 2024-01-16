@@ -10,6 +10,7 @@ import session from "../../../store/session";
 import { useState } from "react";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
+import SettingsGroup from "./SettingsGroup";
 
 const orderOptions = ["default", "random"];
 const repetitionOptions = [1, 2, 3, 5, 10];
@@ -56,10 +57,7 @@ const LearnModeSettings = observer(function() {
 	}
 
 	return (
-		<View style={styles.container}>
-			<Text style={styles.title}>
-				Learn mode settings
-			</Text>
+		<SettingsGroup title="Learning mode">
 			<View style={styles.optionContainer}>
 				<Text style={styles.optionTitle}>
 					Words order:
@@ -86,25 +84,11 @@ const LearnModeSettings = observer(function() {
 					renderDropdownIcon={() => <Ionicons name="caret-down" size={20} color={nondescriptColor} />}
 				></SelectDropdown>
 			</View>
-		</View>
+		</SettingsGroup>
 	)
 });
 
 const styles = StyleSheet.create({
-	container: {
-		margin: 10,
-		padding: 10,
-		borderStyle: "solid",
-		borderWidth: 1,
-		borderColor: borderColor,
-		borderRadius: 5,
-		backgroundColor: "#fefefe"
-	},
-	title: {
-		fontSize: 21,
-		color: fontColor,
-		marginBottom: 10
-	},
 	optionContainer: {
 		marginBottom: 10,
 		flexDirection: "row",

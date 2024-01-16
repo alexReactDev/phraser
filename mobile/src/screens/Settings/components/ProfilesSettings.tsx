@@ -12,6 +12,7 @@ import { useState } from "react";
 import ModalComponent from "@components/ModalComponent";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
+import SettingsGroup from "./SettingsGroup";
 
 const ProfilesSettings = observer(function() {
 	const [ displayModal, setDisplayModal ] = useState(false);
@@ -45,7 +46,7 @@ const ProfilesSettings = observer(function() {
 	if(error) return <ErrorComponent message="Failed to load profiles data" />
 
 	return (
-		<View style={styles.container}>
+		<SettingsGroup title="Profiles">
 			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<View style={styles.modalBody}>
 					<Text style={styles.modalTitle}>
@@ -63,9 +64,6 @@ const ProfilesSettings = observer(function() {
 					></Button>
 				</View>
 			</ModalComponent>
-			<Text style={styles.title}>
-				Profiles
-			</Text>
 			<View>
 				<Text style={styles.subtitle}>
 					Active profile
@@ -84,25 +82,11 @@ const ProfilesSettings = observer(function() {
 					onPress={() => setDisplayModal(true)}
 				></Button>
 			</View>
-		</View>
+		</SettingsGroup>
 	)
 });
 
 const styles = StyleSheet.create({
-	container: {
-		margin: 10,
-		padding: 10,
-		borderStyle: "solid",
-		borderWidth: 1,
-		borderColor: borderColor,
-		borderRadius: 5,
-		backgroundColor: "#fefefe"
-	},
-	title: {
-		fontSize: 21,
-		color: fontColor,
-		marginBottom: 10
-	},
 	subtitle: {
 		fontSize: 17,
 		color: fontColor,
