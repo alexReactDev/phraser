@@ -1,11 +1,15 @@
 import { v4 } from "uuid";
 import globalErrorHandler from "../misc/globalErrorHandler";
+import { IContext } from "@ts-backend/context";
+import SettingsController from "./Settings";
 
 class TranslationController {
-	async getTranslatedText({ input }: { input: string }) {
+	async getTranslatedText({ input }: { input: string }, context: IContext) {
+		const settings = await SettingsController.getUserSettings({ id: context.auth.userId });
+
 		const params = new URLSearchParams();
 		params.append("api-version", "3.0");
-		params.append("to", "en");
+		params.append("to", settings.settings.suggestionsLanguage);
 
 		let result;
 
@@ -34,6 +38,35 @@ class TranslationController {
 		}
 
 		return result[0].translations[0].text;
+	}
+
+	async getSupportedLanguages() {
+		const params = new URLSearchParams();
+		params.append("api-version", "3.0");
+
+		let result;
+
+		try {
+			const res = await fetch(`https://api.cognitive.microsofttranslator.com/languages?${params.toString()}`);
+
+			if(!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+
+			result = await res.json();
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to connect translator api ${e}`);
+		}
+
+		const languagesArray = [];
+
+		for (let key in result.translation) {
+			languagesArray.push({
+				value: key,
+				name: result.translation[key].name
+			})
+		}
+
+		return languagesArray;
 	}
 }
 

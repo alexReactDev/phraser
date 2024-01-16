@@ -5,3 +5,12 @@ export const GET_TRANSLATED_TEXT = gql`
 		getTranslatedText(input: $input)
 	}
 `;
+
+export const GET_SUPPORTED_LANGUAGES = gql`
+	query getSupportedLanguages {
+		getSupportedLanguages {
+			value,
+			name
+		}
+	}
+`;

@@ -18,7 +18,9 @@ class SettingsController {
 				autoCollectionsSize: 30,
 				intervalRepetitionDates: "auto",
 				useGPT3: false,
-				textDifficulty: "default"
+				textDifficulty: "default",
+				disableSuggestions: false,
+				suggestionsLanguage: "en"
 			}
 		}
 

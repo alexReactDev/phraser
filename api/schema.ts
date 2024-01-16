@@ -78,7 +78,9 @@ const schema = buildSchema(`
 		autoCollectionsSize: Int,
 		intervalRepetitionDates: String,
 		useGPT3: Boolean,
-		textDifficulty: String
+		textDifficulty: String,
+		disableSuggestions: Boolean,
+		suggestionsLanguage: String
 	}
 
 	type UserSettings {
@@ -105,6 +107,11 @@ const schema = buildSchema(`
 		created: Float
 	}
 
+	type Language {
+		value: String,
+		name: String
+	}
+
 	type Query {
 		getCollection(id: ID!): Collection,
 		getProfileCollections(id: ID!): [Collection],
@@ -118,7 +125,8 @@ const schema = buildSchema(`
 		getUserRepetitions(userId: ID!): [Repetition],
 		getGeneratedText(phrases: [String]!): String,
 		getGeneratedSentences(phrases: [String]!): [String],
-		getTranslatedText(input: String!): String
+		getTranslatedText(input: String!): String,
+		getSupportedLanguages: [Language]
 	}
 
 	input ProfileInput {
@@ -176,7 +184,9 @@ const schema = buildSchema(`
 		autoCollectionsSize: Int!,
 		intervalRepetitionDates: String!,
 		textDifficulty: String!,
-		useGPT3: Boolean!
+		useGPT3: Boolean!,
+		disableSuggestions: Boolean!,
+		suggestionsLanguage: String!
 	}
 
 	input PartialSettingsInput {
@@ -188,7 +198,9 @@ const schema = buildSchema(`
 		autoCollectionsSize: Int,
 		intervalRepetitionDates: String,
 		textDifficulty: String,
-		useGPT3: Boolean
+		useGPT3: Boolean,
+		disableSuggestions: Boolean,
+		suggestionsLanguage: String
 	}
 
 	input LoginInput {

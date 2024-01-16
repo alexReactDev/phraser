@@ -109,6 +109,8 @@ const Add = observer(function ({ route, navigation }: Props) {
 	const [ getSuggestion, { data: suggestionData, loading: suggestionLoading }] = useLazyQuery(GET_TRANSLATED_TEXT);
 
 	useEffect(() => {
+		if(settings.settings.disableSuggestions) return;
+		
 		if(!formik.values.value || formik.values.translation) {
 			if(showSuggestion) setShowSuggestion(false);
 			return;
@@ -120,7 +122,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 		}, 500);
 
 		return () => clearTimeout(timer);
-	}, [formik.values.value, formik.values.translation])
+	}, [formik.values.value, formik.values.translation, settings.settings.disableSuggestions])
 
 	function submitHandler() {
 		if(!formik.values.value) {

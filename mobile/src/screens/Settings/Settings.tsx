@@ -10,6 +10,7 @@ import { observer } from "mobx-react-lite";
 import AutoCollectionsSettings from "./components/AutoCollectionsSettings";
 import AISettings from "./components/AISettings";
 import errorMessage from "@store/errorMessage";
+import SuggestionsSettings from "./components/SuggestionsSettings";
 
 const Settings = observer(function() {
 	const [ deleteUser ] = useMutation(DELETE_USER);
@@ -69,8 +70,9 @@ const Settings = observer(function() {
 	return (
 		<ScrollView>
 			<ProfilesSettings />
-			<LearnModeSettings />
+			<SuggestionsSettings />
 			<AutoCollectionsSettings />
+			<LearnModeSettings />
 			<AISettings />
 			<View style={styles.buttonsContainer}>
 				<View style={styles.button}>

@@ -29,7 +29,9 @@ export const GET_USER_SETTING = gql`
 				autoCollectionsSize,
 				intervalRepetitionDates,
 				useGPT3,
-				textDifficulty
+				textDifficulty,
+				disableSuggestions,
+				suggestionsLanguage
 			}
 		}
 	}

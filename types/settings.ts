@@ -17,5 +17,7 @@ export interface ISettings {
 	autoCollectionsSize: number,
 	intervalRepetitionDates: TIntervalRepetitionDates,
 	useGPT3: boolean,
-	textDifficulty: TTextDifficulty
+	textDifficulty: TTextDifficulty,
+	disableSuggestions: boolean,
+	suggestionsLanguage: string
 }

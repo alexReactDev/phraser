@@ -452,8 +452,10 @@ const root = {
 
 		if(!params.input) throw new Error("400. Bad request - received empty query");
 
-		return await TranslationController.getTranslatedText(params);
-	}
+		return await TranslationController.getTranslatedText(params, context);
+	},
+
+	getSupportedLanguages: TranslationController.getSupportedLanguages.bind(TranslationController),
 }
 
 export default root;
