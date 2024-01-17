@@ -27,7 +27,7 @@ class AuthorizationController {
 
 		if(!bcrypt.compareSync(input.password, user.password)) throw new Error(`403. Wrong password`);
 
-		await mailService.sendTo({ 
+		mailService.sendTo({ 
 			userId: user.id, 
 			subject: "New login", 
 			html: `New successful login from ip ${context.req.ip}. If it wasn't you, please consider changing your password.`
@@ -68,7 +68,7 @@ class AuthorizationController {
 			throw new Error(`Server error. Failed to create user. ${e}`);
 		}
 
-		await this.verifyEmail({ userId });
+		this.verifyEmail({ userId });
 
 		const session = await this._createSession({ userId });
 
