@@ -14,6 +14,7 @@ import logMiddleware from "./src/misc/logMiddleware";
 import * as Sentry from "@sentry/node";
 import verificationHandler from "./src/misc/verificationHandler";
 import path from "path";
+import startServices from "./src/misc/startServices";
 
 Sentry.init({
   dsn: "https://ca86ddc5e4849db752f5adcba30af61c@o4506399434080256.ingest.sentry.io/4506433288077312"
@@ -44,4 +45,4 @@ app.use("/graphql", graphqlHTTP((req: any) => ({
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
-setInterval(sessionsCleanup, 1000 * 60 * 60 * 24); //Once per day
+startServices();
