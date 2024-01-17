@@ -6,6 +6,8 @@ import { LOGIN, SIGNUP } from "../../query/authorization";
 import { IAuthData } from "../../types/authorization";
 import ErrorMessage from "../../components/Errors/ErrorMessage";
 import { Ionicons } from '@expo/vector-icons';
+import { observer } from "mobx-react-lite";
+import loadingSpinner from "@store/loadingSpinner";
 
 function Welcome({ updateCredentials }: { updateCredentials: (data: IAuthData) => void }) {
 	const [ showSignUp, setShowSignUp ] = useState(false);
@@ -24,7 +26,7 @@ function Welcome({ updateCredentials }: { updateCredentials: (data: IAuthData) =
 	)
 }
 
-function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, updateCredentials: (data: IAuthData) => void }) {
+const Login = observer(function({ changeRoute, updateCredentials }: { changeRoute: () => void, updateCredentials: (data: IAuthData) => void }) {
 	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 	const [ errorMessage, setErrorMessage ] = useState("");
@@ -33,7 +35,17 @@ function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, up
 	const [ tryLogin ] = useMutation(LOGIN);
 
 	async function loginHandler() {
-		if(!email || !password) return;
+		if(!email) {
+			setErrorMessage("Email field is empty");
+			return;
+		}
+
+		if(!password) {
+			setErrorMessage("Password field is empty");
+			return;
+		}
+
+		loadingSpinner.setLoading();
 
 		let data;
 
@@ -52,6 +64,7 @@ function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, up
 		}
 
 		updateCredentials(data?.data.login);
+		loadingSpinner.dismissLoading();
 	}
 
 	return (
@@ -65,7 +78,10 @@ function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, up
 			}
 			<TextInput
 				value={email}
-				onChangeText={setEmail}
+				onChangeText={(t) => {
+					setErrorMessage("");
+					setEmail(t);
+				}}
 				placeholder="Email"
 				inputMode="email"
 				style={style.input}
@@ -80,7 +96,10 @@ function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, up
 				</TouchableOpacity>
 				<TextInput
 					value={password}
-					onChangeText={setPassword}
+					onChangeText={(t) => {
+						setErrorMessage("");
+						setPassword(t);
+					}}
 					placeholder="Password"
 					style={{ ...style.input, paddingRight: 45 }}
 					secureTextEntry={!showPassword}
@@ -93,9 +112,9 @@ function Login({ changeRoute, updateCredentials }: { changeRoute: () => void, up
 			<Button title="Sign up" onPress={changeRoute} color={faintBlue}></Button>
 		</View>
 	)
-}
+})
 
-function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, updateCredentials: (data: IAuthData) => void }) {
+const SignUp = observer(function({ changeRoute, updateCredentials }: { changeRoute: () => void, updateCredentials: (data: IAuthData) => void }) {
 	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 	const [ errorMessage, setErrorMessage ] = useState("");
@@ -104,7 +123,22 @@ function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, u
 	const [ trySignUp ] = useMutation(SIGNUP);
 
 	async function signUpHandler() {
-		if(!email || !password) return;
+		if(!email) {
+			setErrorMessage("Email field is empty");
+			return;
+		}
+
+		if(!password) {
+			setErrorMessage("Password field is empty");
+			return;
+		}
+
+		if(password.length < 6) {
+			setErrorMessage("Password should have at least 6 characters");
+			return;
+		}
+
+		loadingSpinner.setLoading();
 
 		let res;
 
@@ -123,6 +157,7 @@ function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, u
 		}
 
 		updateCredentials(res?.data.signUp);
+		loadingSpinner.dismissLoading();
 	}
 
 	return (
@@ -136,7 +171,10 @@ function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, u
 			}
 			<TextInput
 				value={email}
-				onChangeText={setEmail}
+				onChangeText={(t) => {
+					setErrorMessage("");
+					setEmail(t);
+				}}
 				placeholder="Email"
 				inputMode="email"
 				style={style.input}
@@ -151,7 +189,10 @@ function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, u
 				</TouchableOpacity>
 				<TextInput
 					value={password}
-					onChangeText={setPassword}
+					onChangeText={(t) => {
+						setErrorMessage("");
+						setPassword(t);
+					}}
 					placeholder="Password"
 					style={{ ...style.input, paddingRight: 45 }}
 					secureTextEntry={!showPassword}
@@ -164,7 +205,7 @@ function SignUp({ changeRoute, updateCredentials }: { changeRoute: () => void, u
 			<Button title="Login" onPress={changeRoute} color={faintBlue}></Button>
 		</View>
 	)
-}
+});
 
 const style = StyleSheet.create({
 	container: {

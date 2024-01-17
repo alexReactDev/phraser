@@ -49,11 +49,11 @@ function App() {
       <ClickOutsideProvider>
         <ApolloProvider client={client}>
           <NavigationContainer>
-            <AuthorizationChecker>
-              <>
-                <ErrorMessageToast />
-                <LoaderToast />
-                <StatusBar translucent={true} hidden={false} />
+            <>
+              <ErrorMessageToast />
+              <LoaderToast />
+              <StatusBar translucent={true} hidden={false} />
+              <AuthorizationChecker>
                 <Navigator.Navigator 
                   id="MainNavigator" 
                   screenOptions={{
@@ -73,8 +73,8 @@ function App() {
                       headerShown: false
                     }}></Navigator.Screen>
                 </Navigator.Navigator>
-              </>
-            </AuthorizationChecker>
+              </AuthorizationChecker>
+            </>
           </NavigationContainer>
         </ApolloProvider>
       </ClickOutsideProvider>
