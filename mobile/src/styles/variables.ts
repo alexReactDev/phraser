@@ -1,4 +1,4 @@
-export const fontColor = "#222222";
+export const fontColor = "#333";
 export const fontColorLight = "#f0f0f0";
 export const fontColorFaint = "#555555a0";
 export const fontColorFaintLight = "#dddddd";
