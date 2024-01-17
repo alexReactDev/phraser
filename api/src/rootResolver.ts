@@ -1,4 +1,4 @@
-import { IJWT } from "./types/authorization";
+import { IChangePasswordInput, IJWT } from "./types/authorization";
 import collectionsController from "./controller/Collections";
 import phrasesController from "./controller/Phrases";
 import profilesController from "./controller/Profiles";
@@ -23,12 +23,20 @@ const root = {
 	login: authController.login.bind(authController),
 	signUp: authController.signUp.bind(authController),
 	getSession: authController.getSession.bind(authController),
+
 	logout: async (params: {}, context: IContext) => {
 		if(!context.auth) return "OK";
 
 		return await authController.logout(params, context);
 	},
 
+	changePassword: async (params: { userId: string, input: IChangePasswordInput }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		if(params.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		return await authController.changePassword(params, context);
+	},
 	
 	getUser: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");

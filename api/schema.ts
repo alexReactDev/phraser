@@ -222,6 +222,11 @@ const schema = buildSchema(`
 		created: Float!
 	}
 
+	input ChangePasswordInput {
+		oldPassword: String!,
+		newPassword: String!
+	}
+
 	type Mutation {
 		deletePhrase(id: ID!): String,
 		deletePhrasesMany(ids: [ID]!): String,
@@ -246,7 +251,8 @@ const schema = buildSchema(`
 		logout: String,
 		deleteUser(id: ID!): String,
 		createRepetition(input: RepetitionInput!): String,
-		generateAutoCollection(type: String!): Collection
+		generateAutoCollection(type: String!): Collection,
+		changePassword(userId: ID!, input: ChangePasswordInput!): String
 	}
 `);
 

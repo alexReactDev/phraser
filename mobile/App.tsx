@@ -69,7 +69,8 @@ function App() {
                       headerShown: false
                     }}></Navigator.Screen>
                     <Navigator.Screen name="Settings" component={Settings} options={{
-                      tabBarIcon: ({ focused }) => <Ionicons name="settings-sharp" size={24} color={focused ? "black" : "gray"}  />
+                      tabBarIcon: ({ focused }) => <Ionicons name="settings-sharp" size={24} color={focused ? "black" : "gray"}  />,
+                      headerShown: false
                     }}></Navigator.Screen>
                 </Navigator.Navigator>
               </>

@@ -33,3 +33,9 @@ export const LOGOUT = gql`
 		logout
 	}
 `;
+
+export const CHANGE_PASSWORD = gql`
+	mutation changePassword($userId: ID!, $input: ChangePasswordInput!) {
+		changePassword(userId: $userId, input: $input)
+	}
+`;

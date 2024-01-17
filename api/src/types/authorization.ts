@@ -8,3 +8,8 @@ export interface IJWT {
 	sid: string | number,
 	userId: string
 }
+
+export interface IChangePasswordInput {
+	oldPassword: string,
+	newPassword: string
+}

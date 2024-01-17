@@ -1,4 +1,4 @@
-import { ILoginInput } from "../types/authorization";
+import { IChangePasswordInput, ILoginInput } from "../types/authorization";
 import { signJWT } from "../misc/signJWT";
 
 import db from "../model/db";
@@ -10,6 +10,7 @@ import { IUserInput } from "@ts-backend/users";
 import bcrypt from "bcrypt";
 import mailService from "./MailService";
 import { v4 } from "uuid";
+import MailService from "./MailService";
 
 class AuthorizationController {
 	async login({ input }: { input: ILoginInput }, context: IContext) {
@@ -125,6 +126,55 @@ class AuthorizationController {
 			subject: "Please, verify your email", 
 			html: `Please, follow this link in order to verify your email: ${process.env.HOST}/verify/${link}. If you didn't request verification, just ignore this mail.`,
 		})
+	}
+
+	async changePassword({ userId, input } : { userId: string, input: IChangePasswordInput }, context: IContext) {
+		let user;
+
+		try {
+			user = await db.collection("users").findOne({ id: userId });
+
+			if(!user) throw new Error("404. User not found");
+		}
+		catch(e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to change password. ${e}`);
+		}
+		
+		if(!bcrypt.compareSync(input.oldPassword, user.password)) throw new Error("403. Access denied - wrong password");
+		
+		try {
+			const hash = await bcrypt.hash(input.newPassword, 3);
+			
+			await db.collection("users").updateOne({ id: userId }, {
+				$set: {
+					password: hash
+				}
+			})
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to change password ${e}`)
+		}
+
+		try {
+			await db.collection("active_sessions").deleteMany({
+				userId,
+				sid: {
+					$ne: context.auth.sid
+				}
+			})
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to clear sessions ${e}`)
+		}
+
+		MailService.sendTo({
+			userId,
+			subject: "Password changed",
+			html: `Your password had been changed from ip: ${context.req.ip}. If it wasn't you, please consider resetting your password.`
+		})
+		
+		return "OK"
 	}
 }
 
