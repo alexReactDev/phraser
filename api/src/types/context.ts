@@ -1,5 +1,7 @@
+import { Request } from "express";
 import { IJWT } from "./authorization";
 
 export interface IContext {
-	auth: IJWT
+	auth: IJWT,
+	req: Request
 }

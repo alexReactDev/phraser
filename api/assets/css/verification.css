@@ -1,0 +1,20 @@
+.container {
+	max-width: 800px;
+	margin: 0px auto;
+	text-align: center;
+	font-family: sans-serif;
+	color: #444;
+}
+
+.picture {
+	font-size: 96px;
+}
+
+.title {
+	font-size: 2.5rem;
+}
+
+.text {
+	line-height: 1.3em;
+	font-family: "Roboto", sans-serif;
+}

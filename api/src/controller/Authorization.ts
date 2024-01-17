@@ -8,9 +8,11 @@ import { IContext } from "@ts-backend/context";
 import generateId from "../misc/generateId";
 import { IUserInput } from "@ts-backend/users";
 import bcrypt from "bcrypt";
+import mailService from "./MailService";
+import { v4 } from "uuid";
 
 class AuthorizationController {
-	async login({ input }: { input: ILoginInput }) {
+	async login({ input }: { input: ILoginInput }, context: IContext) {
 		let user;
 
 		try {
@@ -24,6 +26,12 @@ class AuthorizationController {
 		}
 
 		if(!bcrypt.compareSync(input.password, user.password)) throw new Error(`403. Wrong password`);
+
+		await mailService.sendTo({ 
+			userId: user.id, 
+			subject: "New login", 
+			html: `New successful login from ip ${context.req.ip}. If it wasn't you, please consider changing your password.`
+		});
 
 		const session = await this._createSession({ userId: user.id });
 
@@ -60,6 +68,8 @@ class AuthorizationController {
 			throw new Error(`Server error. Failed to create user. ${e}`);
 		}
 
+		await this.verifyEmail({ userId });
+
 		const session = await this._createSession({ userId });
 
 		const token = await signJWT({
@@ -94,6 +104,27 @@ class AuthorizationController {
 		}
 	
 		return session;
+	}
+
+	async verifyEmail({ userId }: { userId: string }) {
+		const link = v4();
+
+		try {
+			await db.collection("verification_links").insertOne({
+				userId,
+				link,
+				expiresAt: new Date().getTime() + 1000 * 60 * 60 //1 hour
+			})
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to create verification link ${e}`)
+		}
+
+		await mailService.sendTo({ 
+			userId, 
+			subject: "Please, verify your email", 
+			html: `Please, follow this link in order to verify your email: ${process.env.HOST}/verify/${link}. If you didn't request verification, just ignore this mail.`,
+		})
 	}
 }
 

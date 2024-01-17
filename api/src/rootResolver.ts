@@ -146,7 +146,7 @@ const root = {
 
 		return await collectionsController.createCollection(params, context);
 	},
-	generateAutoCollection: async ({ type }: { type: string }, context: { auth: IJWT}) => {
+	generateAutoCollection: async ({ type }: { type: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(type === "auto") {

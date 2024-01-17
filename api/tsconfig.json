@@ -108,6 +108,7 @@
     "paths": {
       "@ts/*": ["../types/*"],
       "@ts-backend/*": ["./src/types/*"],
+      "@assets/*": ["./assets/*"]
     }
   }
 }
