@@ -39,3 +39,25 @@ export const CHANGE_PASSWORD = gql`
 		changePassword(userId: $userId, input: $input)
 	}
 `;
+
+export const SEND_VERIFICATION_CODE = gql`
+	mutation sendVerificationCode($email: String!) {
+		sendVerificationCode(email: $email)
+	}
+`
+
+export const CHECK_VERIFICATION_CODE = gql`
+	query checkVerificationCode($email: String!, $code: String!) {
+		checkVerificationCode(email: $email, code: $code)
+	}
+`;
+
+export const RESET_PASSWORD = gql`
+	mutation resetPassword($input: resetPasswordInput!) {
+		resetPassword(input: $input) {
+			token,
+			sid,
+			userId
+		}
+	}
+`;

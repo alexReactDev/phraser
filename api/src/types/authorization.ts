@@ -13,3 +13,9 @@ export interface IChangePasswordInput {
 	oldPassword: string,
 	newPassword: string
 }
+
+export interface IResetPasswordInput {
+	code: string,
+	newPassword: string,
+	email: string
+}

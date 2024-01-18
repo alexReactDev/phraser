@@ -1,4 +1,4 @@
-import { IChangePasswordInput, ILoginInput } from "../types/authorization";
+import { IChangePasswordInput, ILoginInput, IResetPasswordInput } from "../types/authorization";
 import { signJWT } from "../misc/signJWT";
 
 import db from "../model/db";
@@ -175,6 +175,120 @@ class AuthorizationController {
 		})
 		
 		return "OK"
+	}
+
+	async resetPassword({ input }: { input: IResetPasswordInput }) {
+		const { email, code, newPassword } = input;
+
+		let user;
+
+		try {
+			user = await db.collection("users").findOne({ email });
+
+			if(!user) throw new Error("404. User not found");
+		}
+		catch(e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to reset password. ${e}`);
+		}
+		
+		await this.checkVerificationCode({ email, code });
+
+		try {
+			const hash = await bcrypt.hash(newPassword, 3);
+
+			await db.collection("users").updateOne({ id: user.id }, {
+				$set: {
+					password: hash
+				}
+			})
+		}
+		catch(e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to reset password ${e}`);
+		}
+
+		this._cleanVerificationCodes({ email });
+
+		MailService.sendTo({
+			userId: user.id,
+			subject: "Password reset",
+			html: `Your password was successfully reset`
+		})
+
+		const session = await this._createSession({ userId: user.id });
+
+		const token = await signJWT({
+			sid: session.sid,
+			userId: user.id
+		});
+
+		return { ...token };
+	}
+
+	async sendVerificationCode({ email }: { email: string }, context: IContext) {
+		let user;
+		
+		try {
+			user = await db.collection("users").findOne({ email });
+			
+			if(!user) throw new Error("404. User not found");
+		}
+		catch(e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to send verification code. ${e}`);
+		}
+		
+		await this._cleanVerificationCodes({ email });
+		
+		const code = Math.trunc(Math.random() * 9000 + 1000).toString();
+		
+		try {
+			await db.collection("verification_codes").insertOne({
+				email,
+				code,
+				expiresAt: new Date().getTime() + 1000 * 60 * 60 //1 hour
+			})
+		}
+		catch(e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to create verification code. ${e}`);
+		}
+
+		MailService.sendTo({
+			userId: user.id,
+			subject: "Password reset",
+			html: `Password reset attempt from ip: ${context.req.ip}. This is your verification code ${code}. If you didn't request password reset, just ignore this mail.`
+		})
+		
+		return "OK";
+	}
+
+	async checkVerificationCode({ email, code }: { email: string, code: string }) {
+		let verificationCode;
+
+		try {
+			verificationCode = await db.collection("verification_codes").findOne({ email });
+		} catch(e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to check verification code. ${e}`)
+		}
+
+		if(!verificationCode) throw new Error("404. Verification code wasn't found");
+		if(verificationCode.expiresAt < new Date().getTime()) throw new Error("400. Verification code has expired");
+		if(verificationCode.code !== code) throw new Error("403. Wrong verification code");
+
+		return "OK";
+	}
+
+	async _cleanVerificationCodes({ email }: { email: string }) {
+		try {
+			await db.collection("verification_codes").deleteMany({ email });
+		}
+		catch(e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Failed to clean verification codes. ${e}`);
+		}
 	}
 }
 

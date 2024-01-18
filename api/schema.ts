@@ -118,7 +118,8 @@ const schema = buildSchema(`
 		getGeneratedText(phrases: [String]!): String,
 		getGeneratedSentences(phrases: [String]!): [String],
 		getTranslatedText(input: String!): String,
-		getSupportedLanguages: [Language]
+		getSupportedLanguages: [Language],
+		checkVerificationCode(email: String!, code: String!): String
 	}
 
 	input ProfileInput {
@@ -227,6 +228,12 @@ const schema = buildSchema(`
 		newPassword: String!
 	}
 
+	input resetPasswordInput {
+		email: String!,
+		code: String!,
+		newPassword: String!
+	}
+
 	type Mutation {
 		deletePhrase(id: ID!): String,
 		deletePhrasesMany(ids: [ID]!): String,
@@ -252,7 +259,9 @@ const schema = buildSchema(`
 		deleteUser(id: ID!): String,
 		createRepetition(input: RepetitionInput!): String,
 		generateAutoCollection(type: String!): Collection,
-		changePassword(userId: ID!, input: ChangePasswordInput!): String
+		changePassword(userId: ID!, input: ChangePasswordInput!): String,
+		sendVerificationCode(email: String!): String,
+		resetPassword(input: resetPasswordInput!): TokenData
 	}
 `);
 

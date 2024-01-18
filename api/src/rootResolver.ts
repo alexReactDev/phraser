@@ -23,6 +23,9 @@ const root = {
 	login: authController.login.bind(authController),
 	signUp: authController.signUp.bind(authController),
 	getSession: authController.getSession.bind(authController),
+	sendVerificationCode: authController.sendVerificationCode.bind(authController),
+	checkVerificationCode: authController.checkVerificationCode.bind(authController),
+	resetPassword: authController.resetPassword.bind(authController),
 
 	logout: async (params: {}, context: IContext) => {
 		if(!context.auth) return "OK";

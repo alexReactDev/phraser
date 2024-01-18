@@ -1,5 +1,5 @@
 import db from "../model/db";
-import globalErrorHandler from "./globalErrorHandler";
+import globalErrorHandler from "../misc/globalErrorHandler";
 
 export default async function activationLinksCleanUp() {
 	try {

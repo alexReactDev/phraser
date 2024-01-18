@@ -9,7 +9,7 @@ import { expressjwt } from "express-jwt";
 import rootSchema from "./schema";
 import rootResolver from "./src/rootResolver";
 import throttleMiddleware from "./src/middleware/throttleMiddleware";
-import sessionsCleanup from "./src/misc/sessionsCleanup";
+import sessionsCleanup from "./src/services/sessionsCleanup";
 import logMiddleware from "./src/misc/logMiddleware";
 import * as Sentry from "@sentry/node";
 import verificationHandler from "./src/misc/verificationHandler";
