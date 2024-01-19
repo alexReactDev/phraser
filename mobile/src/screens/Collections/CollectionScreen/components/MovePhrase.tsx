@@ -92,14 +92,7 @@ const MovePhrase = observer(function({ id, currentColId, moveMany = false, onSuc
 
 const styles = StyleSheet.create({
 	container: {
-		width: 300,
-		borderWidth: 1,
-		borderColor: "gray",
-		borderStyle: "solid",
-		padding: 20,
-		gap: 20,
-		position: "relative",
-		backgroundColor: "white"
+		gap: 20
 	},
 	title: {
 		fontSize: 18

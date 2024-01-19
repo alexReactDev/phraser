@@ -13,6 +13,7 @@ import { fontColor } from "@styles/variables";
 import { useState } from "react";
 import ModalComponent from "@components/ModalComponent";
 import DeleteAccount from "./DeleteAccount";
+import ModalWithBody from "@components/ModalWithBody";
 
 type NavigationProp = StackNavigationProp<SettingsNavigatorParams, "Settings", "SettingsNavigator">
 
@@ -41,9 +42,9 @@ const AccountManagement = observer(function () {
 
 	return (
 		<SettingsGroup title="Account management">
-			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<DeleteAccount />
-			</ModalComponent>
+			</ModalWithBody>
 			<View style={styles.container}>
 				<TouchableOpacity style={styles.option}
 					activeOpacity={0.5}

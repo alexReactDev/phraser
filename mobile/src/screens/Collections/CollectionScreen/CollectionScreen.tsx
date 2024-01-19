@@ -20,6 +20,7 @@ import { observer } from "mobx-react-lite";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import LearnButton from "./components/LearnButton";
+import ModalWithBody from "@components/ModalWithBody";
 
 type Props = StackScreenProps<StackNavigatorParams, "Collection", "collectionsNavigator">;
 
@@ -127,13 +128,13 @@ const CollectionScreen = observer(function({ route, navigation }: Props) {
 			}
 			{
 				displayModal &&
-				<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+				<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
 					<MovePhrase id={selectedItems} currentColId={colId} moveMany onSuccess={() => {
 						setSelectedItems([]);
 						setDisplayModal(false);
 						setSelectionEnabled(false);
 					}} />
-				</ModalComponent>
+				</ModalWithBody>
 			}
 			<FlatList
 				style={styles.list}

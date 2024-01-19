@@ -181,15 +181,7 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 });
 
 const styles = StyleSheet.create({
-	container: {
-		width: 300,
-		borderWidth: 1,
-		borderColor: "gray",
-		borderStyle: "solid",
-		padding: 20,
-		position: "relative",
-		backgroundColor: "white"
-	},
+	container: {},
 	title: {
 		fontSize: 18,
 		marginBottom: 15

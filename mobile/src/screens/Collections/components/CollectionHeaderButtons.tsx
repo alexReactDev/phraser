@@ -12,6 +12,7 @@ import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import { StackScreenProps } from "@react-navigation/stack";
 import { StackNavigatorParams } from "../Collections";
+import ModalWithBody from "@components/ModalWithBody";
 
 type TProps = StackScreenProps<StackNavigatorParams, "Collection", "collectionsNavigator">;
 
@@ -91,9 +92,9 @@ const CollectionHeaderButtons = observer(function({ route, navigation }: TProps)
 
 	return (
 		<View style={styles.container}>
-			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<EditCollection mutateId={data.getCollection.id} onReady={() => setDisplayModal(false)} />
-			</ModalComponent>
+			</ModalWithBody>
 			<TouchableOpacity
 				activeOpacity={0.75}
 				onPress={() => setDisplayMenu(true)}

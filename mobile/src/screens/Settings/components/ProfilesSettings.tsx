@@ -9,11 +9,11 @@ import settings from "../../../store/settings";
 import { fontColor } from "../../../styles/variables";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import ModalComponent from "@components/ModalComponent";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import SettingsGroup from "./SettingsGroup";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
+import ModalWithBody from "@components/ModalWithBody";
 
 const ProfilesSettings = observer(function() {
 	const [ displayModal, setDisplayModal ] = useState(false);
@@ -48,7 +48,7 @@ const ProfilesSettings = observer(function() {
 
 	return (
 		<SettingsGroup title="Profiles">
-			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<View style={styles.modalBody}>
 					<Text style={styles.modalTitle}>
 						Profile name
@@ -65,7 +65,7 @@ const ProfilesSettings = observer(function() {
 						onPress={createProfileHandler}
 					></Button>
 				</View>
-			</ModalComponent>
+			</ModalWithBody>
 			<View>
 				<Text style={styles.subtitle}>
 					Active profile
@@ -102,15 +102,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		backgroundColor: "#ffffff88"
 	},
-	modalBody: {
-		width: 300,
-		borderWidth: 1,
-		borderColor: "gray",
-		borderStyle: "solid",
-		padding: 20,
-		position: "relative",
-		backgroundColor: "white"
-	},
+	modalBody: {},
 	modalCross: {
 		position: "absolute",
 		top: 0,

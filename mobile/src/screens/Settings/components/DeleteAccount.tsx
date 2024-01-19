@@ -13,7 +13,6 @@ import SecureTextInput from "@components/Inputs/SecureTextInput";
 const DeleteAccount = observer(function() {
 	const [ deleteUser ] = useMutation(DELETE_USER);
 	const [ showPasswordField, setShowPasswordField ] = useState(false);
-	const [ showPassword, setShowPassword ] = useState(false);
 	const [ password, setPassword ] = useState("");
 	const [ errorMessage, setErrorMessage ] = useState("");
 
@@ -80,14 +79,7 @@ const DeleteAccount = observer(function() {
 
 const styles = StyleSheet.create({
 	container: {
-		width: 300,
-		borderWidth: 1,
-		borderColor: "gray",
-		borderStyle: "solid",
-		borderRadius: 5,
-		padding: 20,
-		gap: 10,
-		backgroundColor: "white"
+		gap: 10
 	},
 	title: {
 		color: fontColor,

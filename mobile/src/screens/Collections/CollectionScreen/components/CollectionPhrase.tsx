@@ -12,6 +12,7 @@ import Checkbox from "expo-checkbox";
 import { observer } from "mobx-react-lite";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
+import ModalWithBody from "@components/ModalWithBody";
 
 interface IProps {
 	phrase: IPhrase,
@@ -49,9 +50,9 @@ const CollectionPhrase = observer(function({ phrase, colId, navigation, editable
 
 	return (
 		<View style={styles.container} ref={ref}>
-			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<MovePhrase id={phrase.id} currentColId={colId} />
-			</ModalComponent>
+			</ModalWithBody>
 			{
 				selectionEnabled &&
 				<View style={styles.checkBoxContainer}>

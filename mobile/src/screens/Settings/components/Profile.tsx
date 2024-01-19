@@ -9,10 +9,10 @@ import { DELETE_PROFILE, GET_USER_PROFILES, MUTATE_PROFILE } from "../../../quer
 import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "../../../query/settings";
 import { observer } from "mobx-react-lite";
 import session from "../../../store/session";
-import ModalComponent from "@components/ModalComponent";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
+import ModalWithBody from "@components/ModalWithBody";
 
 const Profile = observer(function({ profile }: { profile: IProfile}) {
 	const [ showButtons, setShowButtons ] = useState(false);
@@ -97,7 +97,7 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 
 	return (
 		<>
-			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<View style={styles.modalBody}>
 					<Text style={styles.modalTitle}>
 						Profile name
@@ -114,7 +114,7 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 						onPress={mutateHandler}
 					></Button>
 				</View>
-			</ModalComponent>
+			</ModalWithBody>
 			<TouchableOpacity 
 				style={styles.container} 
 				activeOpacity={0.7}
@@ -176,15 +176,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		backgroundColor: "#ffffff88"
 	},
-	modalBody: {
-		width: 300,
-		borderWidth: 1,
-		borderColor: "gray",
-		borderStyle: "solid",
-		padding: 20,
-		position: "relative",
-		backgroundColor: "white"
-	},
+	modalBody: {},
 	modalCross: {
 		position: "absolute",
 		top: 0,

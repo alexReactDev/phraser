@@ -22,6 +22,7 @@ import AutoCollections from "./components/AutoCollections";
 import WarningMessage from "@components/Errors/WarningMessage";
 import ErrorMessage from "@components/Errors/ErrorMessage";
 import ModalComponent from "@components/ModalComponent";
+import ModalWithBody from "@components/ModalWithBody";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
@@ -68,9 +69,9 @@ const Collections = observer(function ({ navigation }: Props) {
 
 	return (
 		<View style={styles.container}>
-			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<EditCollection onReady={() => setDisplayModal(false)} />
-			</ModalComponent>
+			</ModalWithBody>
 			<ScrollView>
 				{
 					autoCollectionsError &&

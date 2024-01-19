@@ -16,7 +16,7 @@ import session from "@store/session";
 import loadingSpinner from "@store/loadingSpinner";
 import errorMessage from "@store/errorMessage";
 import LoaderModal from "@components/Loaders/LoaderModal";
-import ModalComponent from "@components/ModalComponent";
+import ModalWithBody from "@components/ModalWithBody";
 import EditCollection from "../Collections/components/EditCollection";
 import { GET_TRANSLATED_TEXT } from "@query/translation";
 
@@ -154,9 +154,9 @@ const Add = observer(function ({ route, navigation }: Props) {
 				phraseLoading &&
 				<LoaderModal />
 			}
-			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<EditCollection onReady={() => setDisplayModal(false)} />
-			</ModalComponent>
+			</ModalWithBody>
 			<View style={styles.labelContainer}>
 				<Text style={styles.inputLabel}>
 					Phrase
