@@ -6,13 +6,14 @@ import session from "../../../store/session";
 import Profile from "./Profile";
 import { IProfile } from "../../../types/profiles";
 import settings from "../../../store/settings";
-import { borderColor, fontColor } from "../../../styles/variables";
+import { fontColor } from "../../../styles/variables";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import ModalComponent from "@components/ModalComponent";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import SettingsGroup from "./SettingsGroup";
+import StyledTextInput from "@components/Inputs/StyledTextInput";
 
 const ProfilesSettings = observer(function() {
 	const [ displayModal, setDisplayModal ] = useState(false);
@@ -52,12 +53,13 @@ const ProfilesSettings = observer(function() {
 					<Text style={styles.modalTitle}>
 						Profile name
 					</Text>
-					<TextInput
+					<StyledTextInput
 						autoFocus
 						value={input}
-						onChangeText={(t) => setInput(t)}
+						onChangeText={(t: string) => setInput(t)}
 						style={styles.modalInput}
-					></TextInput>
+						placeholder="Nice name..."
+					/>
 					<Button
 						title="Confirm"
 						onPress={createProfileHandler}
@@ -119,12 +121,6 @@ const styles = StyleSheet.create({
 		marginBottom: 15
 	},
 	modalInput: {
-		borderWidth: 1,
-		borderColor: "gray",
-		borderStyle: "solid",
-		borderRadius: 2,
-		paddingVertical: 5,
-		paddingHorizontal: 10,
 		marginBottom: 15
 	}
 })

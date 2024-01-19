@@ -6,6 +6,7 @@ import { styles } from "../styles/styles";
 import { useState } from "react";
 import { observer } from "mobx-react-lite";
 import loadingSpinner from "@store/loadingSpinner";
+import StyledTextInput from "@components/Inputs/StyledTextInput";
 
 const SendVerificationCode = observer(function ({ onSend, onError }: { onSend: (email: string) => void, onError: (e: string) => void}) {
 	const [ sendVerificationCode ] = useMutation(SEND_VERIFICATION_CODE);
@@ -40,16 +41,15 @@ const SendVerificationCode = observer(function ({ onSend, onError }: { onSend: (
 			<Text style={styles.info}>
 				We will send verification code to your email.
 			</Text>
-			<TextInput
-				style={styles.input}
+			<StyledTextInput
 				inputMode="email"
 				value={email}
-				onChangeText={(t) => {
+				onChangeText={(t: string) => {
 					onError("");
 					setEmail(t);
 				}}
 				placeholder="Your email"
-			></TextInput>
+			/>
 			<View style={styles.btn}>
 				<Button title="Send code" onPress={sendCodeHandler} />
 			</View>

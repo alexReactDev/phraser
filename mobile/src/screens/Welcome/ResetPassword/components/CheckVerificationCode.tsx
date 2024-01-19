@@ -6,6 +6,7 @@ import { CHECK_VERIFICATION_CODE, SEND_VERIFICATION_CODE } from "@query/authoriz
 import { useEffect, useState } from "react";
 import loadingSpinner from "@store/loadingSpinner";
 import { fontColorFaint } from "@styles/variables";
+import StyledTextInput from "@components/Inputs/StyledTextInput";
 
 const CheckVerificationCode = observer(function({ email, onCheck, onError }: { email: string, onCheck: (code: string) => void, onError: (e: string) => void}) {
 	const [ checkVerificationCode ] = useLazyQuery(CHECK_VERIFICATION_CODE);
@@ -71,16 +72,16 @@ const CheckVerificationCode = observer(function({ email, onCheck, onError }: { e
 			<Text style={styles.info}>
 				We've sent verification code to your email. Note, that message delivery can take some time, and don't forget to check your spam folder.
 			</Text>
-			<TextInput
-				style={{...styles.input, ...styles.codeInput}}
+			<StyledTextInput
+				style={styles.codeInput}
 				inputMode="numeric"
 				value={code}
-				onChangeText={(t) => {
+				onChangeText={(t: string) => {
 					onError("");
 					setCode(t);
 				}}
 				placeholder="Code"
-			></TextInput>
+			/>
 			<View style={styles.btn}>
 				<Button title="Verify" onPress={checkCodeHandler} />
 			</View>

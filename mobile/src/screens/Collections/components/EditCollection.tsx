@@ -8,6 +8,7 @@ import settings from "../../../store/settings";
 import { observer } from "mobx-react-lite";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
+import StyledTextInput from "@components/Inputs/StyledTextInput";
 
 interface IProps {
 	mutateId?: number,
@@ -82,12 +83,13 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 			>
 				{mutateId ? "Edit collection" : "Add collection"}
 			</Text>
-			<TextInput
+			<StyledTextInput
+				autoFocus
 				style={styles.input}
 				onChangeText={setName}
 				value={name}
 				placeholder="Collection name..."
-			></TextInput>
+			/>
 			<SelectDropdown
 				data={colors}
 				ref={selectRef as any}
@@ -193,12 +195,6 @@ const styles = StyleSheet.create({
 		marginBottom: 15
 	},
 	input: {
-		borderWidth: 1,
-		borderColor: "gray",
-		borderStyle: "solid",
-		borderRadius: 2,
-		paddingVertical: 5,
-		paddingHorizontal: 10,
 		marginBottom: 15
 	},
 	select: {

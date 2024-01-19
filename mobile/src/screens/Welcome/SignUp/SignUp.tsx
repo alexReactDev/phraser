@@ -13,6 +13,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { WelcomeNavigatorParams } from "../Welcome";
 import { useNavigation } from "@react-navigation/native";
 import WelcomeWrapper from "../components/WelcomeWrapper";
+import StyledTextInput from "@components/Inputs/StyledTextInput";
 
 type NavigationProp = StackNavigationProp<WelcomeNavigatorParams, "Sign up", "WelcomeNavigator">;
 
@@ -73,15 +74,14 @@ const SignUp = observer(function({ updateCredentials }: { updateCredentials: (da
 					errorMessage &&
 					<ErrorMessage message={errorMessage} />
 				}
-				<TextInput
+				<StyledTextInput
 					value={email}
-					onChangeText={(t) => {
+					onChangeText={(t: string) => {
 						setErrorMessage("");
 						setEmail(t);
 					}}
 					placeholder="Email"
 					inputMode="email"
-					style={style.input}
 				/>
 				<View style={style.inputContainer}>
 					<TouchableOpacity 

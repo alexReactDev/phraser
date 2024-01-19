@@ -12,6 +12,7 @@ import session from "../../../store/session";
 import ModalComponent from "@components/ModalComponent";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
+import StyledTextInput from "@components/Inputs/StyledTextInput";
 
 const Profile = observer(function({ profile }: { profile: IProfile}) {
 	const [ showButtons, setShowButtons ] = useState(false);
@@ -101,11 +102,13 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 					<Text style={styles.modalTitle}>
 						Profile name
 					</Text>
-					<TextInput
+					<StyledTextInput
+						autoFocus
 						value={input}
-						onChangeText={(t) => setInput(t)}
+						onChangeText={(t: string) => setInput(t)}
 						style={styles.modalInput}
-					></TextInput>
+						placeholder="Nice name..."
+					/>
 					<Button
 						title="Confirm"
 						onPress={mutateHandler}
@@ -192,12 +195,6 @@ const styles = StyleSheet.create({
 		marginBottom: 15
 	},
 	modalInput: {
-		borderWidth: 1,
-		borderColor: "gray",
-		borderStyle: "solid",
-		borderRadius: 2,
-		paddingVertical: 5,
-		paddingHorizontal: 10,
 		marginBottom: 15
 	}
 })
