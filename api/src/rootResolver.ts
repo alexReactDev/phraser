@@ -65,7 +65,7 @@ const root = {
 		return await usersController.getUser(params);
 	},
 
-	deleteUser: async (params: { id: string }, context: IContext) => {
+	deleteUser: async (params: { id: string, password: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.id !== context.auth.userId) throw new Error("403. Access denied");

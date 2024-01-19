@@ -261,7 +261,7 @@ const schema = buildSchema(`
 		login(input: LoginInput!): TokenData,
 		signUp(input: SignUpInput!): TokenData,
 		logout: String,
-		deleteUser(id: ID!): String,
+		deleteUser(id: ID!, password: String!): String,
 		createRepetition(input: RepetitionInput!): String,
 		generateAutoCollection(type: String!): Collection,
 		changePassword(userId: ID!, input: ChangePasswordInput!): String,

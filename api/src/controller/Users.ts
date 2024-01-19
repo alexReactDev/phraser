@@ -62,7 +62,18 @@ class UsersController {
 		return createdUser.id;
 	}
 
-	async deleteUser({ id }: { id: string }, context: IContext) {
+	async deleteUser({ id, password }: { id: string, password: string }, context: IContext) {
+		let user;
+
+		try {
+			user = await db.collection("users").findOne({ id });
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to delete user - failed to verify password ${e}`)
+		}
+
+		if(!bcrypt.compareSync(password, user.password)) throw new Error("403. Access denied - wrong password");
+
 		try {
 			const promises = [];
 

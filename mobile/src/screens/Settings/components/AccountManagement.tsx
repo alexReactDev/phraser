@@ -4,53 +4,22 @@ import session from "@store/session";
 import errorMessage from "@store/errorMessage";
 import { useMutation } from "@apollo/client";
 import { LOGOUT } from "@query/authorization";
-import { DELETE_USER } from "@query/user";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { observer } from "mobx-react-lite";
 import { useNavigation } from "@react-navigation/native";
 import { SettingsNavigatorParams } from "../Settings";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { fontColor } from "@styles/variables";
+import { useState } from "react";
+import ModalComponent from "@components/ModalComponent";
+import DeleteAccount from "./DeleteAccount";
 
 type NavigationProp = StackNavigationProp<SettingsNavigatorParams, "Settings", "SettingsNavigator">
 
 const AccountManagement = observer(function () {
-	const [ deleteUser ] = useMutation(DELETE_USER);
+	const [ displayModal, setDisplayModal ] = useState(false);
 	const [ logout ] = useMutation(LOGOUT);
 	const navigation = useNavigation<NavigationProp>();
-
-	async function deleteUserHandler() {
-		Alert.alert("Are you sure?", "This action will delete your account permanently", [
-			{
-				text: "Cancel",
-				style: "cancel"
-			},
-			{
-				text: "Delete account",
-				style: "destructive",
-				onPress: async () => {
-					try {
-						await deleteUser({
-							variables: {
-								id: session.data.userId
-							},
-							context: {
-								headers: {
-									"Authorization": `Bearer ${session.data.token}`
-								}
-							}
-						})
-	
-						await removeAuthToken();
-						session.logout();
-					} catch (e: any) {
-						console.log(e);
-						errorMessage.setErrorMessage(e.toString());
-					}
-				}
-			}
-		])
-	}
 
 	async function logoutHandler() {
 		try {
@@ -72,6 +41,9 @@ const AccountManagement = observer(function () {
 
 	return (
 		<SettingsGroup title="Account management">
+			<ModalComponent visible={displayModal} onClose={() => setDisplayModal(false)}>
+				<DeleteAccount />
+			</ModalComponent>
 			<View style={styles.container}>
 				<TouchableOpacity style={styles.option}
 					activeOpacity={0.5}
@@ -91,7 +63,7 @@ const AccountManagement = observer(function () {
 				</TouchableOpacity>
 				<TouchableOpacity style={styles.option}
 					activeOpacity={0.5}
-					onPress={deleteUserHandler}
+					onPress={() => setDisplayModal(true)}
 				>
 					<Text style={{...styles.optionText, color: "#9c2323"}}>
 						Delete account

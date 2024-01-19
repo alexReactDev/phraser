@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 interface IProps {
 	visible: boolean,
 	onClose: () => void,
-	children?: React.ReactNode
+	children: React.ReactNode
 }
 
 function ModalComponent({ visible, onClose, children }: IProps) {
