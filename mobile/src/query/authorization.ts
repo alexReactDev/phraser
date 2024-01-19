@@ -61,3 +61,17 @@ export const RESET_PASSWORD = gql`
 		}
 	}
 `;
+
+export const GET_VERIFICATION_STATUS = gql`
+	query getVerificationStatus($userId: String!) {
+		getVerificationStatus(userId: $userId) {
+			isVerified
+		}
+	}
+`;
+
+export const VERIFY_EMAIL = gql`
+	mutation verifyEmail($userId: String!) {
+		verifyEmail(userId: $userId)
+	}
+`;

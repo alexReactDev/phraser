@@ -105,6 +105,10 @@ const schema = buildSchema(`
 		name: String
 	}
 
+	type VerificationStatus {
+		isVerified: Boolean
+	}
+
 	type Query {
 		getCollection(id: ID!): Collection,
 		getProfileCollections(id: ID!): [Collection],
@@ -119,7 +123,8 @@ const schema = buildSchema(`
 		getGeneratedSentences(phrases: [String]!): [String],
 		getTranslatedText(input: String!): String,
 		getSupportedLanguages: [Language],
-		checkVerificationCode(email: String!, code: String!): String
+		checkVerificationCode(email: String!, code: String!): String,
+		getVerificationStatus(userId: String!): VerificationStatus
 	}
 
 	input ProfileInput {
@@ -261,7 +266,8 @@ const schema = buildSchema(`
 		generateAutoCollection(type: String!): Collection,
 		changePassword(userId: ID!, input: ChangePasswordInput!): String,
 		sendVerificationCode(email: String!): String,
-		resetPassword(input: resetPasswordInput!): TokenData
+		resetPassword(input: resetPasswordInput!): TokenData,
+		verifyEmail(userId: String!): String
 	}
 `);
 

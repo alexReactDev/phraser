@@ -128,6 +128,14 @@ class AuthorizationController {
 		})
 	}
 
+	async getVerificationStatus({ userId }: { userId: string}) {
+		const user = await usersController.getUser({ id: userId });
+
+		return {
+			isVerified: user.isVerified
+		}
+	}
+
 	async changePassword({ userId, input } : { userId: string, input: IChangePasswordInput }, context: IContext) {
 		let user;
 

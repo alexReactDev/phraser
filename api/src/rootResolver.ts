@@ -40,6 +40,22 @@ const root = {
 
 		return await authController.changePassword(params, context);
 	},
+
+	verifyEmail: async (params: { userId: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		if(params.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		return await authController.verifyEmail(params);
+	},
+
+	getVerificationStatus: async (params: { userId: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		if(context.auth.userId !== params.userId) throw new Error("403. Access denied");
+
+		return await authController.getVerificationStatus(params);
+	},
 	
 	getUser: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
