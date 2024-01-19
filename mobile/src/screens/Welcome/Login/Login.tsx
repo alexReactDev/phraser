@@ -1,11 +1,10 @@
-import { Text, View, TextInput, Button, TouchableOpacity } from "react-native";
+import { Text, View, Button, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { faintBlue, fontColorFaint } from "@styles/variables";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "@query/authorization";
 import { IAuthData } from "@ts-frontend/authorization";
 import ErrorMessage from "@components/Errors/ErrorMessage";
-import { Ionicons } from '@expo/vector-icons';
 import { observer } from "mobx-react-lite";
 import loadingSpinner from "@store/loadingSpinner";
 import { style as commonStyle } from "../style/style";
@@ -15,6 +14,7 @@ import { WelcomeNavigatorParams } from "../Welcome";
 import WelcomeWrapper from "../components/WelcomeWrapper";
 import { StyleSheet } from "react-native";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
+import SecureTextInput from "@components/Inputs/SecureTextInput";
 
 type NavigationProp = StackNavigationProp<WelcomeNavigatorParams, "Login", "WelcomeNavigator">;
 
@@ -22,7 +22,6 @@ const Login = observer(function({ updateCredentials }: { updateCredentials: (dat
 	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 	const [ errorMessage, setErrorMessage ] = useState("");
-	const [ showPassword, setShowPassword ] = useState(false);
 	const navigation = useNavigation<NavigationProp>();
 
 	const [ tryLogin ] = useMutation(LOGIN);
@@ -79,28 +78,14 @@ const Login = observer(function({ updateCredentials }: { updateCredentials: (dat
 					placeholder="Email"
 					inputMode="email"
 				/>
-				<View style={style.inputContainer}>
-					<TouchableOpacity 
-						style={style.inputIconContainer}
-						activeOpacity={0.7}
-						onPress={() => setShowPassword(!showPassword)}
-					>
-						<Ionicons name={showPassword ? "eye" : "eye-off"} size={24} color="grey" />
-					</TouchableOpacity>
-					<TextInput
-						value={password}
-						onChangeText={(t) => {
-							setErrorMessage("");
-							setPassword(t);
-						}}
-						placeholder="Password"
-						style={{ ...style.input, paddingRight: 45 }}
-						secureTextEntry={!showPassword}
-						autoCapitalize="none"
-						autoComplete="off"
-						autoCorrect={false}
-					/>
-				</View>
+				<SecureTextInput
+					value={password}
+					onChangeText={(t: string) => {
+						setErrorMessage("");
+						setPassword(t);
+					}}
+					placeholder="Password"
+				/>
 				<Button title="Login" onPress={loginHandler}></Button>
 				<Button title="Sign up" onPress={() => navigation.navigate("Sign up")} color={faintBlue}></Button>
 				<TouchableOpacity

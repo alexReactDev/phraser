@@ -2,11 +2,11 @@ import { useMutation } from "@apollo/client";
 import { RESET_PASSWORD } from "@query/authorization";
 import { IAuthData } from "@ts-frontend/authorization";
 import { observer } from "mobx-react-lite";
-import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Button, Text, View } from "react-native";
 import { styles } from "../styles/styles";
 import { useState } from "react";
-import { Ionicons } from '@expo/vector-icons';
 import loadingSpinner from "@store/loadingSpinner";
+import SecureTextInput from "@components/Inputs/SecureTextInput";
 
 interface IProps {
 	email: string, 
@@ -73,50 +73,22 @@ const Reset = observer(function({ email, code, onError, updateCredentials }: IPr
 			<Text style={styles.info}>
 				Please, create new password
 			</Text>
-			<View style={styles.inputContainer}>
-					<TouchableOpacity
-						style={styles.inputIconContainer}
-						activeOpacity={0.7}
-						onPress={() => setShowPassword(!showPassword)}
-					>
-						<Ionicons name={showPassword ? "eye" : "eye-off"} size={24} color="grey" />
-					</TouchableOpacity>
-					<TextInput
-						value={newPassword}
-						onChangeText={(t) => {
-							onError("");
-							setNewPassword(t);
-						}}
-						placeholder="New password"
-						style={{ ...styles.input, paddingRight: 45 }}
-						secureTextEntry={!showPassword}
-						autoCapitalize="none"
-						autoComplete="off"
-						autoCorrect={false}
-					/>
-			</View>
-			<View style={styles.inputContainer}>
-				<TouchableOpacity
-					style={styles.inputIconContainer}
-					activeOpacity={0.7}
-					onPress={() => setShowPassword(!showPassword)}
-				>
-					<Ionicons name={showPassword ? "eye" : "eye-off"} size={24} color="grey" />
-				</TouchableOpacity>
-				<TextInput
-					value={retypePassword}
-					onChangeText={(t) => {
-						onError("");
-						setRetypePassword(t);
-					}}
-					placeholder="Retype password"
-					style={{ ...styles.input, paddingRight: 45 }}
-					secureTextEntry={!showPassword}
-					autoCapitalize="none"
-					autoComplete="off"
-					autoCorrect={false}
-				/>
-			</View>
+			<SecureTextInput
+				value={newPassword}
+				onChangeText={(t: string) => {
+					onError("");
+					setNewPassword(t);
+				}}
+				placeholder="New password"
+			/>
+			<SecureTextInput
+				value={retypePassword}
+				onChangeText={(t: string) => {
+					onError("");
+					setRetypePassword(t);
+				}}
+				placeholder="Retype password"
+			/>
 			<View style={styles.btn}>
 				<Button title="Reset" onPress={resetPasswordHandler} />
 			</View>

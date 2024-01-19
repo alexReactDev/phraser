@@ -21,26 +21,5 @@ export const style = StyleSheet.create({
 		textAlign: "center",
 		fontSize: 21,
 		color: fontColor
-	},
-	inputContainer: {
-		position: "relative"
-	},
-	inputIconContainer: {
-		zIndex: 1,
-		position: "absolute",
-		right: 12,
-		top: 10
-	},
-	inputIcon: {},
-	input: {
-		borderWidth: 1,
-		borderStyle: "solid",
-		borderColor: "gray",
-		borderRadius: 2,
-		padding: 7,
-		backgroundColor: "white",
-		fontSize: 16,
-		lineHeight: 24,
-		color: fontColor
 	}
 })

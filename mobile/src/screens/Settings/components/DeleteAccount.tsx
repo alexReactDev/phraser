@@ -2,14 +2,13 @@ import { useMutation } from "@apollo/client";
 import { DELETE_USER } from "@query/user";
 import { fontColor } from "@styles/variables";
 import { useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { Ionicons } from '@expo/vector-icons';
+import { Button, StyleSheet, Text, View } from "react-native";
 import { observer } from "mobx-react-lite";
 import loadingSpinner from "@store/loadingSpinner";
 import session from "@store/session";
 import ErrorMessage from "@components/Errors/ErrorMessage";
 import { removeAuthToken } from "@utils/authToken";
+import SecureTextInput from "@components/Inputs/SecureTextInput";
 
 const DeleteAccount = observer(function() {
 	const [ deleteUser ] = useMutation(DELETE_USER);
@@ -50,28 +49,14 @@ const DeleteAccount = observer(function() {
 			<Text style={styles.title}>
 				Enter your password
 			</Text>
-			<View style={styles.inputContainer}>
-					<TouchableOpacity
-						style={styles.inputIconContainer}
-						activeOpacity={0.7}
-						onPress={() => setShowPassword(!showPassword)}
-					>
-						<Ionicons name={showPassword ? "eye" : "eye-off"} size={24} color="grey" />
-					</TouchableOpacity>
-					<TextInput
-						value={password}
-						onChangeText={(t) => {
-							setErrorMessage("");
-							setPassword(t);
-						}}
-						placeholder="Password"
-						style={{ ...styles.input, paddingRight: 45 }}
-						secureTextEntry={!showPassword}
-						autoCapitalize="none"
-						autoComplete="off"
-						autoCorrect={false}
-					/>
-			</View>
+				<SecureTextInput
+					value={password}
+					onChangeText={(t: string) => {
+						setErrorMessage("");
+						setPassword(t);
+					}}
+					placeholder="Password"
+				/>
 			<View style={styles.buttonContainer}>
 				<Button title="Delete" color="#f1574c" onPress={() => deleteUserHandler()} />
 			</View>
@@ -112,27 +97,6 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		textAlign: "center",
-		color: fontColor
-	},
-	inputContainer: {
-		position: "relative"
-	},
-	inputIconContainer: {
-		zIndex: 1,
-		position: "absolute",
-		right: 12,
-		top: 10
-	},
-	inputIcon: {},
-	input: {
-		borderWidth: 1,
-		borderStyle: "solid",
-		borderColor: "gray",
-		borderRadius: 2,
-		padding: 7,
-		backgroundColor: "white",
-		fontSize: 16,
-		lineHeight: 24,
 		color: fontColor
 	},
 	buttonContainer: {

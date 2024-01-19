@@ -1,7 +1,6 @@
 import { fontColor, nondescriptColor } from "@styles/variables";
 import { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
+import { Button, StyleSheet, Text, View } from "react-native";
 import { useMutation } from "@apollo/client";
 import { CHANGE_PASSWORD } from "@query/authorization";
 import ErrorMessage from "@components/Errors/ErrorMessage";
@@ -11,6 +10,7 @@ import loadingSpinner from "@store/loadingSpinner";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { SettingsNavigatorParams } from "../Settings";
+import SecureTextInput from "@components/Inputs/SecureTextInput";
 
 type NavigationProp = StackNavigationProp<SettingsNavigatorParams, "Settings", "SettingsNavigator">;
 
@@ -70,7 +70,9 @@ const ChangePassword = observer(function() {
 			})
 		} catch (e: any) {
 			console.log(e);
-			setErrorMessage(`Something went wrong. ${e}`)
+			setErrorMessage(`Something went wrong. ${e}`);
+			loadingSpinner.dismissLoading();
+			return;
 		}
 		
 
@@ -84,81 +86,39 @@ const ChangePassword = observer(function() {
 				errorMessage &&
 				<ErrorMessage message={errorMessage} />
 			}
-			<View style={styles.inputContainer}>
-				<TouchableOpacity 
-					style={styles.inputIconContainer}
-					activeOpacity={0.7}
-					onPress={() => setShowPassword(!showPassword)}
-				>
-					<Ionicons name={showPassword ? "eye" : "eye-off"} size={24} color="grey" />
-				</TouchableOpacity>
-				<Text style={styles.inputLabel}>
-					Old password
-				</Text>
-				<TextInput 
+			<Text style={styles.inputLabel}>
+				Old password
+			</Text>
+			<SecureTextInput 
 				value={oldPassword}
-				onChangeText={(t) => {
+				onChangeText={(t: string) => {
 					setErrorMessage("");
 					setOldPassword(t);
 				}}
 				placeholder="Old password"
-				style={styles.input}
-				secureTextEntry={!showPassword}
-				autoCapitalize="none"
-				autoComplete="off"
-				autoCorrect={false}
-				></TextInput>
-			</View>
-			<View style={styles.inputContainer}>
-				<TouchableOpacity 
-					style={styles.inputIconContainer}
-					activeOpacity={0.7}
-					onPress={() => setShowPassword(!showPassword)}
-				>
-					<Ionicons name={showPassword ? "eye" : "eye-off"} size={24} color="grey" />
-				</TouchableOpacity>
-				<Text style={styles.inputLabel}>
-					New password
-				</Text>
-				<TextInput 
-				value={newPassword}
-				onChangeText={(t) => {
-					setErrorMessage("");
-					setNewPassword(t);
-				}}
-				placeholder="New password"
-				style={styles.input}
-				secureTextEntry={!showPassword}
-				autoCapitalize="none"
-				autoComplete="off"
-				autoCorrect={false}
-				></TextInput>
-			</View>
-			<View style={styles.inputContainer}>
-				<TouchableOpacity 
-					style={styles.inputIconContainer}
-					activeOpacity={0.7}
-					onPress={() => setShowPassword(!showPassword)}
-				>
-					<Ionicons name={showPassword ? "eye" : "eye-off"} size={24} color="grey" />
-				</TouchableOpacity>
-				<Text style={styles.inputLabel}>
-					Retype password
-				</Text>
-				<TextInput 
-				value={retypePassword}
-				onChangeText={(t) => {
-					setErrorMessage("");
-					setRetypePassword(t);
-				}}
-				placeholder="Retype password"
-				style={styles.input}
-				secureTextEntry={!showPassword}
-				autoCapitalize="none"
-				autoComplete="off"
-				autoCorrect={false}
-				></TextInput>
-			</View>
+			/>
+			<Text style={styles.inputLabel}>
+				New password
+			</Text>
+			<SecureTextInput
+			value={newPassword}
+			onChangeText={(t: string) => {
+				setErrorMessage("");
+				setNewPassword(t);
+			}}
+			placeholder="New password"
+			/>
+			<Text style={styles.inputLabel}>
+				Retype password
+			</Text>
+			<SecureTextInput 
+			value={retypePassword}
+			onChangeText={(t: string) => {
+				setErrorMessage("");
+				setRetypePassword(t);
+			}}
+			placeholder="Retype password"
+			/>
 			<View style={styles.btn}>
 				<Button title="Change password" onPress={changePasswordHandler}></Button>
 			</View>
@@ -177,29 +137,10 @@ const styles = StyleSheet.create({
 		gap: 12,
 		backgroundColor: "white"
 	},
-	inputContainer: {
-		position: "relative"
-	},
-	inputIconContainer: {
-		zIndex: 1,
-		position: "absolute",
-		right: 12,
-		bottom: 8
-	},
-	inputIcon: {},
 	inputLabel: {
-		marginBottom: 7.5,
+		marginBottom: -5,
 		fontSize: 16,
 		fontWeight: "bold",
-		color: fontColor
-	},
-	input: {
-		borderWidth: 1,
-		borderStyle: "solid",
-		borderColor: "gray",
-		borderRadius: 2,
-		padding: 7,
-		backgroundColor: "white",
 		color: fontColor
 	},
 	btn: {
