@@ -35,7 +35,13 @@ const MovePhrase = observer(function({ id, currentColId, moveMany = false, onSuc
 						ids: id,
 						destId: selectedId
 					},
-					refetchQueries: [GET_COLLECTION_PHRASES]
+					refetchQueries: [{
+						query: GET_COLLECTION_PHRASES,
+						variables: { id: currentColId }
+					}],
+					update: (cache) => {
+						cache.evict({ fieldName: "getCollectionPhrases", args: { id: selectedId } });
+					}
 				})
 			} catch (e: any) {
 				console.log(e);
@@ -48,7 +54,13 @@ const MovePhrase = observer(function({ id, currentColId, moveMany = false, onSuc
 						id,
 						destId: selectedId
 					},
-					refetchQueries: [GET_COLLECTION_PHRASES]
+					refetchQueries: [{
+						query: GET_COLLECTION_PHRASES,
+						variables: { id: currentColId }
+					}],
+					update: (cache) => {
+						cache.evict({ fieldName: "getCollectionPhrases", args: { id: selectedId } });
+					}
 				})
 			} catch (e: any) {
 				console.log(e);
