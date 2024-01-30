@@ -12,6 +12,7 @@ export interface IPhrase {
 	lastUpdate: bigint,
 	meta: IPhraseMeta,
 	profile: string,
+	collection: string,
 	userId: string
 }
 
