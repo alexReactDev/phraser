@@ -139,7 +139,10 @@ const schema = buildSchema(`
 		getTranslatedText(input: String!): String,
 		getSupportedLanguages: [Language],
 		checkVerificationCode(email: String!, code: String!): String,
-		getVerificationStatus(userId: String!): VerificationStatus
+		getVerificationStatus(userId: String!): VerificationStatus,
+		searchCollectionPhrases(pattern: String!, colId: ID!): [Phrase],
+		searchProfilePhrases(pattern: String!, profile: ID!): [Phrase],
+		searchProfileCollections(pattern: String!, profile: ID!): [Collection]
 	}
 
 	input ProfileInput {

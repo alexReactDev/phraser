@@ -20,9 +20,9 @@ import Cards from "./Learn/Cards/Cards";
 import AIGeneratedText from "./Learn/AIGeneratedText/AIGeneratedText";
 import AutoCollections from "./components/AutoCollections";
 import WarningMessage from "@components/Errors/WarningMessage";
-import ErrorMessage from "@components/Errors/ErrorMessage";
-import ModalComponent from "@components/ModalComponent";
 import ModalWithBody from "@components/ModalWithBody";
+import Search from "@components/Search";
+import SearchResults from "./components/SearchResults";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
@@ -58,6 +58,7 @@ const Collections = observer(function ({ navigation }: Props) {
 	const { data = [], loading, error } = useQuery(GET_PROFILE_COLLECTIONS, { variables: { id: settings.settings.activeProfile } });
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const [ autoCollectionsError, setAutoCollectionsError ] = useState<any>("");
+	const [ searchQuery, setSearchQuery ] = useState("");
 
 	if(loading) return <Loader />
 
@@ -67,21 +68,34 @@ const Collections = observer(function ({ navigation }: Props) {
 		setAutoCollectionsError(e);
 	}
 
+	if(searchQuery) return (
+		<View style={styles.container}>
+			<Search placeholder="Search collections, phrases..." initialState={searchQuery} onChange={setSearchQuery} />
+			<SearchResults query={searchQuery} navigation={navigation} collections={data?.getProfileCollections || []} />
+		</View>
+	)
+
+	if(data.getProfileCollections.length === 0) return (
+		<View style={styles.container}>
+			<NoCollections />
+		</View>
+	)
+
 	return (
 		<View style={styles.container}>
 			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<EditCollection onReady={() => setDisplayModal(false)} />
 			</ModalWithBody>
+			<Search placeholder="Search collections, phrases..." initialState="" onChange={setSearchQuery} />
 			<ScrollView>
+				<View style={{ height: 10 }} />
 				{
 					autoCollectionsError &&
 					<View style={styles.errorContainer}>
 						<WarningMessage message={`Failed to load auto collections ${autoCollectionsError.toString()}`} />
 					</View>
 				}
-				<View
-					style={styles.list}
-				>
+				<View style={styles.list}>
 					{
 						(!settings.settings.disableAutoCollections && data.getProfileCollections.length !== 0) &&
 						<AutoCollections navigation={navigation} onError={autoCollectionsErrorHandler} />
@@ -90,9 +104,6 @@ const Collections = observer(function ({ navigation }: Props) {
 						data.getProfileCollections.map((col: ICollection) => <CollectionCard key={col.id} collection={col} navigation={navigation} />)
 					}
 				</View>
-				{
-					data.getProfileCollections.length === 0 && <NoCollections />
-				}
 			</ScrollView>
 			<TouchableOpacity
 				onPress={() => setDisplayModal(true)}
@@ -106,7 +117,8 @@ const Collections = observer(function ({ navigation }: Props) {
 
 const styles = StyleSheet.create({
 	container: {
-		padding: 15,
+		paddingVertical: 8,
+		paddingHorizontal: 15,
 		height: "100%",
 		position: "relative"
 	},

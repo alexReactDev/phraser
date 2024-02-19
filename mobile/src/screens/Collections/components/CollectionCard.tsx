@@ -18,6 +18,7 @@ function CollectionCard({ collection, navigation }: IProps) {
 			onPress={() => navigation.navigate("Collection", { colId: collection.id})}
 			activeOpacity={0.8}
 			style={{backgroundColor: collection.color, ...styles.container}}
+			key={collection.id}
 		>
 			<View>
 				<Text style={styles.title}>

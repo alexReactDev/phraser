@@ -1,13 +1,12 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { IPhrase } from "@ts/phrases";
 import { Ionicons } from "@expo/vector-icons";
-import { fontColorFaint } from "../../../../styles/variables";
+import { fontColorFaint } from "../../../styles/variables";
 import { useMutation } from "@apollo/client";
-import { DELETE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION } from "../../../../query/phrases";
+import { DELETE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION } from "../../../query/phrases";
 import { useState } from "react";
 import { useClickOutside } from "react-native-click-outside";
-import ModalComponent from "@components/ModalComponent";
-import MovePhrase from "./MovePhrase";
+import MovePhrase from "../CollectionScreen/components/MovePhrase";
 import Checkbox from "expo-checkbox";
 import { observer } from "mobx-react-lite";
 import errorMessage from "@store/errorMessage";
@@ -16,16 +15,23 @@ import ModalWithBody from "@components/ModalWithBody";
 
 interface IProps {
 	phrase: IPhrase,
-	colId: string,
 	navigation: any,
 	editable: boolean,
+}
+
+interface ISelectableProps extends IProps {
+	selectable: true,
 	selectionEnabled: boolean,
 	isSelected: boolean,
 	enableSelection: () => void,
 	onChange: (selected: boolean) => void
 }
 
-const CollectionPhrase = observer(function({ phrase, colId, navigation, editable, selectionEnabled, isSelected, enableSelection, onChange }: IProps) {
+interface INotSelectableProps extends IProps {
+	selectable: false
+}
+
+const CollectionPhrase = observer(function({ phrase, navigation, editable, selectable, ...selectionProps }: ISelectableProps | INotSelectableProps) {
 	const [ showControls, setShowControls ] = useState(false);
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const ref = useClickOutside(() => setShowControls(false));
@@ -49,17 +55,21 @@ const CollectionPhrase = observer(function({ phrase, colId, navigation, editable
 	}
 
 	return (
-		<View style={styles.container} ref={ref}>
+		<View style={styles.container} ref={ref} key={phrase.id}>
 			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
-				<MovePhrase id={phrase.id} currentColId={colId} />
+				<MovePhrase id={phrase.id} currentColId={phrase.collection} />
 			</ModalWithBody>
 			{
-				selectionEnabled &&
+				//@ts-ignore
+				(selectable && selectionProps.selectionEnabled) &&
 				<View style={styles.checkBoxContainer}>
 					<Checkbox
-						value={isSelected}
-						onValueChange={onChange}
-						color={isSelected ? "#81b0ff" : undefined}
+					//@ts-ignore
+					value={selectionProps.isSelected}
+					//@ts-ignore
+					onValueChange={selectionProps.onChange}
+					//@ts-ignore
+						color={selectionProps.isSelected ? "#81b0ff" : undefined}
 					/>
 				</View>
 			}
@@ -68,17 +78,21 @@ const CollectionPhrase = observer(function({ phrase, colId, navigation, editable
 				onPress={() => {
 					if(!editable) return;
 
-					if(selectionEnabled) {
-						onChange(isSelected ? false : true)
+					//@ts-ignore
+					if(selectable && selectionProps.selectionEnabled) {
+						//@ts-ignore
+						selectionProps.onChange(selectionProps.isSelected ? false : true)
 					} else {
 						setShowControls(!showControls)
 					}
 				}}
 				onLongPress={() => {
-					if(!editable) return;
+					if(!editable || !selectable) return;
 					
-					enableSelection();
-					onChange(true);
+					//@ts-ignore
+					selectionProps.enableSelection();
+					//@ts-ignore
+					selectionProps.onChange(true);
 				}}
 				activeOpacity={0.7}
 			>
@@ -119,7 +133,6 @@ const CollectionPhrase = observer(function({ phrase, colId, navigation, editable
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: "row",
-		marginBottom: 12,
 		borderWidth: 1,
 		borderColor: "gray",
 		borderStyle: "solid",

@@ -10,6 +10,7 @@ import autoCollectionsController from "./controller/AutoCollections";
 import AIGeneratedTextController from "./controller/AIGeneratedText";
 import globalErrorHandler from "./misc/globalErrorHandler";
 import TranslationController from "./controller/Translation";
+import searchController from "./controller/Search";
 import db from "./model/db";
 import { IChangeCollectionLockInput, ICollectionInput, ICollectionMetaInput } from "@ts-backend/collections";
 import { IPhraseInput, IPhraseRepetitionInput } from "@ts-backend/phrases";
@@ -483,6 +484,36 @@ const root = {
 	},
 
 	getSupportedLanguages: TranslationController.getSupportedLanguages.bind(TranslationController),
+
+	searchCollectionPhrases: async (params: { pattern: string, colId: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		const collection = await collectionsController.getCollection({ id: params.colId });
+
+		if(collection.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		return await searchController.searchCollectionPhrases(params);
+	},
+
+	searchProfilePhrases: async (params: { pattern: string, profile: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		const profile = await profilesController.getProfile({ id: params.profile });
+
+		if(profile.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		return await searchController.searchProfilePhrases(params);
+	},
+
+	searchProfileCollections: async (params: { pattern: string, profile: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		const profile = await profilesController.getProfile({ id: params.profile });
+
+		if(profile.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		return await searchController.searchProfileCollections(params);
+	}
 }
 
 export default root;
