@@ -41,6 +41,28 @@ const MovePhrase = observer(function({ id, currentColId, moveMany = false, onSuc
 					}],
 					update: (cache) => {
 						cache.evict({ fieldName: "getCollectionPhrases", args: { id: selectedId } });
+						cache.modify({
+							id: `Collection:${currentColId}`,
+							fields: {
+								lastUpdate: () => new Date().getTime(),
+								//@ts-ignore Meta is not a reference
+								meta: (oldMeta: ICollectionMeta) => ({
+									...oldMeta,
+									phrasesCount: oldMeta.phrasesCount - id.length
+								})
+							}
+						});
+						cache.modify({
+							id: `Collection:${selectedId}`,
+							fields: {
+								lastUpdate: () => new Date().getTime(),
+								//@ts-ignore Meta is not a reference
+								meta: (oldMeta: ICollectionMeta) => ({
+									...oldMeta,
+									phrasesCount: oldMeta.phrasesCount + id.length
+								})
+							}
+						})
 					}
 				})
 			} catch (e: any) {
@@ -60,13 +82,37 @@ const MovePhrase = observer(function({ id, currentColId, moveMany = false, onSuc
 					}],
 					update: (cache) => {
 						cache.evict({ fieldName: "getCollectionPhrases", args: { id: selectedId } });
+						cache.modify({
+							id: `Collection:${currentColId}`,
+							fields: {
+								lastUpdate: () => new Date().getTime(),
+								//@ts-ignore Meta is not a reference
+								meta: (oldMeta: ICollectionMeta) => ({
+									...oldMeta,
+									phrasesCount: oldMeta.phrasesCount - 1
+								})
+							}
+						});
+						cache.modify({
+							id: `Collection:${selectedId}`,
+							fields: {
+								lastUpdate: () => new Date().getTime(),
+								//@ts-ignore Meta is not a reference
+								meta: (oldMeta: ICollectionMeta) => ({
+									...oldMeta,
+									phrasesCount: oldMeta.phrasesCount + 1
+								})
+							}
+						})
 					}
 				})
 			} catch (e: any) {
+				console.log("EEEEEEEEEEEEEERRR");
 				console.log(e);
 				errorMessage.setErrorMessage(`Failed to move phrase ${e.toString()}`);
 			}
 		}
+		console.log("SUCESSSSS")
 
 		onSuccess && onSuccess();
 		loadingSpinner.dismissLoading();

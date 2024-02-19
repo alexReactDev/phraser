@@ -7,7 +7,7 @@ import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "../../query/collections";
 import SelectDropdown from "react-native-select-dropdown";
 import { CREATE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE_WITH_COLLECTION, MOVE_PHRASE, MUTATE_PHRASE } from "../../query/phrases";
-import { ICollection } from "@ts/collections";
+import { ICollection, ICollectionMeta } from "@ts/collections";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { NavigatorParams } from "../../../App";
 import settings from "../../store/settings";
@@ -93,7 +93,20 @@ const Add = observer(function ({ route, navigation }: Props) {
 								"Authorization": `Bearer ${session.data.token}`
 							}
 						},
-						refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: collection } }]
+						refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: collection } }],
+						update: (cache, { data: { createPhrase } }) => {
+							cache.modify({
+								id: `Collection:${collection}`,
+								fields: {
+									lastUpdate: () => createPhrase.created,
+									//@ts-ignore Meta is not a reference
+									meta: (oldMeta: ICollectionMeta) => ({
+										...oldMeta,
+										phrasesCount: oldMeta.phrasesCount + 1
+									})
+								}
+							})
+						}
 					})
 				} catch (e: any) {
 					console.log(e);

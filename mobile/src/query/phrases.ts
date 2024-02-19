@@ -8,6 +8,7 @@ export const GET_COLLECTION_PHRASES = gql`
 			translation,
 			created,
 			lastUpdate,
+			collection,
 			meta {
 				guessed, forgotten, lastRepetition
 			}

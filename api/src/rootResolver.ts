@@ -361,11 +361,7 @@ const root = {
 	deletePhrase: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
-		const phrase = await phrasesController.getPhrase({ id: params.id });
-
-		if(phrase.userId !== context.auth.userId) throw new Error("403. Access denied");
-
-		return await phrasesController.deletePhrase(params);
+		return await phrasesController.deletePhrase(params, context);
 	},
 	
 	deletePhrasesMany: async (params: { ids: string[] }, context: IContext) => {

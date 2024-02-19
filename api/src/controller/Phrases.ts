@@ -84,6 +84,18 @@ class PhrasesController {
 			throw new Error(`Server error. Failed to create phrase. ${e}`);
 		}
 
+		try {
+			await db.collection("collections").updateOne({ id: collection }, {
+				$set: {
+					"meta.phrasesCount": col.meta.phrasesCount + 1,
+					lastUpdate: timestamp
+				}
+			})
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to update collection. ${e}`);
+		}
+
 		return phrase;
 	}
 
@@ -92,7 +104,8 @@ class PhrasesController {
 			await db.collection("phrases").updateOne({ id }, {
 				$set: {
 					value: input.value,
-					translation: input.translation
+					translation: input.translation,
+					lastUpdate: new Date().getTime()
 				}
 			})
 		} catch (e) {
@@ -105,8 +118,12 @@ class PhrasesController {
 
 	async movePhrase({ id, destId }: { id: string, destId: string }) {
 		const dest = await collectionsController.getCollection({ id: destId });
-
+		
 		if(dest.isLocked) throw new Error("400. Bad request - collection is locked");
+		
+		const col = await db.collection("collections").findOne({
+			id: (await db.collection("phrases").findOne({ id })).collection
+		});
 
 		try {
 			await db.collection("phrases").updateOne({ id }, {
@@ -119,6 +136,30 @@ class PhrasesController {
 			throw new Error(`Server error. Failed to move phrase ${e}`);
 		}
 
+		try {
+			await db.collection("collections").updateOne({ id: destId }, {
+				$set: {
+					"meta.phrasesCount": dest.meta.phrasesCount + 1,
+					lastUpdate: new Date().getTime()
+				}
+			})
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to update collection. ${e}`);
+		}
+
+		try {
+			await db.collection("collections").updateOne({ id: col.id }, {
+				$set: {
+					"meta.phrasesCount": col.meta.phrasesCount - 1,
+					lastUpdate: new Date().getTime()
+				}
+			})
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to update collection. ${e}`);
+		}
+
 		return "OK"
 	}
 
@@ -126,6 +167,10 @@ class PhrasesController {
 		const dest = await collectionsController.getCollection({ id: destId });
 
 		if(dest.isLocked) throw new Error("400. Bad request - collection is locked");
+
+		const col = await db.collection("collections").findOne({
+			id: (await db.collection("phrases").findOne({ id: ids[0] })).collection
+		});
 
 		try {
 			await db.collection("phrases").updateMany({ id: { $in: ids } }, {
@@ -136,6 +181,30 @@ class PhrasesController {
 		} catch (e) {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to move phrases ${e}`);
+		}
+
+		try {
+			await db.collection("collections").updateOne({ id: destId }, {
+				$set: {
+					"meta.phrasesCount": dest.meta.phrasesCount + ids.length,
+					lastUpdate: new Date().getTime()
+				}
+			})
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to update collection. ${e}`);
+		}
+
+		try {
+			await db.collection("collections").updateOne({ id: col.id }, {
+				$set: {
+					"meta.phrasesCount": col.meta.phrasesCount - ids.length,
+					lastUpdate: new Date().getTime()
+				}
+			})
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to update collection. ${e}`);
 		}
 
 		return "OK"
@@ -169,7 +238,13 @@ class PhrasesController {
 		return "OK";
 	}	
 
-	async deletePhrase({ id }: { id: string }) {
+	async deletePhrase({ id }: { id: string }, context: IContext) {
+		const phrase = await this.getPhrase({ id });
+
+		if(phrase.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		const col = await db.collection("collections").findOne({ id: phrase.collection });
+
 		try {
 			await db.collection("phrases").deleteOne({ id });
 		} catch (e) {
@@ -177,15 +252,43 @@ class PhrasesController {
 			throw new Error(`Server error. Failed to delete phrase. ${e}`);
 		}
 
+		try {
+			await db.collection("collections").updateOne({ id: col.id }, {
+				$set: {
+					"meta.phrasesCount": col.meta.phrasesCount - 1,
+					lastUpdate: new Date().getTime()
+				}
+			})
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to update collection. ${e}`);
+		}
+
 		return "OK";
 	}
 
 	async deleteMany({ ids }: { ids: string[] }) {
+		const col = await db.collection("collections").findOne({
+			id: (await db.collection("phrases").findOne({ id: ids[0] })).collection
+		});
+
 		try {
 			await db.collection("phrases").deleteMany({ id: { $in: ids } });
 		} catch (e) {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to delete phrases. ${e}`);
+		}
+
+		try {
+			await db.collection("collections").updateOne({ id: col.id }, {
+				$set: {
+					"meta.phrasesCount": col.meta.phrasesCount - ids.length,
+					lastUpdate: new Date().getTime()
+				}
+			})
+		} catch (e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to update collection. ${e}`);
 		}
 
 		return "OK";

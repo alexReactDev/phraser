@@ -67,7 +67,20 @@ const CollectionScreen = observer(function({ route, navigation }: Props) {
 				variables: {
 					ids: selectedItems
 				},
-				refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION]
+				refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION],
+				update: (cache) => {
+					cache.modify({
+						id: `Collection:${colId}`,
+						fields: {
+							lastUpdate: () => new Date().getTime(),
+							//@ts-ignore Meta is not a reference
+							meta: (oldMeta: ICollectionMeta) => ({
+								...oldMeta,
+								phrasesCount: oldMeta.phrasesCount - selectedItems.length
+							})
+						}
+					})
+				}
 			});
 		} catch (e: any) {
 			console.log(e);
@@ -158,6 +171,7 @@ const CollectionScreen = observer(function({ route, navigation }: Props) {
 				renderItem={({ item: phrase }) => 
 					<View style={{ marginBottom: 12 }}>
 						<CollectionPhrase 
+							colId={colId}
 							key={phrase.id} 
 							phrase={phrase} 
 							navigation={navigation}

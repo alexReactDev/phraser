@@ -12,8 +12,10 @@ import { observer } from "mobx-react-lite";
 import errorMessage from "@store/errorMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import ModalWithBody from "@components/ModalWithBody";
+import { ICollectionMeta } from "@ts/collections";
 
 interface IProps {
+	colId: string,
 	phrase: IPhrase,
 	navigation: any,
 	editable: boolean,
@@ -31,7 +33,7 @@ interface INotSelectableProps extends IProps {
 	selectable: false
 }
 
-const CollectionPhrase = observer(function({ phrase, navigation, editable, selectable, ...selectionProps }: ISelectableProps | INotSelectableProps) {
+const CollectionPhrase = observer(function({ colId, phrase, navigation, editable, selectable, ...selectionProps }: ISelectableProps | INotSelectableProps) {
 	const [ showControls, setShowControls ] = useState(false);
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const ref = useClickOutside(() => setShowControls(false));
@@ -44,7 +46,20 @@ const CollectionPhrase = observer(function({ phrase, navigation, editable, selec
 		try {
 			await deletePhrase({
 				variables: { id: phrase.id },
-				refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION]
+				refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION],
+				update: (cache) => {
+					cache.modify({
+						id: `Collection:${colId}`,
+						fields: {
+							lastUpdate: () => new Date().getTime(),
+							//@ts-ignore Meta is not a reference
+							meta: (oldMeta: ICollectionMeta) => ({
+								...oldMeta,
+								phrasesCount: oldMeta.phrasesCount - 1
+							})
+						}
+					})
+				}
 			})
 		} catch (e: any) {
 			console.log(e);
@@ -57,7 +72,7 @@ const CollectionPhrase = observer(function({ phrase, navigation, editable, selec
 	return (
 		<View style={styles.container} ref={ref} key={phrase.id}>
 			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
-				<MovePhrase id={phrase.id} currentColId={phrase.collection} />
+				<MovePhrase id={phrase.id} currentColId={phrase.collection} onSuccess={() => setDisplayModal(false)} />
 			</ModalWithBody>
 			{
 				//@ts-ignore
