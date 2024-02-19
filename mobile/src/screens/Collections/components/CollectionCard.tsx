@@ -34,7 +34,7 @@ function CollectionCard({ collection, navigation }: IProps) {
 					:
 					<>					
 						<Text style={styles.subtitle}>
-							Words: {collection.meta.phrasesCount}
+							{collection.meta.phrasesCount} {collection.meta.phrasesCount === 1 ? "phrase" : "phrases"}
 						</Text>
 						<Text style={styles.bottomNote}>
 							Last update: {lastUpdate}
