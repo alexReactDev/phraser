@@ -1,5 +1,5 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { GENERATE_AUTO_COLLECTION, GET_COLLECTION } from "@query/collections";
+import { useMutation } from "@apollo/client";
+import { GENERATE_AUTO_COLLECTION } from "@query/collections";
 import CollectionCard from "./CollectionCard";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParams } from "../Collections";

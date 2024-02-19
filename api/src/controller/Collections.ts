@@ -69,23 +69,27 @@ class CollectionsController {
 			throw new Error(`Server error. Failed to create collection. ${e}`);
 		}
 
-		return "OK";
+		return collection;
 	}
 
 	async mutateCollection({ id, input }: { id: string, input: ICollectionInput}) {
+		let updatedCollection;
+
 		try {
 			await db.collection("collections").updateOne({ id }, {
 				$set: {
 					name: input.name,
 					color: input.color
 				}
-			})
+			});
+			
+			updatedCollection = await db.collection("collections").findOne({ id });
 		} catch (e) {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to mutate collection. ${e}`);
 		}
 
-		return "OK";
+		return updatedCollection;
 	}
 
 	async mutateCollectionMeta({ id, input }: { id: string, input: ICollectionMetaInput }) {

@@ -53,7 +53,9 @@ const CollectionHeaderButtons = observer(function({ route, navigation }: TProps)
 					try {
 						await deleteCollection({
 							variables: { id: colId },
-							refetchQueries: [GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES]
+							update: (cache) => {
+								cache.evict({ id: `Collection:${colId}` })
+							}
 						});
 					} catch (e: any) {
 						console.log(e);

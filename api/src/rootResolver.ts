@@ -218,13 +218,12 @@ const root = {
 
 	
 	mutateCollection: async (params: { id: string, input: ICollectionInput}, context: IContext) => {
-		console.log("COL1")
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		let collection = await collectionsController.getCollection(params);
-		console.log("COL2")
+
 		if(collection.userId !== context.auth.userId) throw new Error("403. Access denied");
-		console.log("COL3")
+
 		return await collectionsController.mutateCollection(params);
 	},
 

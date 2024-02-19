@@ -47,8 +47,7 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 							name,
 							color
 						}
-					},
-					refetchQueries: [GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES]
+					}
 				})
 			} catch(e: any) {
 				console.log(e);
@@ -64,7 +63,18 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 							profile: settings.settings.activeProfile
 						}
 					},
-					refetchQueries: [GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES]
+					update: (cache, { data: { createCollection } }) => {
+						cache.evict({ fieldName: "searchProfileCollections" });
+						cache.modify({
+							fields: {
+								"getProfileCollections": (existingCollections = []) => {
+									return [...existingCollections, {
+										__ref: `Collection:${createCollection.id}`
+									}]
+								}
+							}
+						})
+					}
 				})
 			} catch(e: any) {
 				console.log(e);
