@@ -23,6 +23,7 @@ type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 
 const Add = observer(function ({ route, navigation }: Props) {
 	const [ showSuggestion, setShowSuggestion ] = useState(false);
+	const [ loading, setLoading ] = useState(false);
 	const { data: { getProfileCollections: collections = [] } = {} } = useQuery(GET_PROFILE_COLLECTIONS_FOR_PHRASES, { variables: { id: settings.settings.activeProfile } });
 	const { data: { getPhrase: phraseData } = {}, loading: phraseLoading } = useQuery(GET_PHRASE, { variables: { id: route.params?.mutateId }, skip: !route.params?.mutateId });
 	const [ createPhrase ] = useMutation(CREATE_PHRASE);
@@ -66,6 +67,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 			};
 
 			loadingSpinner.setLoading();
+			setLoading(true);
 
 			if(route.params?.mutateId) {
 				let promises = [];
@@ -117,6 +119,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 					console.log(e);
 					errorMessage.setErrorMessage(`Failed to update phrase ${e.toString()}`);
 					loadingSpinner.dismissLoading();
+					setLoading(false);
 					return;
 				}
 			} else {
@@ -148,11 +151,13 @@ const Add = observer(function ({ route, navigation }: Props) {
 					console.log(e);
 					errorMessage.setErrorMessage(`Failed to create phrase ${e.toString()}`);
 					loadingSpinner.dismissLoading();
+					setLoading(false);
 					return;
 				}
 			}
 			
 			loadingSpinner.dismissLoading();
+			setLoading(false);
 			reset();
 		}
 	})
@@ -176,6 +181,8 @@ const Add = observer(function ({ route, navigation }: Props) {
 	}, [formik.values.value, formik.values.translation, settings.settings.disableSuggestions])
 
 	function submitHandler() {
+		if(loading) return;
+
 		if(!formik.values.value.trim()) {
 			errorMessage.setErrorMessage("Please, provide a value");
 			return;
