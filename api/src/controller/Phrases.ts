@@ -100,6 +100,8 @@ class PhrasesController {
 	}
 
 	async mutatePhrase({ id, input }: { id: string, input: IPhraseInput }) {
+		let updatedPhrase;
+
 		try {
 			await db.collection("phrases").updateOne({ id }, {
 				$set: {
@@ -107,13 +109,15 @@ class PhrasesController {
 					translation: input.translation,
 					lastUpdate: new Date().getTime()
 				}
-			})
+			});
+
+			updatedPhrase = await db.collection("phrases").findOne({ id });
 		} catch (e) {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to mutate phrase. ${e}`);
 		}
 
-		return "OK";
+		return updatedPhrase;
 	}
 
 	async movePhrase({ id, destId }: { id: string, destId: string }) {
@@ -125,12 +129,15 @@ class PhrasesController {
 			id: (await db.collection("phrases").findOne({ id })).collection
 		});
 
+		let updatedPhrase;
+
 		try {
 			await db.collection("phrases").updateOne({ id }, {
 				$set: {
 					collection: destId
 				}
-			})
+			});
+			updatedPhrase = await db.collection("phrases").findOne({ id });
 		} catch (e: any) {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to move phrase ${e}`);
@@ -160,7 +167,7 @@ class PhrasesController {
 			throw new Error(`Server error. Failed to update collection. ${e}`);
 		}
 
-		return "OK"
+		return updatedPhrase;
 	}
 
 	async moveMany({ ids, destId }: { ids: string[], destId: string}) {
@@ -172,12 +179,16 @@ class PhrasesController {
 			id: (await db.collection("phrases").findOne({ id: ids[0] })).collection
 		});
 
+		let updatedPhrases;
+
 		try {
 			await db.collection("phrases").updateMany({ id: { $in: ids } }, {
 				$set: {
 					collection: destId
 				}
-			})
+			});
+			const cursor = await db.collection("phrases").find({ id: { $in: ids }});
+			updatedPhrases = await cursor.toArray();
 		} catch (e) {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to move phrases ${e}`);
@@ -207,7 +218,7 @@ class PhrasesController {
 			throw new Error(`Server error. Failed to update collection. ${e}`);
 		}
 
-		return "OK"
+		return updatedPhrases;
 	}
 
 	async mutatePhraseMeta({ id, input }: { id: string, input: IPhraseRepetitionInput }) {

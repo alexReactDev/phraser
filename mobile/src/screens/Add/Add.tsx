@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { TouchableOpacity, View, TextInput, StyleSheet, Text, ActivityIndicator } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import { fontColor, fontColorFaint, nondescriptColor } from "../../styles/variables";
+import { fontColor, fontColorFaint,} from "../../styles/variables";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "../../query/collections";
 import SelectDropdown from "react-native-select-dropdown";
@@ -12,13 +12,13 @@ import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { NavigatorParams } from "../../../App";
 import settings from "../../store/settings";
 import { observer } from "mobx-react-lite";
-import session from "@store/session";
 import loadingSpinner from "@store/loadingSpinner";
 import errorMessage from "@store/errorMessage";
 import LoaderModal from "@components/Loaders/LoaderModal";
 import ModalWithBody from "@components/ModalWithBody";
 import EditCollection from "../Collections/components/EditCollection";
 import { GET_TRANSLATED_TEXT } from "@query/translation";
+import { SEARCH_COLLECTION_PHRASES, SEARCH_PROFILE_COLLECTIONS } from "@query/search";
 
 type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 
@@ -61,8 +61,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 					variables: {
 						id: route.params.mutateId,
 						input: data
-					},
-					refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: phraseData.collection } }]
+					}
 				}));
 				
 				if(collection !== phraseData.collection) {
@@ -88,11 +87,6 @@ const Add = observer(function ({ route, navigation }: Props) {
 							input: data,
 							collection
 						},
-						context: {
-							headers: {
-								"Authorization": `Bearer ${session.data.token}`
-							}
-						},
 						refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: collection } }],
 						update: (cache, { data: { createPhrase } }) => {
 							cache.modify({
@@ -105,7 +99,10 @@ const Add = observer(function ({ route, navigation }: Props) {
 										phrasesCount: oldMeta.phrasesCount + 1
 									})
 								}
-							})
+							});
+
+							cache.evict({ fieldName: "searchCollectionPhrases" });
+							cache.evict({ fieldName: "searchProfilePhrases" });
 						}
 					})
 				} catch (e: any) {

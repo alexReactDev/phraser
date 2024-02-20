@@ -15,7 +15,6 @@ import ModalWithBody from "@components/ModalWithBody";
 import { ICollectionMeta } from "@ts/collections";
 
 interface IProps {
-	colId: string,
 	phrase: IPhrase,
 	navigation: any,
 	editable: boolean,
@@ -33,7 +32,7 @@ interface INotSelectableProps extends IProps {
 	selectable: false
 }
 
-const CollectionPhrase = observer(function({ colId, phrase, navigation, editable, selectable, ...selectionProps }: ISelectableProps | INotSelectableProps) {
+const CollectionPhrase = observer(function({ phrase, navigation, editable, selectable, ...selectionProps }: ISelectableProps | INotSelectableProps) {
 	const [ showControls, setShowControls ] = useState(false);
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const ref = useClickOutside(() => setShowControls(false));
@@ -46,10 +45,9 @@ const CollectionPhrase = observer(function({ colId, phrase, navigation, editable
 		try {
 			await deletePhrase({
 				variables: { id: phrase.id },
-				refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE],
 				update: (cache) => {
 					cache.modify({
-						id: `Collection:${colId}`,
+						id: `Collection:${phrase.collection}`,
 						fields: {
 							lastUpdate: () => new Date().getTime(),
 							//@ts-ignore Meta is not a reference
@@ -58,7 +56,8 @@ const CollectionPhrase = observer(function({ colId, phrase, navigation, editable
 								phrasesCount: oldMeta.phrasesCount - 1
 							})
 						}
-					})
+					});
+					cache.evict({ id: `Phrase:${phrase.id}` });
 				}
 			})
 		} catch (e: any) {

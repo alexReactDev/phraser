@@ -107,12 +107,10 @@ const MovePhrase = observer(function({ id, currentColId, moveMany = false, onSuc
 					}
 				})
 			} catch (e: any) {
-				console.log("EEEEEEEEEEEEEERRR");
 				console.log(e);
 				errorMessage.setErrorMessage(`Failed to move phrase ${e.toString()}`);
 			}
 		}
-		console.log("SUCESSSSS")
 
 		onSuccess && onSuccess();
 		loadingSpinner.dismissLoading();

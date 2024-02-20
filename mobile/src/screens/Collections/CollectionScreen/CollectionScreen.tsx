@@ -67,7 +67,6 @@ const CollectionScreen = observer(function({ route, navigation }: Props) {
 				variables: {
 					ids: selectedItems
 				},
-				refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE],
 				update: (cache) => {
 					cache.modify({
 						id: `Collection:${colId}`,
@@ -79,7 +78,10 @@ const CollectionScreen = observer(function({ route, navigation }: Props) {
 								phrasesCount: oldMeta.phrasesCount - selectedItems.length
 							})
 						}
-					})
+					});
+					selectedItems.forEach((id) => {
+						cache.evict({ id: `Phrase:${id}` });
+					});
 				}
 			});
 		} catch (e: any) {
@@ -171,7 +173,6 @@ const CollectionScreen = observer(function({ route, navigation }: Props) {
 				renderItem={({ item: phrase }) => 
 					<View style={{ marginBottom: 12 }}>
 						<CollectionPhrase 
-							colId={colId}
 							key={phrase.id} 
 							phrase={phrase} 
 							navigation={navigation}

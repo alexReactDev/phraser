@@ -6,12 +6,7 @@ export const GET_COLLECTION_PHRASES = gql`
 			id,
 			value,
 			translation,
-			created,
-			lastUpdate,
-			collection,
-			meta {
-				guessed, forgotten, lastRepetition
-			}
+			collection
 		}
 	}
 `;
@@ -30,26 +25,39 @@ export const GET_PHRASE = gql`
 export const CREATE_PHRASE = gql`
 	mutation createPhrase($input: PhraseInput!, $collection: ID!) {
 		createPhrase(input: $input, collection: $collection) {
-			id
+			id,
+			value,
+			translation,
+			collection
 		}
 	}
 `;
 
 export const MUTATE_PHRASE = gql`
 	mutation mutatePhrase($id: ID!, $input: PhraseInput!) {
-		mutatePhrase(id: $id, input: $input)
+		mutatePhrase(id: $id, input: $input) {
+			id,
+			value,
+			translation
+		}
 	}
 `;
 
 export const MOVE_PHRASE = gql`
 	mutation movePhrase($id: ID!, $destId: ID!) {
-		movePhrase(id: $id, destId: $destId)
+		movePhrase(id: $id, destId: $destId) {
+			id,
+			collection
+		}
 	}
 `;
 
 export const MOVE_PHRASES_MANY = gql`
 	mutation movePhrasesMany($ids: [ID]!, $destId: ID!) {
-		movePhrasesMany(ids: $ids, destId: $destId)
+		movePhrasesMany(ids: $ids, destId: $destId) {
+			id,
+			collection
+		}
 	}
 `;
 
