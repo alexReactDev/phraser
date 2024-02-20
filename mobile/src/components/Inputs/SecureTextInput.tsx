@@ -1,9 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import StyledTextInput from "./StyledTextInput";
 import { Ionicons } from '@expo/vector-icons';
 
-function SecureTextInput({ containerStyle = {}, style = {}, ...args }) {
+const SecureTextInput = React.forwardRef<any, any>(function ({ containerStyle = {}, style = {}, ...args }, ref) {
 	const [ showPassword, setShowPassword ] = useState(false);
 
 	return (
@@ -27,11 +27,12 @@ function SecureTextInput({ containerStyle = {}, style = {}, ...args }) {
 				autoCapitalize="none"
 				autoComplete="off"
 				autoCorrect={false}
+				ref={ref}
 				{...args}
 			/>
 		</View>
 	)
-}
+});
 
 const styles = StyleSheet.create({
 	inputContainer: {
