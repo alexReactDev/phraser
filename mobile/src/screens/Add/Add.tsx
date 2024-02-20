@@ -58,7 +58,12 @@ const Add = observer(function ({ route, navigation }: Props) {
 			collection: null
 		},
 		async onSubmit(values) {
-			const { collection, ...data } = values;
+			const { collection, ...input } = values;
+
+			const data = {
+				value: input.value.trim(),
+				translation: input.translation.trim()
+			};
 
 			loadingSpinner.setLoading();
 
@@ -167,10 +172,10 @@ const Add = observer(function ({ route, navigation }: Props) {
 	}, [formik.values.value, formik.values.translation, settings.settings.disableSuggestions])
 
 	function submitHandler() {
-		if(!formik.values.value) {
+		if(!formik.values.value.trim()) {
 			errorMessage.setErrorMessage("Please, provide a value");
 			return;
-		} else if (!formik.values.translation) {
+		} else if (!formik.values.translation.trim()) {
 			errorMessage.setErrorMessage("Please, provide a translation");
 			return;
 		} else if (!formik.values.collection) {
