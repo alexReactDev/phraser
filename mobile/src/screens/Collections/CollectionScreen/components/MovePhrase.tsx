@@ -103,7 +103,7 @@ const MovePhrase = observer(function({ id, currentColId, moveMany = false, onSuc
 									phrasesCount: oldMeta.phrasesCount + 1
 								})
 							}
-						})
+						});
 					}
 				})
 			} catch (e: any) {

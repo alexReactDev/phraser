@@ -70,7 +70,31 @@ const Add = observer(function ({ route, navigation }: Props) {
 							id: route.params.mutateId,
 							destId: collection
 						},
-						refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: phraseData.collection } }, { query: GET_COLLECTION_PHRASES, variables: { id: collection }}]
+						refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: phraseData.collection } }, { query: GET_COLLECTION_PHRASES, variables: { id: collection }}],
+						update: (cache) => {
+							cache.modify({
+								id: `Collection:${phraseData.collection}`,
+								fields: {
+									lastUpdate: () => new Date().getTime(),
+									//@ts-ignore Meta is not a reference
+									meta: (oldMeta: ICollectionMeta) => ({
+										...oldMeta,
+										phrasesCount: oldMeta.phrasesCount - 1
+									})
+								}
+							});
+							cache.modify({
+								id: `Collection:${collection}`,
+								fields: {
+									lastUpdate: () => new Date().getTime(),
+									//@ts-ignore Meta is not a reference
+									meta: (oldMeta: ICollectionMeta) => ({
+										...oldMeta,
+										phrasesCount: oldMeta.phrasesCount + 1
+									})
+								}
+							});
+						}
 					}));
 				}
 				
