@@ -115,7 +115,9 @@ const Add = observer(function ({ route, navigation }: Props) {
 					await Promise.all(promises);
 				} catch (e: any) {
 					console.log(e);
-					errorMessage.setErrorMessage(`Failed to update phrase ${e.toString()}`)
+					errorMessage.setErrorMessage(`Failed to update phrase ${e.toString()}`);
+					loadingSpinner.dismissLoading();
+					return;
 				}
 			} else {
 				try {
@@ -144,7 +146,9 @@ const Add = observer(function ({ route, navigation }: Props) {
 					})
 				} catch (e: any) {
 					console.log(e);
-					errorMessage.setErrorMessage(`Failed to create phrase ${e.toString()}`)
+					errorMessage.setErrorMessage(`Failed to create phrase ${e.toString()}`);
+					loadingSpinner.dismissLoading();
+					return;
 				}
 			}
 			
