@@ -18,7 +18,6 @@ import LoaderModal from "@components/Loaders/LoaderModal";
 import ModalWithBody from "@components/ModalWithBody";
 import EditCollection from "../Collections/components/EditCollection";
 import { GET_TRANSLATED_TEXT } from "@query/translation";
-import { SEARCH_COLLECTION_PHRASES, SEARCH_PROFILE_COLLECTIONS } from "@query/search";
 
 type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 
@@ -201,7 +200,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 				<EditCollection onReady={() => setDisplayModal(false)} />
 			</ModalWithBody>
 			<View style={styles.labelContainer}>
-				<Text style={styles.inputLabel}>
+				<Text style={{...styles.inputLabel, marginBottom: -2 }}>
 					Phrase
 				</Text>
 				{
@@ -237,7 +236,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 				blurOnSubmit
 			/>
 			<Ionicons name="arrow-down" size={24} color="gray" style={styles.icon} />
-			<Text style={styles.inputLabel}>
+			<Text style={{...styles.inputLabel, marginBottom: 6 }}>
 				Translation
 			</Text>
 			<View>
@@ -384,8 +383,8 @@ const styles = StyleSheet.create({
 		fontStyle: "italic"
 	},
 	icon: {
-		marginTop: 10,
-		marginBottom: -20,
+		marginTop: 11,
+		marginBottom: -19,
 		alignSelf: "center"
 	},
 	close: {
