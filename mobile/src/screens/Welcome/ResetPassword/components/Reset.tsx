@@ -4,7 +4,7 @@ import { IAuthData } from "@ts-frontend/authorization";
 import { observer } from "mobx-react-lite";
 import { Button, Text, View } from "react-native";
 import { styles } from "../styles/styles";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import loadingSpinner from "@store/loadingSpinner";
 import SecureTextInput from "@components/Inputs/SecureTextInput";
 
@@ -16,10 +16,11 @@ interface IProps {
 }
 
 const Reset = observer(function({ email, code, onError, updateCredentials }: IProps) {
-	const [ resetPassword ] = useMutation(RESET_PASSWORD);
+	const retypePasswordRef = useRef<any>(null);
 	const [ newPassword, setNewPassword ] = useState("");
 	const [ retypePassword, setRetypePassword ] = useState("");
-	const [ showPassword, setShowPassword ] = useState(false);
+
+	const [ resetPassword ] = useMutation(RESET_PASSWORD);
 
 	async function resetPasswordHandler() {
 		if(!newPassword) {
@@ -79,6 +80,7 @@ const Reset = observer(function({ email, code, onError, updateCredentials }: IPr
 					onError("");
 					setNewPassword(t);
 				}}
+				onBlur={() => retypePasswordRef.current?.focus()}
 				placeholder="New password"
 			/>
 			<SecureTextInput
@@ -87,6 +89,7 @@ const Reset = observer(function({ email, code, onError, updateCredentials }: IPr
 					onError("");
 					setRetypePassword(t);
 				}}
+				ref={retypePasswordRef}
 				placeholder="Retype password"
 			/>
 			<View style={styles.btn}>

@@ -41,9 +41,4 @@ function Welcome({ updateCredentials }: { updateCredentials: (data: IAuthData) =
 	)
 }
 
-/*
-		<View style={style.container}>
-
-*/
-
 export default Welcome;

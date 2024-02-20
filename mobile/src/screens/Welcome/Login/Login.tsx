@@ -1,5 +1,5 @@
 import { Text, View, Button, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { faintBlue, fontColorFaint } from "@styles/variables";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "@query/authorization";
@@ -19,10 +19,12 @@ import SecureTextInput from "@components/Inputs/SecureTextInput";
 type NavigationProp = StackNavigationProp<WelcomeNavigatorParams, "Login", "WelcomeNavigator">;
 
 const Login = observer(function({ updateCredentials }: { updateCredentials: (data: IAuthData) => void }) {
+	const navigation = useNavigation<NavigationProp>();
+	const passwordRef = useRef<any>(null);
+
 	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 	const [ errorMessage, setErrorMessage ] = useState("");
-	const navigation = useNavigation<NavigationProp>();
 
 	const [ tryLogin ] = useMutation(LOGIN);
 
@@ -75,6 +77,7 @@ const Login = observer(function({ updateCredentials }: { updateCredentials: (dat
 						setErrorMessage("");
 						setEmail(t);
 					}}
+					onBlur={() => passwordRef.current?.focus()}
 					placeholder="Email"
 					inputMode="email"
 				/>
@@ -84,6 +87,7 @@ const Login = observer(function({ updateCredentials }: { updateCredentials: (dat
 						setErrorMessage("");
 						setPassword(t);
 					}}
+					ref={passwordRef}
 					placeholder="Password"
 				/>
 				<Button title="Login" onPress={loginHandler}></Button>

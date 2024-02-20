@@ -1,5 +1,5 @@
 import { Text, View, Button } from "react-native";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { faintBlue } from "@styles/variables";
 import { useMutation } from "@apollo/client";
 import { SIGNUP } from "@query/authorization";
@@ -18,11 +18,14 @@ import SecureTextInput from "@components/Inputs/SecureTextInput";
 type NavigationProp = StackNavigationProp<WelcomeNavigatorParams, "Sign up", "WelcomeNavigator">;
 
 const SignUp = observer(function({ updateCredentials }: { updateCredentials: (data: IAuthData) => void }) {
+	const navigation = useNavigation<NavigationProp>();
+	const passwordRef = useRef<any>(null);
+	const retypePasswordRef = useRef<any>(null);
+
 	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 	const [ retypePassword, setRetypePassword ] = useState("");
 	const [ errorMessage, setErrorMessage ] = useState("");
-	const navigation = useNavigation<NavigationProp>();
 
 	const [ trySignUp ] = useMutation(SIGNUP);
 
@@ -43,7 +46,7 @@ const SignUp = observer(function({ updateCredentials }: { updateCredentials: (da
 		}
 
 		if(retypePassword !== password) {
-			setErrorMessage("Passwords don't match");
+			setErrorMessage("Passwords do not match");
 			return;
 		}
 
@@ -85,6 +88,7 @@ const SignUp = observer(function({ updateCredentials }: { updateCredentials: (da
 						setErrorMessage("");
 						setEmail(t);
 					}}
+					onBlur={() => passwordRef.current?.focus()}
 					placeholder="Email"
 					inputMode="email"
 				/>
@@ -94,6 +98,8 @@ const SignUp = observer(function({ updateCredentials }: { updateCredentials: (da
 						setErrorMessage("");
 						setPassword(t);
 					}}
+					onBlur={() => retypePasswordRef.current?.focus()}
+					ref={passwordRef}
 					placeholder="Password"
 				/>
 				<SecureTextInput
@@ -102,6 +108,7 @@ const SignUp = observer(function({ updateCredentials }: { updateCredentials: (da
 						setErrorMessage("");
 						setRetypePassword(t);
 					}}
+					ref={retypePasswordRef}
 					placeholder="Retype password"
 				/>
 				<Button title="Sign up" onPress={signUpHandler}></Button>

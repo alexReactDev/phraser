@@ -1,5 +1,5 @@
 import { fontColor, nondescriptColor } from "@styles/variables";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { useMutation } from "@apollo/client";
 import { CHANGE_PASSWORD } from "@query/authorization";
@@ -16,10 +16,12 @@ type NavigationProp = StackNavigationProp<SettingsNavigatorParams, "Settings", "
 
 const ChangePassword = observer(function() {
 	const navigation = useNavigation<NavigationProp>();
+	const newPasswordRef = useRef<any>(null);
+	const retypePasswordRef = useRef<any>(null);
+
 	const [ oldPassword, setOldPassword ] = useState("");
 	const [ newPassword, setNewPassword ] = useState("");
 	const [ retypePassword, setRetypePassword ] = useState("");
-	const [ showPassword, setShowPassword ] = useState(false);
 
 	const [ errorMessage, setErrorMessage ] = useState("");
 
@@ -95,6 +97,7 @@ const ChangePassword = observer(function() {
 					setErrorMessage("");
 					setOldPassword(t);
 				}}
+				onBlur={() => newPasswordRef.current?.focus()}
 				placeholder="Old password"
 			/>
 			<Text style={styles.inputLabel}>
@@ -106,6 +109,8 @@ const ChangePassword = observer(function() {
 				setErrorMessage("");
 				setNewPassword(t);
 			}}
+			ref={newPasswordRef}
+			onBlur={() => retypePasswordRef.current?.focus()}
 			placeholder="New password"
 			/>
 			<Text style={styles.inputLabel}>
@@ -117,6 +122,7 @@ const ChangePassword = observer(function() {
 				setErrorMessage("");
 				setRetypePassword(t);
 			}}
+			ref={retypePasswordRef}
 			placeholder="Retype password"
 			/>
 			<View style={styles.btn}>
