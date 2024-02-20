@@ -39,7 +39,10 @@ const Add = observer(function ({ route, navigation }: Props) {
 			formik.setFieldValue("value", phraseData.value);
 			formik.setFieldValue("translation", phraseData.translation);
 			formik.setFieldValue("collection", phraseData.collection);
-			selectRef?.current?.selectIndex(collections.findIndex((col: ICollection) => col.id == phraseData.collection))
+			selectRef?.current?.selectIndex(collections.findIndex((col: ICollection) => col.id == phraseData.collection));
+			navigation.setOptions({
+				title: `Edit`
+			});
 		}
 	}, [phraseData]);
 
@@ -201,7 +204,12 @@ const Add = observer(function ({ route, navigation }: Props) {
 		formik.resetForm();
 		selectRef?.current?.reset();
 
-		if(route.params?.mutateId) navigation.setParams({ mutateId: undefined });
+		if(route.params?.mutateId) {
+			navigation.setParams({ mutateId: undefined });
+			navigation.setOptions({
+				title: "Add"
+			});
+		};
 	}
 
 	return (
