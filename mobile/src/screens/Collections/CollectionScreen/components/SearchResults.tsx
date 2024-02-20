@@ -30,7 +30,7 @@ function SearchResults({ query, colId, navigation }: IProps) {
 			</Text>
 			<View style={styles.list}>
 				{
-					data.searchCollectionPhrases.map((phrase: IPhrase) => <CollectionPhrase phrase={phrase} navigation={navigation} editable={true} selectable={false} />)
+					data.searchCollectionPhrases.map((phrase: IPhrase) => <CollectionPhrase key={phrase.id} phrase={phrase} navigation={navigation} editable={true} selectable={false} />)
 				}
 			</View>
 		</ScrollView>

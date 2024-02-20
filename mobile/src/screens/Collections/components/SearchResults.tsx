@@ -76,7 +76,7 @@ const SearchResults = observer(function({ collections, query, navigation }: IPro
 					</Text>
 				}
 				{
-					collectionsData?.searchProfileCollections.map((col: ICollection) => <CollectionRow collection={col} navigation={navigation} />)
+					collectionsData?.searchProfileCollections.map((col: ICollection) => <CollectionRow key={col.id} collection={col} navigation={navigation} />)
 				}
 			</View>
 			<Text style={styles.title}>
@@ -98,7 +98,7 @@ const SearchResults = observer(function({ collections, query, navigation }: IPro
 						const col = collections.find((col) => col.id === data.colId)!;
 
 						return (
-							<View style={{...styles.collectionContainer, borderColor: col.color }}>
+							<View key={data.colId} style={{...styles.collectionContainer, borderColor: col.color }}>
 								<View style={{...styles.collectionHeader, backgroundColor: col.color}}>
 									<Text style={styles.collectionTitle}>
 										{col.name}
@@ -106,7 +106,7 @@ const SearchResults = observer(function({ collections, query, navigation }: IPro
 								</View>
 								<View style={styles.phrasesContainer}>
 									{
-										data.phrases.map((phrase) => <CollectionPhrase phrase={phrase} navigation={navigation} editable={true} selectable={false} />)
+										data.phrases.map((phrase) => <CollectionPhrase key={phrase.id} phrase={phrase} navigation={navigation} editable={true} selectable={false} />)
 									}
 								</View>
 							</View>
