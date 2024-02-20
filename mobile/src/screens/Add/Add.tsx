@@ -43,6 +43,15 @@ const Add = observer(function ({ route, navigation }: Props) {
 		}
 	}, [phraseData]);
 
+	useEffect(() => {
+		if(!formik.values.collection) return;
+
+		const col = collections.find((col: ICollection) => col.id === formik.values.collection);
+
+		if(!col) formik.setFieldValue("collection", "");
+		selectRef?.current?.reset();
+	}, [settings.settings])
+
 	const formik = useFormik({
 		initialValues: {
 			value: "",
