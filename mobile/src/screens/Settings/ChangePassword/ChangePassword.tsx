@@ -24,10 +24,13 @@ const ChangePassword = observer(function() {
 	const [ retypePassword, setRetypePassword ] = useState("");
 
 	const [ errorMessage, setErrorMessage ] = useState("");
+	const [ loading, setLoading ] = useState(false);
 
 	const [ changePassword ] = useMutation(CHANGE_PASSWORD);
 
 	async function changePasswordHandler() {
+		if(loading) return;
+
 		if(!oldPassword) {
 			setErrorMessage("Old password field is empty");
 			return;
@@ -59,6 +62,7 @@ const ChangePassword = observer(function() {
 		}
 
 		loadingSpinner.setLoading();
+		setLoading(true);
 
 		try {
 			await changePassword({
@@ -74,11 +78,13 @@ const ChangePassword = observer(function() {
 			console.log(e);
 			setErrorMessage(`Something went wrong. ${e}`);
 			loadingSpinner.dismissLoading();
+			setLoading(false);
 			return;
 		}
 		
 
 		loadingSpinner.dismissLoading();
+		setLoading(false);
 		navigation.navigate("Settings");
 	}
 

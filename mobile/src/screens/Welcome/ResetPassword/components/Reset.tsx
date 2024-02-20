@@ -19,10 +19,13 @@ const Reset = observer(function({ email, code, onError, updateCredentials }: IPr
 	const retypePasswordRef = useRef<any>(null);
 	const [ newPassword, setNewPassword ] = useState("");
 	const [ retypePassword, setRetypePassword ] = useState("");
+	const [ loading, setLoading ] = useState(false);
 
 	const [ resetPassword ] = useMutation(RESET_PASSWORD);
 
 	async function resetPasswordHandler() {
+		if(loading) return;
+
 		if(!newPassword) {
 			onError("Password field is empty");
 			return;
@@ -44,6 +47,7 @@ const Reset = observer(function({ email, code, onError, updateCredentials }: IPr
 		}
 
 		loadingSpinner.setLoading();
+		setLoading(true);
 
 		let credentials;
 
@@ -62,11 +66,13 @@ const Reset = observer(function({ email, code, onError, updateCredentials }: IPr
 		} catch(e: any) {
 			onError(e.toString());
 			loadingSpinner.dismissLoading();
+			setLoading(false);
 			return;
 		}
 
 		updateCredentials(credentials);
 		loadingSpinner.dismissLoading();
+		setLoading(false);
 	}
 
 	return (

@@ -18,6 +18,8 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 	const [ showButtons, setShowButtons ] = useState(false);
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const [ input, setInput ] = useState("");
+	const [ loading, setLoading ] = useState(false);
+
 	const [ mutateProfile ] = useMutation(MUTATE_PROFILE);
 	const [ deleteProfile ] = useMutation(DELETE_PROFILE);
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
@@ -34,7 +36,10 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 				text: "Delete",
 				style: "destructive",
 				onPress: async () => {
+					if(loading) return;
+
 					loadingSpinner.setLoading();
+					setLoading(true);
 
 					try {
 						await deleteProfile({
@@ -49,13 +54,17 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 					}
 			
 					loadingSpinner.dismissLoading();
+					setLoading(false);
 				}
 			}
 		])
 	}
 
 	async function mutateHandler() {
+		if(loading) return;
+
 		loadingSpinner.setLoading();
+		setLoading(true);
 
 		try {
 			await mutateProfile({
@@ -72,10 +81,14 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 
 		setDisplayModal(false);
 		loadingSpinner.dismissLoading();
+		setLoading(false);
 	}
 
 	async function selectHandler() {
+		if(loading) return;
+
 		loadingSpinner.setLoading();
+		setLoading(true);
 
 		try {
 			await updateUserSettings({
@@ -93,6 +106,7 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 		}
 
 		loadingSpinner.dismissLoading();
+		setLoading(false);
 	}
 
 	return (
@@ -133,7 +147,7 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 							<Ionicons name={profile.id === settings.settings.activeProfile ? "checkmark-circle" : "checkmark"} size={20} color="gray" />
 						</TouchableOpacity>
 						<TouchableOpacity
-							onPress={() => setDisplayModal(true)}
+							onPress={() => !loading && setDisplayModal(true)}
 						>
 							<Ionicons name="pencil" size={17} color="gray" />
 						</TouchableOpacity>

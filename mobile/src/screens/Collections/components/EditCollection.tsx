@@ -18,6 +18,7 @@ interface IProps {
 const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 	const [ name, setName ] = useState("");
 	const [ color, setColor ] = useState("");
+	const [ loading, setLoading ] = useState(false);
 
 	const { data } = useQuery(GET_COLLECTION, { variables: { id: mutateId }, skip: !mutateId});
 	const [ createCollection ] = useMutation(CREATE_COLLECTION);
@@ -34,9 +35,12 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 	}, [data])
 
 	async function pressHandler() {
+		if(loading) return;
+
 		if(!name || !color) return;
 
 		loadingSpinner.setLoading();
+		setLoading(true);
 
 		if(mutateId) {
 			try {
@@ -84,6 +88,7 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 
 		onReady && onReady();
 		loadingSpinner.dismissLoading();
+		setLoading(false);
 	}
 
 	return (

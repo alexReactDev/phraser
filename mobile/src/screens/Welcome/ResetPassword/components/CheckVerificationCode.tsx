@@ -13,6 +13,7 @@ const CheckVerificationCode = observer(function({ email, onCheck, onError }: { e
 	const [ sendVerificationCode ] = useMutation(SEND_VERIFICATION_CODE);
 	const [ showResendCodeButton, setShowResendCodeButton ] = useState(false);
 	const [ code, setCode ] = useState("");
+	const [ loading, setLoading ] = useState(false);
 
 	useEffect(() => {
 		if(showResendCodeButton) return;
@@ -23,12 +24,15 @@ const CheckVerificationCode = observer(function({ email, onCheck, onError }: { e
 	}, [showResendCodeButton]);
 	
 	async function checkCodeHandler() {
+		if(loading) return;
+
 		if(!code) {
 			onError("Please, provide verification code");
 			return;
 		}
 
 		loadingSpinner.setLoading();
+		setLoading(true);
 
 		try {
 			const res = await checkVerificationCode({
@@ -41,10 +45,12 @@ const CheckVerificationCode = observer(function({ email, onCheck, onError }: { e
 		} catch(e: any) {
 			onError(e.toString());
 			loadingSpinner.dismissLoading();
+			setLoading(false);
 			return;
 		}
 
 		loadingSpinner.dismissLoading();
+		setLoading(false);
 		onCheck(code);
 	}
 
@@ -81,6 +87,7 @@ const CheckVerificationCode = observer(function({ email, onCheck, onError }: { e
 					setCode(t);
 				}}
 				placeholder="Code"
+				autoFocus
 			/>
 			<View style={styles.btn}>
 				<Button title="Verify" onPress={checkCodeHandler} />

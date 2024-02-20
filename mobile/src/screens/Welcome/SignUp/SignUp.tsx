@@ -25,11 +25,15 @@ const SignUp = observer(function({ updateCredentials }: { updateCredentials: (da
 	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 	const [ retypePassword, setRetypePassword ] = useState("");
+
 	const [ errorMessage, setErrorMessage ] = useState("");
+	const [ loading, setLoading ] = useState(false);
 
 	const [ trySignUp ] = useMutation(SIGNUP);
 
 	async function signUpHandler() {
+		if(loading) return;
+
 		if(!email) {
 			setErrorMessage("Email field is empty");
 			return;
@@ -51,6 +55,7 @@ const SignUp = observer(function({ updateCredentials }: { updateCredentials: (da
 		}
 
 		loadingSpinner.setLoading();
+		setLoading(true);
 
 		let res;
 
@@ -66,10 +71,14 @@ const SignUp = observer(function({ updateCredentials }: { updateCredentials: (da
 		} catch(e) {
 			console.log(e);
 			setErrorMessage(`Signup error. ${e}`);
+			loadingSpinner.dismissLoading();
+			setLoading(false);
+			return;
 		}
 
 		updateCredentials(res?.data.signUp);
 		loadingSpinner.dismissLoading();
+		setLoading(false);
 	}
 
 	return (

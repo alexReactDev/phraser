@@ -18,11 +18,16 @@ import ModalWithBody from "@components/ModalWithBody";
 const ProfilesSettings = observer(function() {
 	const [ displayModal, setDisplayModal ] = useState(false);
 	const [ input, setInput ] = useState("");
+	const [ loading, setLoading ] = useState(false);
+
 	const { data: { getUserProfiles: profiles = []} = {}, error } = useQuery(GET_USER_PROFILES, { variables: { id: session.data.userId }});
 	const [ createProfile ] = useMutation(CREATE_PROFILE);
 
 	async function createProfileHandler() {
+		if(loading) return;
+
 		loadingSpinner.setLoading();
+		setLoading(true);
 
 		try {
 			await createProfile({
@@ -42,6 +47,7 @@ const ProfilesSettings = observer(function() {
 		setInput("");
 		setDisplayModal(false);
 		loadingSpinner.dismissLoading();
+		setLoading(false);
 	}
 
 	if(error) return <ErrorComponent message="Failed to load profiles data" />

@@ -24,11 +24,15 @@ const Login = observer(function({ updateCredentials }: { updateCredentials: (dat
 
 	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
+
 	const [ errorMessage, setErrorMessage ] = useState("");
+	const [ loading, setLoading ] = useState(false);
 
 	const [ tryLogin ] = useMutation(LOGIN);
 
 	async function loginHandler() {
+		if(loading) return;
+
 		if(!email) {
 			setErrorMessage("Email field is empty");
 			return;
@@ -40,6 +44,7 @@ const Login = observer(function({ updateCredentials }: { updateCredentials: (dat
 		}
 
 		loadingSpinner.setLoading();
+		setLoading(true);
 
 		let data;
 
@@ -55,10 +60,14 @@ const Login = observer(function({ updateCredentials }: { updateCredentials: (dat
 		} catch(e) {
 			console.log(e);
 			setErrorMessage(`Login error ${e}`);
+			loadingSpinner.dismissLoading();
+			setLoading(false);
+			return;
 		}
 
 		updateCredentials(data?.data.login);
 		loadingSpinner.dismissLoading();
+		setLoading(false);
 	}
 
 	return (

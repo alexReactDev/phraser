@@ -1,7 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { SEND_VERIFICATION_CODE } from "@query/authorization";
 import { Button, Text, View } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
 import { styles } from "../styles/styles";
 import { useState } from "react";
 import { observer } from "mobx-react-lite";
@@ -11,14 +10,18 @@ import StyledTextInput from "@components/Inputs/StyledTextInput";
 const SendVerificationCode = observer(function ({ onSend, onError }: { onSend: (email: string) => void, onError: (e: string) => void}) {
 	const [ sendVerificationCode ] = useMutation(SEND_VERIFICATION_CODE);
 	const [ email, setEmail ] = useState("");
+	const [ loading, setLoading ] = useState(false);
 
 	async function sendCodeHandler() {
+		if(loading) return;
+
 		if(!email) {
 			onError("Email field is empty");
 			return;
 		}
 
 		loadingSpinner.setLoading();
+		setLoading(true);
 
 		try {
 			await sendVerificationCode({
@@ -29,10 +32,12 @@ const SendVerificationCode = observer(function ({ onSend, onError }: { onSend: (
 		} catch (e: any) {
 			onError(e.toString());
 			loadingSpinner.dismissLoading();
+			setLoading(false);
 			return;
 		}
 
 		loadingSpinner.dismissLoading();
+		setLoading(false);
 		onSend(email);
 	}
 
@@ -49,6 +54,7 @@ const SendVerificationCode = observer(function ({ onSend, onError }: { onSend: (
 					setEmail(t);
 				}}
 				placeholder="Your email"
+				autoFocus
 			/>
 			<View style={styles.btn}>
 				<Button title="Send code" onPress={sendCodeHandler} />
