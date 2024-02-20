@@ -34,12 +34,14 @@ const Add = observer(function ({ route, navigation }: Props) {
 	
 	const [ displayModal, setDisplayModal ] = useState(false);
 
+	const filteredCollections = collections.filter((col: ICollection) => !col.isLocked || col.id === phraseData?.collection).concat({ id: "CREATE" });
+
 	useEffect(() => {
 		if(phraseData) {
 			formik.setFieldValue("value", phraseData.value);
 			formik.setFieldValue("translation", phraseData.translation);
 			formik.setFieldValue("collection", phraseData.collection);
-			selectRef?.current?.selectIndex(collections.findIndex((col: ICollection) => col.id == phraseData.collection));
+			selectRef?.current?.selectIndex(filteredCollections.findIndex((col: ICollection) => col.id == phraseData.collection));
 			navigation.setOptions({
 				title: `Edit`
 			});
@@ -301,7 +303,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 				}
 			</View>
 			<SelectDropdown
-				data={collections.filter((col: ICollection) => !col.isLocked).concat({ id: "CREATE" })}
+				data={filteredCollections}
 				ref={selectRef as any}
 				onSelect={(selectedItem) => formik.setFieldValue("collection", selectedItem.id)}
 				buttonTextAfterSelection={(item) => item.name}
