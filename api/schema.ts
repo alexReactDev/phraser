@@ -129,7 +129,6 @@ const schema = buildSchema(`
 		getProfileCollections(id: ID!): [Collection],
 		getCollectionPhrases(id: ID!): [Phrase],
 		getPhrase(id: ID!): Phrase,
-		getPhraseCollection(id: ID!): Collection,
 		getUserProfiles(id: ID!): [Profile],
 		getSession: Session,
 		getUserSettings(id: ID!): UserSettings,

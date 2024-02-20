@@ -6,7 +6,7 @@ import { fontColor, fontColorFaint, nondescriptColor } from "../../styles/variab
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "../../query/collections";
 import SelectDropdown from "react-native-select-dropdown";
-import { CREATE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE_WITH_COLLECTION, MOVE_PHRASE, MUTATE_PHRASE } from "../../query/phrases";
+import { CREATE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE, MOVE_PHRASE, MUTATE_PHRASE } from "../../query/phrases";
 import { ICollection, ICollectionMeta } from "@ts/collections";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { NavigatorParams } from "../../../App";
@@ -25,7 +25,7 @@ type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 const Add = observer(function ({ route, navigation }: Props) {
 	const [ showSuggestion, setShowSuggestion ] = useState(false);
 	const { data: { getProfileCollections: collections = [] } = {} } = useQuery(GET_PROFILE_COLLECTIONS_FOR_PHRASES, { variables: { id: settings.settings.activeProfile } });
-	const { data: { getPhrase: phraseData, getPhraseCollection: phraseCollection } = {}, loading: phraseLoading } = useQuery(GET_PHRASE_WITH_COLLECTION, { variables: { id: route.params?.mutateId }, skip: !route.params?.mutateId });
+	const { data: { getPhrase: phraseData } = {}, loading: phraseLoading } = useQuery(GET_PHRASE, { variables: { id: route.params?.mutateId }, skip: !route.params?.mutateId });
 	const [ createPhrase ] = useMutation(CREATE_PHRASE);
 	const [ mutatePhrase ] = useMutation(MUTATE_PHRASE);
 	const [ movePhrase ] = useMutation(MOVE_PHRASE);
@@ -35,11 +35,11 @@ const Add = observer(function ({ route, navigation }: Props) {
 	const [ displayModal, setDisplayModal ] = useState(false);
 
 	useEffect(() => {
-		if(phraseData && phraseCollection) {
+		if(phraseData) {
 			formik.setFieldValue("value", phraseData.value);
 			formik.setFieldValue("translation", phraseData.translation);
-			formik.setFieldValue("collection", phraseCollection.id);
-			selectRef?.current?.selectIndex(collections.findIndex((col: ICollection) => col.id == phraseCollection.id))
+			formik.setFieldValue("collection", phraseData.collection);
+			selectRef?.current?.selectIndex(collections.findIndex((col: ICollection) => col.id == phraseData.collection))
 		}
 	}, [phraseData]);
 
@@ -62,16 +62,16 @@ const Add = observer(function ({ route, navigation }: Props) {
 						id: route.params.mutateId,
 						input: data
 					},
-					refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: phraseCollection.id } }]
+					refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: phraseData.collection } }]
 				}));
 				
-				if(collection !== phraseCollection.id) {
+				if(collection !== phraseData.collection) {
 					promises.push(movePhrase({
 						variables: {
 							id: route.params.mutateId,
 							destId: collection
 						},
-						refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: phraseCollection.id } }, { query: GET_COLLECTION_PHRASES, variables: { id: collection }}]
+						refetchQueries: [{ query: GET_COLLECTION_PHRASES, variables: { id: phraseData.collection } }, { query: GET_COLLECTION_PHRASES, variables: { id: collection }}]
 					}));
 				}
 				

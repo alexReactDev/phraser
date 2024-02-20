@@ -41,23 +41,6 @@ class CollectionsController {
 		return result;
 	}
 
-	async getCollectionByPhrase({ id }: { id: string }): Promise<ICollection> {
-		let result;
-
-		try {
-			result = await db.collection("collections").findOne({
-				phrases: { $in: [id] }
-			});
-
-			if(!result) throw new Error("404. Collection not found");
-		} catch (e) {
-			globalErrorHandler(e);
-			throw new Error(`Server error. Failed to find collection. ${e}`);
-		}
-
-		return result;
-	}
-
 	async createCollection({ input }: {input: ICollectionInput}, context: IContext) {
 		const collection: Partial<ICollection> = new Collection(input.name, input.color, input.profile, context.auth.userId);
 		collection.userId = context.auth.userId;

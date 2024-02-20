@@ -22,26 +22,7 @@ export const GET_PHRASE = gql`
 			id,
 			value,
 			translation,
-			created,
-			lastUpdate,
-			meta {
-				guessed, forgotten, lastRepetition
-			}
-		}
-	}
-`;
-
-export const GET_PHRASE_WITH_COLLECTION = gql`
-	query getPhrase($id: ID!) {
-		getPhrase(id: $id) {
-			id,
-			value,
-			translation
-		}
-
-		getPhraseCollection(id: $id) {
-			id,
-			name
+			collection
 		}
 	}
 `;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useMutation, useQuery } from "@apollo/client";
-import { DELETE_PHRASES_MANY, GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION } from "../../../query/phrases";
+import { DELETE_PHRASES_MANY, GET_COLLECTION_PHRASES, GET_PHRASE } from "../../../query/phrases";
 import Loader from "../../../components/Loaders/Loader";
 import ErrorComponent from "../../../components/Errors/ErrorComponent";
 import CollectionPhrase from "../components/CollectionPhrase";
@@ -67,7 +67,7 @@ const CollectionScreen = observer(function({ route, navigation }: Props) {
 				variables: {
 					ids: selectedItems
 				},
-				refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION],
+				refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE],
 				update: (cache) => {
 					cache.modify({
 						id: `Collection:${colId}`,

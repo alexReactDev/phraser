@@ -248,17 +248,6 @@ const root = {
 		return await collectionsController.changeCollectionLock(params);
 	},
 
-	
-	getPhraseCollection: async (params: { id: string }, context: IContext) => {
-		if(!context.auth) throw new Error("401. Authorization required");
-
-		const collection = await collectionsController.getCollectionByPhrase(params);
-
-		if(collection.userId !== context.auth.userId) throw new Error("403. Access denied");
-
-		return collection;
-	},
-
 	getPhrase: async (params: { id: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 

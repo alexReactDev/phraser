@@ -3,7 +3,7 @@ import { IPhrase } from "@ts/phrases";
 import { Ionicons } from "@expo/vector-icons";
 import { fontColorFaint } from "../../../styles/variables";
 import { useMutation } from "@apollo/client";
-import { DELETE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION } from "../../../query/phrases";
+import { DELETE_PHRASE, GET_COLLECTION_PHRASES, GET_PHRASE } from "../../../query/phrases";
 import { useState } from "react";
 import { useClickOutside } from "react-native-click-outside";
 import MovePhrase from "../CollectionScreen/components/MovePhrase";
@@ -46,7 +46,7 @@ const CollectionPhrase = observer(function({ colId, phrase, navigation, editable
 		try {
 			await deletePhrase({
 				variables: { id: phrase.id },
-				refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE, GET_PHRASE_WITH_COLLECTION],
+				refetchQueries: [GET_COLLECTION_PHRASES, GET_PHRASE],
 				update: (cache) => {
 					cache.modify({
 						id: `Collection:${colId}`,
