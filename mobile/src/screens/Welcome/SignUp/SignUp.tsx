@@ -20,6 +20,7 @@ type NavigationProp = StackNavigationProp<WelcomeNavigatorParams, "Sign up", "We
 const SignUp = observer(function({ updateCredentials }: { updateCredentials: (data: IAuthData) => void }) {
 	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
+	const [ retypePassword, setRetypePassword ] = useState("");
 	const [ errorMessage, setErrorMessage ] = useState("");
 	const navigation = useNavigation<NavigationProp>();
 
@@ -38,6 +39,11 @@ const SignUp = observer(function({ updateCredentials }: { updateCredentials: (da
 
 		if(password.length < 6) {
 			setErrorMessage("Password should have at least 6 characters");
+			return;
+		}
+
+		if(retypePassword !== password) {
+			setErrorMessage("Passwords don't match");
 			return;
 		}
 
@@ -89,6 +95,14 @@ const SignUp = observer(function({ updateCredentials }: { updateCredentials: (da
 						setPassword(t);
 					}}
 					placeholder="Password"
+				/>
+				<SecureTextInput
+					value={retypePassword}
+					onChangeText={(t: string) => {
+						setErrorMessage("");
+						setRetypePassword(t);
+					}}
+					placeholder="Retype password"
 				/>
 				<Button title="Sign up" onPress={signUpHandler}></Button>
 				<Button title="Login" onPress={() => navigation.navigate("Login")} color={faintBlue}></Button>
