@@ -51,7 +51,7 @@ function Learn({ route, navigation }: Props) {
 					activeOpacity={0.7}
 					onPress={() => navigation.navigate("Cards", { colId })}
 				>
-				<View style={styles.cardIconContainer}>
+					<View style={styles.cardIconContainer}>
 						<Ionicons name="copy" size={16} color="darkgrey" />
 						<Text style={styles.cardTitle}>
 							Cards
@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		flexWrap: "wrap",
 		justifyContent: "space-between",
-		gap: 10,
 		paddingHorizontal: "7.5%",
 		paddingVertical: 15
 	},
@@ -121,8 +120,8 @@ const styles = StyleSheet.create({
 		color: fontColorFaint
 	},
 	card: {
-		width: 160,
-		height: 150,
+		width: "48%",
+		height: "40%",
 		borderWidth: 1,
 		borderColor: borderColor,
 		borderRadius: 5,
