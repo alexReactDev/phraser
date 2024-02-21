@@ -6,7 +6,7 @@ function LoadingScreen() {
 		<View style={styles.container}>
 			<View style={styles.body}>
 				<Image
-					source={require("@assets/icon256x256.png")}
+					source={require("@assets/icon256x256_transparent.png")}
 					alt="logo"
 					style={styles.image}
 					resizeMode="contain"
