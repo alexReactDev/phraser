@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { getAuthToken, setAuthToken } from "../utils/authToken";
 import { useQuery } from "@apollo/client";
 import { GET_SESSION } from "../query/authorization";
-import Loader from "./Loaders/Loader";
 import Welcome from "../screens/Welcome/Welcome";
 import { IAuthData } from "../types/authorization";
 import session from "../store/session";
@@ -10,6 +9,7 @@ import { observer } from "mobx-react-lite";
 import ErrorComponent from "./Errors/ErrorComponent";
 import { GET_USER_SETTING } from "../query/settings";
 import settings from "../store/settings";
+import LoadingScreen from "./Loaders/LoadingScreen";
 
 const AuthorizationChecker = observer(function ({ children }: any) {
 	const { data, error } = useQuery(GET_SESSION, { 
@@ -74,11 +74,11 @@ const AuthorizationChecker = observer(function ({ children }: any) {
 		return <ErrorComponent message={`Failed to load settings. \n ${settingsError}`} />
 	}
 
-	if(session.loading || (!session.loaded && !session.error)) return <Loader />
+	if(session.loading || (!session.loaded && !session.error)) return <LoadingScreen />
 
 	if(!session.data.token || !session.data.sid) return <Welcome updateCredentials={updateCredentials} />
 
-	if(settings.loading || (!settings.loaded && !settings.error)) return <Loader />
+	if(settings.loading || (!settings.loaded && !settings.error)) return <LoadingScreen />
 
 	return children;
 });
