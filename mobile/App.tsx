@@ -18,6 +18,7 @@ import { setJSExceptionHandler } from "react-native-exception-handler";
 import { useEffect, useState } from "react";
 import * as Sentry from '@sentry/react-native';
 import { StatusBar } from "expo-status-bar";
+import { useColorScheme } from "react-native";
 
 Sentry.init({
   dsn: 'https://b2d6cb5760f1c202f6e86948d4378569@o4506399434080256.ingest.sentry.io/4506399492341760',
@@ -34,6 +35,8 @@ const Navigator = createBottomTabNavigator<NavigatorParams>();
 
 function App() {
   const [ error, setError ] = useState<any>(null);
+  const theme = useColorScheme();
+  const barColor = theme === "dark" ? "#333" : "#fff";
 
   useEffect(() => {
     setJSExceptionHandler((error, isFatal) => {
@@ -52,7 +55,7 @@ function App() {
             <>
               <ErrorMessageToast />
               <LoaderToast />
-              <StatusBar translucent={true} hidden={false} />
+              <StatusBar translucent={true} hidden={false} backgroundColor={barColor} />
               <AuthorizationChecker>
                 <Navigator.Navigator 
                   id="MainNavigator" 
