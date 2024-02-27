@@ -25,7 +25,7 @@ class MailServiceController {
 
 		try {
 			res = await this._transporter.sendMail({
-				from: process.env.SMTP_USER,
+				from: process.env.SMTP_FROM,
 				to: user.email,
 				subject,
 				html
