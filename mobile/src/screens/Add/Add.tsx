@@ -292,7 +292,13 @@ const Add = observer(function ({ route, navigation }: Props) {
 								onPress={() => formik.setFieldValue("translation", suggestionData.getTranslatedText)}
 							>
 								<Text style={styles.suggestionValueText}>
-									{suggestionData?.getTranslatedText}
+									{
+										suggestionData?.getTranslatedText.length > 70
+										?
+										suggestionData.getTranslatedText.slice(0, 70) + "..."
+										:
+										suggestionData?.getTranslatedText
+									}
 								</Text>
 							</TouchableOpacity>
 						</View>
@@ -390,15 +396,18 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between"
 	},
 	suggestionBody: {
+		width: "100%",
 		flexDirection: "row",
 		gap: 5,
-		alignItems: "center"
+		alignItems: "center",
 	},
 	suggestionInfo: {
-
+		position: "absolute",
+		right: 10,
 	},
 	suggestionValue: {
-
+		width: "70%",
+		flexGrow: 1
 	},
 	suggestionValueText: {
 		color: "grey",
@@ -407,6 +416,7 @@ const styles = StyleSheet.create({
 		fontSize: 15
 	},
 	suggestionTitle: {
+		maxWidth: "30%",
 		fontSize: 16,
 		color: "grey",
 		fontStyle: "italic"
