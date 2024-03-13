@@ -124,6 +124,10 @@ const schema = buildSchema(`
 		isVerified: Boolean
 	}
 
+	type PremiumData {
+		hasPremium: Boolean
+	}
+
 	type Query {
 		getCollection(id: ID!): Collection,
 		getProfileCollections(id: ID!): [Collection],
@@ -141,7 +145,8 @@ const schema = buildSchema(`
 		getVerificationStatus(userId: String!): VerificationStatus,
 		searchCollectionPhrases(pattern: String!, colId: ID!): [Phrase],
 		searchProfilePhrases(pattern: String!, profile: ID!): [Phrase],
-		searchProfileCollections(pattern: String!, profile: ID!): [Collection]
+		searchProfileCollections(pattern: String!, profile: ID!): [Collection],
+		getPremiumData(userId: ID!): PremiumData
 	}
 
 	input ProfileInput {

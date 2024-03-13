@@ -18,6 +18,8 @@ import LoaderModal from "@components/Loaders/LoaderModal";
 import ModalWithBody from "@components/ModalWithBody";
 import EditCollection from "../Collections/components/EditCollection";
 import { GET_TRANSLATED_TEXT } from "@query/translation";
+import { GET_PREMIUM_DATA } from "@query/premium";
+import session from "@store/session";
 
 type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 
@@ -26,6 +28,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 	const [ loading, setLoading ] = useState(false);
 	const { data: { getProfileCollections: collections = [] } = {} } = useQuery(GET_PROFILE_COLLECTIONS_FOR_PHRASES, { variables: { id: settings.settings.activeProfile } });
 	const { data: { getPhrase: phraseData } = {}, loading: phraseLoading } = useQuery(GET_PHRASE, { variables: { id: route.params?.mutateId }, skip: !route.params?.mutateId });
+	const { data: { getPremiumData } = {} } = useQuery(GET_PREMIUM_DATA, { variables: { userId: session.data.userId } });
 	const [ createPhrase ] = useMutation(CREATE_PHRASE);
 	const [ mutatePhrase ] = useMutation(MUTATE_PHRASE);
 	const [ movePhrase ] = useMutation(MOVE_PHRASE);
@@ -170,7 +173,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 	const [ getSuggestion, { data: suggestionData, loading: suggestionLoading }] = useLazyQuery(GET_TRANSLATED_TEXT);
 
 	useEffect(() => {
-		if(settings.settings.disableSuggestions) return;
+		if(settings.settings.disableSuggestions|| !getPremiumData?.hasPremium) return;
 		
 		if(!formik.values.value || formik.values.translation) {
 			if(showSuggestion) setShowSuggestion(false);

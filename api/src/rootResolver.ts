@@ -19,6 +19,7 @@ import { IRepetitionInput } from "@ts/repetitions";
 import { ISettings } from "@ts/settings";
 import { IntervalRepetitionDatesValues, PhrasesOrderValues, TextDifficultyValues } from "./types/settingsValues";
 import { IContext } from "@ts-backend/context";
+import PremiumController from "./controller/Premium";
 
 const root = {
 	login: authController.login.bind(authController),
@@ -497,6 +498,14 @@ const root = {
 		if(profile.userId !== context.auth.userId) throw new Error("403. Access denied");
 
 		return await searchController.searchProfileCollections(params);
+	},
+
+	getPremiumData: async (params: { userId: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		if(params.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		return await PremiumController.getPremiumData(params);
 	}
 }
 
