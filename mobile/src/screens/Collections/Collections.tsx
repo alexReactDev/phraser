@@ -23,13 +23,15 @@ import WarningMessage from "@components/Errors/WarningMessage";
 import ModalWithBody from "@components/ModalWithBody";
 import Search from "@components/Search";
 import SearchResults from "./components/SearchResults";
+import Edit from "./Edit/Edit";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
 	Collection: { colId: string },
 	Learn: { colId: string },
 	Cards: { colId: string },
-	AIGeneratedText: { colId: string }
+	AIGeneratedText: { colId: string },
+	Edit: { mutateId: string }
 }
 
 const StackNavigator = createStackNavigator<StackNavigatorParams>();
@@ -48,6 +50,7 @@ function CollectionsNavigation() {
 			<StackNavigator.Screen name="Learn" component={Learn} />
 			<StackNavigator.Screen name="Cards" component={Cards}/>
 			<StackNavigator.Screen name="AIGeneratedText" component={AIGeneratedText} />
+			<StackNavigator.Screen name="Edit" component={Edit} />
 		</StackNavigator.Navigator>
 	)
 }

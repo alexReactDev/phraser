@@ -128,7 +128,7 @@ const CollectionPhrase = observer(function({ phrase, navigation, editable, selec
 					</TouchableOpacity>
 					<TouchableOpacity
 						activeOpacity={0.5}
-						onPress={() => navigation.navigate("Add", { mutateId: phrase.id })}
+						onPress={() => navigation.navigate("Edit", { mutateId: phrase.id })}
 					>
 						<Ionicons name="pencil" size={24} color={"gray"} />
 					</TouchableOpacity>
