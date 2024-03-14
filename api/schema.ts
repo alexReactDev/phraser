@@ -107,7 +107,8 @@ const schema = buildSchema(`
 	type TokenData {
 		token: String,
 		sid: String,
-		userId: String
+		userId: String,
+		type: String
 	}
 
 	type Session {
@@ -289,7 +290,8 @@ const schema = buildSchema(`
 		changePassword(userId: ID!, input: ChangePasswordInput!): String,
 		sendVerificationCode(email: String!): String,
 		resetPassword(input: resetPasswordInput!): TokenData,
-		verifyEmail(userId: String!): String
+		verifyEmail(userId: String!): String,
+		continueWithGoogle(token: String!): TokenData
 	}
 `);
 

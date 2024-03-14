@@ -29,16 +29,27 @@ class UsersController {
 		return user;
 	}
 
-	async createUser({ input }: { input: IUserInput }) {
+	async createUser({ input, type = "default" }: { input: IUserInput, type?: "default" | "oauth" }) {
 		const user = await db.collection("users").findOne({
 			email: input.email
 		})
 
 		if(user) throw new Error("400. Bad request. Email already in use");
-		
-		const hash = await bcrypt.hash(input.password, 3);
 
-		const createdUser = new User(input.email, hash);
+		let createdUser;
+		
+		if(type === "default") {
+			if(!input.password) throw new Error("400. Bad request. Password is required for default auth type");
+			const hash = await bcrypt.hash(input.password, 3);
+			createdUser = new User({
+				email: input.email,
+				password: hash
+			}, "default");
+		} else {
+			createdUser = new User({
+				email: input.email,
+			}, "oauth");
+		}
 
 		try {
 			await db.collection("users").insertOne(createdUser);

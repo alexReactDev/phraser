@@ -6,11 +6,12 @@ import usersController from "./Users";
 import globalErrorHandler from "../misc/globalErrorHandler";
 import { IContext } from "@ts-backend/context";
 import generateId from "../misc/generateId";
-import { IUserInput } from "@ts-backend/users";
+import { IUser, IUserInput } from "@ts-backend/users";
 import bcrypt from "bcrypt";
 import mailService from "./MailService";
 import { v4 } from "uuid";
 import MailService from "./MailService";
+import { AuthType } from "@ts/authorization"
 
 class AuthorizationController {
 	async login({ input }: { input: ILoginInput }, context: IContext) {
@@ -38,7 +39,8 @@ class AuthorizationController {
 
 		const token = await signJWT({
 			sid: session.sid,
-			userId: user.id
+			userId: user.id,
+			type: "default"
 		});
 
 		return {...token};
@@ -75,7 +77,8 @@ class AuthorizationController {
 
 		const token = await signJWT({
 			sid: session.sid,
-			userId 
+			userId,
+			type: "default"
 		});
 
 		return {...token};
@@ -87,12 +90,13 @@ class AuthorizationController {
 		return "";
 	}
 
-	async _createSession({ userId }: { userId: string }) {
+	async _createSession({ userId, type }: { userId: string, type?: AuthType }) {
 		const sid = generateId();
 
 		const session = {
 			sid,
 			userId,
+			type,
 			created: new Date().getTime(),
 			expiresAt: new Date().getTime() + 1000 * 60 * 60 * 24 * 30 //1 month
 		};
@@ -228,7 +232,8 @@ class AuthorizationController {
 
 		const token = await signJWT({
 			sid: session.sid,
-			userId: user.id
+			userId: user.id,
+			type: "default"
 		});
 
 		return { ...token };
@@ -297,6 +302,73 @@ class AuthorizationController {
 			globalErrorHandler(e);
 			throw new Error(`Failed to clean verification codes. ${e}`);
 		}
+	}
+
+	async continueWithGoogle({ token }: { token: string }, context: IContext) {
+		let data;
+
+		try {
+			const res = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${token}`);
+
+			if(!res.ok) throw new Error(res.status + " " + res.statusText);
+
+			data = await res.json();
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`400. Google authorization failed - failed to verify token. ${e}`);
+		}
+
+		const email = data.email;
+
+		let userId;
+		let user: IUser;
+		let emailSent = false;
+
+		try {
+			user =  await db.collection("users").findOne({ email });
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to get user. ${e}`);
+		}
+
+		if(!user) {
+			userId = await usersController.createUser({ input: { email }, type: "oauth" });
+
+			MailService.sendTo({
+				userId,
+				subject: "Welcome",
+				html: `You've successfully created phraser account via google.`
+			});
+			emailSent = true;
+		} else {
+			userId = user.id;
+		}
+
+		if(user && !user.isVerified) {
+			await db.collection("users").updateOne({ id: user.id }, {
+				$set: {
+					isVerified: true
+				}
+			})
+		}
+
+		const session = await this._createSession({ userId, type: "google" });
+
+		const jwt = await signJWT({
+			sid: session.sid,
+			userId,
+			type: "google"
+		});
+
+		if(!emailSent) {
+			mailService.sendTo({ 
+				userId: user.id, 
+				subject: "New login", 
+				html: `New successful login via google from ip ${context.req.ip}. If it wasn't you, consider changing your <b>google account</b> password.`
+			});
+		}
+
+		return { ...jwt };
 	}
 }
 

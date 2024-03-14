@@ -1,4 +1,4 @@
-import { IChangePasswordInput, IJWT } from "./types/authorization";
+import { IChangePasswordInput } from "./types/authorization";
 import collectionsController from "./controller/Collections";
 import phrasesController from "./controller/Phrases";
 import profilesController from "./controller/Profiles";
@@ -28,6 +28,7 @@ const root = {
 	sendVerificationCode: authController.sendVerificationCode.bind(authController),
 	checkVerificationCode: authController.checkVerificationCode.bind(authController),
 	resetPassword: authController.resetPassword.bind(authController),
+	continueWithGoogle: authController.continueWithGoogle.bind(authController),
 
 	logout: async (params: {}, context: IContext) => {
 		if(!context.auth) return "OK";
