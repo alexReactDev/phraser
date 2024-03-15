@@ -24,6 +24,7 @@ import ModalWithBody from "@components/ModalWithBody";
 import Search from "@components/Search";
 import SearchResults from "./components/SearchResults";
 import Edit from "./Edit/Edit";
+import Description from "./Learn/Description/Description";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
@@ -31,6 +32,7 @@ export type StackNavigatorParams = {
 	Learn: { colId: string },
 	Cards: { colId: string },
 	AIGeneratedText: { colId: string },
+	Description: { colId: string },
 	Edit: { mutateId: string }
 }
 
@@ -50,6 +52,7 @@ function CollectionsNavigation() {
 			<StackNavigator.Screen name="Learn" component={Learn} />
 			<StackNavigator.Screen name="Cards" component={Cards}/>
 			<StackNavigator.Screen name="AIGeneratedText" component={AIGeneratedText} />
+			<StackNavigator.Screen name="Description" component={Description} />
 			<StackNavigator.Screen name="Edit" component={Edit} />
 		</StackNavigator.Navigator>
 	)

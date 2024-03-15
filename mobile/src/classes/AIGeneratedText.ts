@@ -5,6 +5,7 @@ import Learner from "./Learner";
 import Repetition from "./RepetitionCreator";
 import session from "@store/session";
 import { client } from "src/apollo";
+import { IPhraseData } from "@ts-frontend/learn";
 
 export interface IValue {
 	phrases: IPhrase[],
@@ -20,12 +21,6 @@ interface IParams {
 
 export interface IRemembered {
 	[key: string]: boolean
-}
-
-interface IPhraseData {
-	phrase: IPhrase,
-	guessed: number,
-	forgotten: number
 }
 
 class AIGeneratedText extends Learner {
@@ -167,11 +162,6 @@ class AIGeneratedText extends Learner {
 			variables: {
 				phrases
 			},
-			context: {
-				headers: {
-					"Authorization": `Bearer ${session.data.token}`
-				}
-			},
 			fetchPolicy: "no-cache"
 		})).data.getGeneratedText;
 	}
@@ -181,11 +171,6 @@ class AIGeneratedText extends Learner {
 			query: GET_GENERATED_SENTENCES,
 			variables: {
 				phrases
-			},
-			context: {
-				headers: {
-					"Authorization": `Bearer ${session.data.token}`
-				}
 			},
 			fetchPolicy: "no-cache"
 		})).data.getGeneratedSentences

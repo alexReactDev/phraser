@@ -48,6 +48,48 @@ class AIGeneratedTextController {
 		return JSON.parse((completion.choices[0].message.content as string));
 	}
 
+	async generateDescription({ phrase }: { phrase: string}, context: IContext) {
+		const userSettings = await settingsController.getUserSettings({ id: context.auth.userId });
+
+		let completion;
+
+		try {
+			completion = await openai.chat.completions.create({
+				messages: [
+					{ role: "system", content: `You will get the word from user. You have to generate a short description, with help of which user should be able to guess the word. The description should be the same language as the word, and must not include the word itself.`},
+					{ role: "user", content: phrase}
+				],
+				model: userSettings.settings.useGPT3 ? models.gpt3 : models.gpt4
+			})
+		} catch(e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to get response from chatGPT. ${e}`);
+		}
+
+		return completion.choices[0].message.content;
+	}
+
+	async generateHintSentence({ phrase }: { phrase: string}, context: IContext) {
+		const userSettings = await settingsController.getUserSettings({ id: context.auth.userId });
+
+		let completion;
+
+		try {
+			completion = await openai.chat.completions.create({
+				messages: [
+					{ role: "system", content: `You will get the word from a user. You have to generate sentence with this word. Sentence should be in the same language as the word. The word itself should be replaced with ellipsis.`},
+					{ role: "user", content: phrase}
+				],
+				model: userSettings.settings.useGPT3 ? models.gpt3 : models.gpt4
+			})
+		} catch(e) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to get response from chatGPT. ${e}`);
+		}
+
+		return completion.choices[0].message.content;
+	}
+
 	_getDifficultyLevel(userSettings: IUserSettings) {
 		switch(userSettings.settings.textDifficulty) {
 			case "simple": return " Also, the text must be simple and understandable for readers with A2 CEFR level."

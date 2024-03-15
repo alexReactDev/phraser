@@ -448,6 +448,44 @@ const root = {
 		return await AIGeneratedTextController.generateSentences(params, context);
 	},
 
+	getGeneratedDescription: async (params: { phrase: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		let premium;
+
+		try {
+			premium = await db.collection("premium").findOne({
+				userId: context.auth.userId
+			})
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to get premium information ${e.toString()}`);
+		}
+
+		if(!premium) throw new Error("403. Access denied - premium subscription is required");
+
+		return await AIGeneratedTextController.generateDescription(params, context);
+	},
+
+	getGeneratedHintSentence: async (params: { phrase: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		let premium;
+
+		try {
+			premium = await db.collection("premium").findOne({
+				userId: context.auth.userId
+			})
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to get premium information ${e.toString()}`);
+		}
+
+		if(!premium) throw new Error("403. Access denied - premium subscription is required");
+
+		return await AIGeneratedTextController.generateHintSentence(params, context);
+	},
+
 	getTranslatedText: async (params: { input: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 

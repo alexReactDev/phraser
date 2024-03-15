@@ -15,15 +15,11 @@ import settings from "@store/settings";
 import { IRepetition, IRepetitionInput } from "@ts/repetitions";
 import Result from "../components/Result";
 import ProgressBar from "../components/ProgressBar";
+import { ProgressData } from "@ts-frontend/learn";
 
 interface PhraseData {
 	value: string,
 	translation: string
-}
-
-interface ProgressData {
-	total: number,
-	progress: number
 }
 
 type Props = StackScreenProps<StackNavigatorParams, "Cards", "collectionsNavigator">;

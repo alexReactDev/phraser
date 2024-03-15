@@ -17,15 +17,11 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from '@expo/vector-icons';
 import { IRepetitionInput } from "@ts/repetitions";
 import Result from "../components/Result";
-import { faintBlue, fontColor } from "@styles/variables";
+import { faintBlue } from "@styles/variables";
 import ShowHidePhrase from "./components/ShowHidePhrase";
+import { ProgressData } from "@ts-frontend/learn";
 
 type Props = StackScreenProps<StackNavigatorParams, "AIGeneratedText", "collectionsNavigator">;
-
-interface ProgressData {
-	total: number,
-	progress: number
-}
 
 const AIGeneratedText = observer(function ({ route, navigation }: Props) {
 	const colId = route.params.colId;
@@ -45,7 +41,7 @@ const AIGeneratedText = observer(function ({ route, navigation }: Props) {
 
 	const [ controller, setController ] = useState<AIGeneratedTextController>();
 	const [ currentValue, setValue ] = useState<IValue>({ phrases: [], text: [] });
-	const [ progress, setProgress ] = useState<ProgressData>({ progress: 0, total: 0});
+	const [ progress, setProgress ] = useState<ProgressData>({ progress: 0, total: 1});
 
 	const [ mode, setMode ] = useState<TAIGeneratedTextMode>("text");
 

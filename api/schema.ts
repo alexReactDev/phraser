@@ -140,6 +140,8 @@ const schema = buildSchema(`
 		getUserRepetitions(userId: ID!): [Repetition],
 		getGeneratedText(phrases: [String]!): String,
 		getGeneratedSentences(phrases: [String]!): [String],
+		getGeneratedDescription(phrase: String!): String,
+		getGeneratedHintSentence(phrase: String!): String,
 		getTranslatedText(input: String!): String,
 		getSupportedLanguages: [Language],
 		checkVerificationCode(email: String!, code: String!): String,
