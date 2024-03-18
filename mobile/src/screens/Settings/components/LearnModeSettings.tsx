@@ -8,7 +8,7 @@ import { useMutation } from "@apollo/client";
 import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "../../../query/settings";
 import session from "../../../store/session";
 import { useState } from "react";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import SettingsGroup from "./SettingsGroup";
 

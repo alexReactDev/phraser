@@ -28,6 +28,7 @@ import Description from "./Learn/Description/Description";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CollectionsTutorial from "./components/CollectionsTutorial";
 import AutoCollectionsTutorial from "./components/AutoCollectionsTutorial";
+import { skipTutorial } from "@utils/tutorial";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
@@ -73,17 +74,19 @@ const Collections = observer(function ({ navigation }: Props) {
 	const [ showAutoCollectionsTutorial, setShowAutoCollectionsTutorial ] = useState(false);
 
 	useEffect(() => {
-		(async () => {
-			const tutorialPassed = await AsyncStorage.getItem("collectionsTutorialPassed");
-			if(tutorialPassed !== "true") setShowTutorial(true);
-		})();
-	}, []);
+		const unsubscribe = navigation.addListener('focus', () => {
+			(async () => {
+				const tutorialPassed = await AsyncStorage.getItem("collectionsTutorialPassed");
+				if(tutorialPassed !== "true") setShowTutorial(true);
+			})();
 
-	useEffect(() => {
-		(async () => {
-			const tutorialPassed = await AsyncStorage.getItem("autoCollectionsTutorialPassed");
-			if(tutorialPassed !== "true") setShowAutoCollectionsTutorial(true);
-		})();
+			(async () => {
+				const tutorialPassed = await AsyncStorage.getItem("autoCollectionsTutorialPassed");
+				if(tutorialPassed !== "true") setShowAutoCollectionsTutorial(true);
+			})();
+		});
+	  
+		return unsubscribe;
 	}, []);
 	
 	function autoCollectionsErrorHandler(e: any) {
@@ -98,6 +101,12 @@ const Collections = observer(function ({ navigation }: Props) {
 	async function setAutoCollectionsTutorialPassed() {
 		setShowAutoCollectionsTutorial(false);
 		await AsyncStorage.setItem("autoCollectionsTutorialPassed", "true");
+	}
+
+	function skipTutorialHandler() {
+		setShowTutorial(false);
+		setShowAutoCollectionsTutorial(false);
+		skipTutorial();
 	}
 
 	if(loading) return <Loader />
@@ -123,10 +132,10 @@ const Collections = observer(function ({ navigation }: Props) {
 				<EditCollection onReady={() => setDisplayModal(false)} />
 			</ModalWithBody>
 			<ModalWithBody visible={showTutorial} onClose={setTutorialPassed}>
-				<CollectionsTutorial onClose={setTutorialPassed} />
+				<CollectionsTutorial onClose={setTutorialPassed} skipTutorial={skipTutorialHandler} />
 			</ModalWithBody>
 			<ModalWithBody visible={showAutoCollectionsTutorial && !showTutorial} onClose={setAutoCollectionsTutorialPassed}>
-				<AutoCollectionsTutorial onClose={setAutoCollectionsTutorialPassed} />
+				<AutoCollectionsTutorial onClose={setAutoCollectionsTutorialPassed} skipTutorial={skipTutorialHandler} />
 			</ModalWithBody>
 			<Search placeholder="Search collections, phrases..." initialState="" onChange={setSearchQuery} />
 			<ScrollView>

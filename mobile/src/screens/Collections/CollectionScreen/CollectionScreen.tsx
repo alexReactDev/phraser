@@ -16,7 +16,7 @@ import CollectionHeaderButtons from "../components/CollectionHeaderButtons";
 import { IPhrase } from "@ts/phrases";
 import MovePhrase from "./components/MovePhrase";
 import { observer } from "mobx-react-lite";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import LearnButton from "./components/LearnButton";
 import ModalWithBody from "@components/ModalWithBody";

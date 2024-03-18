@@ -9,7 +9,7 @@ import settings from "../../../store/settings";
 import { fontColor } from "../../../styles/variables";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import SettingsGroup from "./SettingsGroup";
 import StyledTextInput from "@components/Inputs/StyledTextInput";

@@ -15,7 +15,7 @@ import EditCollection from "../../../components/EditCollection";
 import ModalWithBody from "@components/ModalWithBody";
 import SaveBtn from "@components/SaveBtn";
 import loadingSpinner from "@store/loadingSpinner";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 
 type Props = StackScreenProps<StackNavigatorParams, "Edit", "collectionsNavigator">;
 

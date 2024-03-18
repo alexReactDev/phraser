@@ -5,7 +5,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "@query/settings";
 import settings from "@store/settings";
 import loadingSpinner from "@store/loadingSpinner";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import session from "@store/session";
 import { GET_SUPPORTED_LANGUAGES } from "@query/translation";
 import SelectDropdown from "react-native-select-dropdown";

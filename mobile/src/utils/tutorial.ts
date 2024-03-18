@@ -1,6 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import toastMessage from "@store/toastMessage";
 
 export async function skipTutorial() {
+	await AsyncStorage.setItem("welcomeTutorialPassed", "true");
 	await AsyncStorage.setItem("addTutorialPassed", "true");
 	await AsyncStorage.setItem("collectionsTutorialPassed", "true");
 	await AsyncStorage.setItem("autoCollectionsTutorialPassed", "true");
@@ -9,9 +11,11 @@ export async function skipTutorial() {
 	await AsyncStorage.setItem("AIGeneratedTextTutorialPassed", "true");
 	await AsyncStorage.setItem("descriptionTutorialPassed", "true");
 
+	toastMessage.setInfoMessage("You can enable tutorial again anytime in the app settings");
 }
 
 export async function enableTutorial() {
+	await AsyncStorage.setItem("welcomeTutorialPassed", "false");
 	await AsyncStorage.setItem("addTutorialPassed", "false");
 	await AsyncStorage.setItem("collectionsTutorialPassed", "false");
 	await AsyncStorage.setItem("autoCollectionsTutorialPassed", "false");

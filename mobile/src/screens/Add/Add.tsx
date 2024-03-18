@@ -12,7 +12,7 @@ import { NavigatorParams } from "../../../App";
 import settings from "../../store/settings";
 import { observer } from "mobx-react-lite";
 import loadingSpinner from "@store/loadingSpinner";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import ModalWithBody from "@components/ModalWithBody";
 import EditCollection from "../../components/EditCollection";
 import { GET_TRANSLATED_TEXT } from "@query/translation";
@@ -24,6 +24,7 @@ import SaveBtn from "@components/SaveBtn";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AddTutorial from "./components/AddTutorial";
 import WelcomeTutorial from "./components/WelcomeTutorial";
+import { skipTutorial } from "@utils/tutorial";
 
 type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 
@@ -42,17 +43,19 @@ const Add = observer(function ({ route, navigation }: Props) {
 	const [ showWelcomeTutorial, setShowWelcomeTutorial ] = useState(false);
 
 	useEffect(() => {
-		(async () => {
-			const tutorialPassed = await AsyncStorage.getItem("welcomeTutorialPassed");
-			if(tutorialPassed !== "true") setShowWelcomeTutorial(true);
-		})();
-	}, []);
+		const unsubscribe = navigation.addListener('focus', () => {
+			(async () => {
+				const tutorialPassed = await AsyncStorage.getItem("welcomeTutorialPassed");
+				if(tutorialPassed !== "true") setShowWelcomeTutorial(true);
+			})();
 
-	useEffect(() => {
-		(async () => {
-			const tutorialPassed = await AsyncStorage.getItem("addTutorialPassed");
-			if(tutorialPassed !== "true") setShowTutorial(true);
-		})();
+			(async () => {
+				const tutorialPassed = await AsyncStorage.getItem("addTutorialPassed");
+				if(tutorialPassed !== "true") setShowTutorial(true);
+			})();
+		});
+	  
+		return unsubscribe;
 	}, []);
 	
 	const selectRef = useRef<any>(null);
@@ -179,6 +182,12 @@ const Add = observer(function ({ route, navigation }: Props) {
 		await AsyncStorage.setItem("welcomeTutorialPassed", "true");
 	}
 
+	function skipTutorialHandler() {
+		setShowTutorial(false);
+		setShowWelcomeTutorial(false);
+		skipTutorial();
+	}
+
 	return (
 		<View
 			style={styles.container}
@@ -187,10 +196,10 @@ const Add = observer(function ({ route, navigation }: Props) {
 				<EditCollection onReady={() => setDisplayModal(false)} />
 			</ModalWithBody>
 			<ModalWithBody visible={showWelcomeTutorial} onClose={setWelcomeTutorialPassed}>
-				<WelcomeTutorial onClose={setWelcomeTutorialPassed} />
+				<WelcomeTutorial onClose={setWelcomeTutorialPassed} skipTutorial={skipTutorialHandler} />
 			</ModalWithBody>
 			<ModalWithBody visible={showTutorial && !showWelcomeTutorial} onClose={setTutorialPassed}>
-				<AddTutorial onClose={setTutorialPassed} />
+				<AddTutorial onClose={setTutorialPassed} skipTutorial={skipTutorialHandler} />
 			</ModalWithBody>
 			<View style={styles.labelContainer}>
 				<Text style={{...styles.inputLabel, marginBottom: -2 }}>

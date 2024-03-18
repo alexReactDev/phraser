@@ -10,7 +10,7 @@ import AuthorizationChecker from "./src/components/AuthorizationChecker";
 import Profiles from "./src/components/Profiles";
 import { ClickOutsideProvider } from "react-native-click-outside";
 import { client } from "src/apollo";
-import ErrorMessageToast from "@components/Errors/ErrorMessageToast";
+import ErrorMessageToast from "@components/Errors/ToastMessage";
 import LoaderToast from "@components/Loaders/LoaderToast";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorComponent from "@components/Errors/ErrorComponent";

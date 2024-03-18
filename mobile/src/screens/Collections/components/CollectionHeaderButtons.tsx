@@ -8,7 +8,7 @@ import { fontColor } from "@styles/variables";
 import { useClickOutside } from "react-native-click-outside";
 import ModalComponent from "@components/ModalComponent";
 import { observer } from "mobx-react-lite";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import { StackScreenProps } from "@react-navigation/stack";
 import { StackNavigatorParams } from "../Collections";

@@ -8,7 +8,7 @@ import { StyleSheet, Switch, Text, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import { Ionicons } from '@expo/vector-icons';
 import session from "@store/session";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import { observer } from "mobx-react-lite";
 import SettingsGroup from "./SettingsGroup";

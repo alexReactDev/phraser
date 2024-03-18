@@ -6,7 +6,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_COLLECTION, GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES, MUTATE_COLLECTION } from "../query/collections";
 import settings from "../store/settings";
 import { observer } from "mobx-react-lite";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
 

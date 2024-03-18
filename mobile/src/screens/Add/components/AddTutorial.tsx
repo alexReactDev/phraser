@@ -1,11 +1,10 @@
 import { useQuery } from "@apollo/client";
 import { GET_PREMIUM_DATA } from "@query/premium";
 import session from "@store/session";
-import { skipTutorial } from "@utils/tutorial";
 import { observer } from "mobx-react-lite";
 import { Button, StyleSheet, Text, View } from "react-native";
 
-const AddTutorial = observer(function ({ onClose }: { onClose: () => void}) {
+const AddTutorial = observer(function ({ onClose, skipTutorial }: { onClose: () => void, skipTutorial: () => void }) {
 	const { data: { getPremiumData } = {} } = useQuery(GET_PREMIUM_DATA, { variables: { userId: session.data.userId } });
 
 	return (

@@ -10,7 +10,7 @@ import settings from "../store/settings";
 import { borderColor, fontColor, nondescriptColor } from "../styles/variables";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 
 const Profiles = observer(function () {
 	const { data, loading, error } = useQuery(GET_USER_PROFILES, {

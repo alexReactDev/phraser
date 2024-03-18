@@ -3,6 +3,7 @@ import { makeAutoObservable } from "mobx";
 class ErrorMessage {
 	displayMessage = false;
 	message = "";
+	type = "";
 
 	constructor() {
 		makeAutoObservable(this);
@@ -11,6 +12,13 @@ class ErrorMessage {
 	setErrorMessage(message: string) {
 		this.displayMessage = true;
 		this.message = message;
+		this.type = "error";
+	}
+
+	setInfoMessage(message: string) {
+		this.displayMessage = true;
+		this.message = message;
+		this.type = "info";
 	}
 
 	dismissErrorMessage() {

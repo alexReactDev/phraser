@@ -8,7 +8,7 @@ import { ICollection } from "@ts/collections";
 import { useState } from "react";
 import { GET_COLLECTION_PHRASES, MOVE_PHRASE, MOVE_PHRASES_MANY } from "@query/phrases";
 import { observer } from "mobx-react-lite";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 
 interface IProps {

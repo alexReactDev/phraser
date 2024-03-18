@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { observer } from "mobx-react-lite";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import { bgColorAccent } from "@styles/variables";
 import { useEffect } from "react";
 
@@ -24,7 +24,7 @@ const ErrorMessageToast = observer(function () {
 			>
 				<Ionicons name="close" color="gray" size={24} />
 			</TouchableOpacity>
-			<Ionicons style={styles.icon} name="alert-circle-outline" size={22} color="gray" />
+			<Ionicons style={styles.icon} name={errorMessage.type === "error" ? "alert-circle-outline": "information-circle-outline"} size={22} color="gray" />
 			<Text style={styles.message}>
 				{errorMessage.message}
 			</Text>

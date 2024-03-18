@@ -9,7 +9,7 @@ import { DELETE_PROFILE, GET_USER_PROFILES, MUTATE_PROFILE } from "../../../quer
 import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "../../../query/settings";
 import { observer } from "mobx-react-lite";
 import session from "../../../store/session";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
 import ModalWithBody from "@components/ModalWithBody";

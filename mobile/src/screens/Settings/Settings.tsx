@@ -13,6 +13,7 @@ import VerifyEmail from "./components/VerifyEmail";
 import { observer } from "mobx-react-lite";
 import session from "@store/session";
 import { useEffect, useState } from "react";
+import OtherSettings from "./components/OtherSettings";
 
 export type SettingsNavigatorParams = {
 	Settings: undefined,
@@ -70,6 +71,7 @@ const Settings = observer(function() {
 			<AutoCollectionsSettings />
 			<LearnModeSettings />
 			<AISettings />
+			<OtherSettings />
 			<AccountManagement />
 		</ScrollView>
 	)

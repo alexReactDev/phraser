@@ -1,7 +1,6 @@
-import { skipTutorial } from "@utils/tutorial";
 import { Button, StyleSheet, Text, View } from "react-native";
 
-function AutoCollectionsTutorial({ onClose }: { onClose: () => void}) {
+function AutoCollectionsTutorial({ onClose, skipTutorial }: { onClose: () => void, skipTutorial: () => void }) {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>

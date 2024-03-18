@@ -9,7 +9,7 @@ import { useClickOutside } from "react-native-click-outside";
 import MovePhrase from "../CollectionScreen/components/MovePhrase";
 import Checkbox from "expo-checkbox";
 import { observer } from "mobx-react-lite";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import ModalWithBody from "@components/ModalWithBody";
 import { ICollectionMeta } from "@ts/collections";

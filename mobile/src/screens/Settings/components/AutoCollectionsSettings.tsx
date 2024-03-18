@@ -10,7 +10,7 @@ import { observer } from "mobx-react-lite";
 import session from "@store/session";
 import Tip from "@components/Tip";
 import { TIntervalRepetitionDates } from "@ts/settings";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import SettingsGroup from "./SettingsGroup";
 

@@ -1,17 +1,16 @@
 import { removeAuthToken } from "@utils/authToken";
 import SettingsGroup from "./SettingsGroup";
 import session from "@store/session";
-import errorMessage from "@store/errorMessage";
+import errorMessage from "@store/toastMessage";
 import { useMutation } from "@apollo/client";
 import { LOGOUT } from "@query/authorization";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { observer } from "mobx-react-lite";
 import { useNavigation } from "@react-navigation/native";
 import { SettingsNavigatorParams } from "../Settings";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { fontColor } from "@styles/variables";
 import { useState } from "react";
-import ModalComponent from "@components/ModalComponent";
 import DeleteAccount from "./DeleteAccount";
 import ModalWithBody from "@components/ModalWithBody";
 
