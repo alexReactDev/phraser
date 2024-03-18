@@ -3,7 +3,7 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { useMutation, useQuery } from "@apollo/client";
 import { CHANGE_COLLECTION_LOCK, DELETE_COLLECTION, GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "../../../query/collections";
-import EditCollection from "./EditCollection";
+import EditCollection from "../../../components/EditCollection";
 import { fontColor } from "@styles/variables";
 import { useClickOutside } from "react-native-click-outside";
 import ModalComponent from "@components/ModalComponent";

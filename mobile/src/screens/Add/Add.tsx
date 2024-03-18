@@ -14,13 +14,16 @@ import { observer } from "mobx-react-lite";
 import loadingSpinner from "@store/loadingSpinner";
 import errorMessage from "@store/errorMessage";
 import ModalWithBody from "@components/ModalWithBody";
-import EditCollection from "../Collections/components/EditCollection";
+import EditCollection from "../../components/EditCollection";
 import { GET_TRANSLATED_TEXT } from "@query/translation";
 import { GET_PREMIUM_DATA } from "@query/premium";
 import session from "@store/session";
 import globalStyles from "@styles/phraseEditorStyles";
 import SelectWithAddBtn from "@components/SelectWithAddBtn";
 import SaveBtn from "@components/SaveBtn";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import AddTutorial from "./components/AddTutorial";
+import WelcomeTutorial from "./components/WelcomeTutorial";
 
 type Props = BottomTabScreenProps<NavigatorParams, "Add", "MainNavigator">;
 
@@ -34,6 +37,23 @@ const Add = observer(function ({ route, navigation }: Props) {
 	const [ showSuggestion, setShowSuggestion ] = useState(false);
 	const [ loading, setLoading ] = useState(false);
 	const [ displayModal, setDisplayModal ] = useState(false);
+
+	const [ showTutorial, setShowTutorial ] = useState(false);
+	const [ showWelcomeTutorial, setShowWelcomeTutorial ] = useState(false);
+
+	useEffect(() => {
+		(async () => {
+			const tutorialPassed = await AsyncStorage.getItem("welcomeTutorialPassed");
+			if(tutorialPassed !== "true") setShowWelcomeTutorial(true);
+		})();
+	}, []);
+
+	useEffect(() => {
+		(async () => {
+			const tutorialPassed = await AsyncStorage.getItem("addTutorialPassed");
+			if(tutorialPassed !== "true") setShowTutorial(true);
+		})();
+	}, []);
 	
 	const selectRef = useRef<any>(null);
 	const translationInputRef = useRef<any>(null);
@@ -149,12 +169,28 @@ const Add = observer(function ({ route, navigation }: Props) {
 		};
 	}
 
+	async function setTutorialPassed() {
+		setShowTutorial(false);
+		await AsyncStorage.setItem("addTutorialPassed", "true");
+	}
+
+	async function setWelcomeTutorialPassed() {
+		setShowWelcomeTutorial(false);
+		await AsyncStorage.setItem("welcomeTutorialPassed", "true");
+	}
+
 	return (
 		<View
 			style={styles.container}
 		>
 			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<EditCollection onReady={() => setDisplayModal(false)} />
+			</ModalWithBody>
+			<ModalWithBody visible={showWelcomeTutorial} onClose={setWelcomeTutorialPassed}>
+				<WelcomeTutorial onClose={setWelcomeTutorialPassed} />
+			</ModalWithBody>
+			<ModalWithBody visible={showTutorial && !showWelcomeTutorial} onClose={setTutorialPassed}>
+				<AddTutorial onClose={setTutorialPassed} />
 			</ModalWithBody>
 			<View style={styles.labelContainer}>
 				<Text style={{...styles.inputLabel, marginBottom: -2 }}>

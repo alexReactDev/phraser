@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, View } from "react-native";
+import { Modal, ScrollView, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
@@ -17,12 +17,12 @@ function ModalComponent({ visible, onClose, children }: IProps) {
 			statusBarTranslucent
 			onRequestClose={onClose}
 		>
-			<View style={styles.modalContainer}>
+			<ScrollView style={styles.modalContainer} contentContainerStyle={{justifyContent: "center", alignItems: "center", flexGrow: 1 }}>
 				<TouchableOpacity style={styles.modalCross} onPress={onClose}>
 					<Ionicons name="close" color="gray" size={32} />
 				</TouchableOpacity>
 				{children}
-			</View>
+			</ScrollView>
 		</Modal>
 	)
 }
@@ -32,14 +32,13 @@ const styles = StyleSheet.create({
 		position: "relative",
 		width: "100%",
 		height: "100%",
-		justifyContent: "center",
-		alignItems: "center",
 		backgroundColor: "#ffffff88"
 	},
 	modalCross: {
 		position: "absolute",
 		top: 15,
-		right: 15
+		right: 15,
+		zIndex: 10
 	}
 })
 

@@ -11,7 +11,7 @@ import LoaderModal from "@components/Loaders/LoaderModal";
 import globalStyles from "@styles/phraseEditorStyles";
 import { Ionicons } from '@expo/vector-icons';
 import SelectWithAddBtn from "@components/SelectWithAddBtn";
-import EditCollection from "../components/EditCollection";
+import EditCollection from "../../../components/EditCollection";
 import ModalWithBody from "@components/ModalWithBody";
 import SaveBtn from "@components/SaveBtn";
 import loadingSpinner from "@store/loadingSpinner";

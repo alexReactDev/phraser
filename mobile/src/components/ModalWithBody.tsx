@@ -19,7 +19,9 @@ function ModalWithBody({ children, ...props}: IProps) {
 
 const styles = StyleSheet.create({
 	body: {
-		width: 300,
+		width: "85%",
+		marginBottom: 30,
+		marginTop: 55,
 		borderWidth: 1,
 		borderColor: "gray",
 		borderStyle: "solid",

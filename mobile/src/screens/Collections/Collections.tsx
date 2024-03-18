@@ -10,7 +10,7 @@ import CollectionScreen from "./CollectionScreen/CollectionScreen";
 import CollectionHeaderButtons from "./components/CollectionHeaderButtons";
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
-import EditCollection from "./components/EditCollection";
+import EditCollection from "../../components/EditCollection";
 import Learn from "./Learn/Learn";
 import Profiles from "../../components/Profiles";
 import settings from "../../store/settings";
