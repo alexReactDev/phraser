@@ -9,7 +9,7 @@ import { StackScreenProps, createStackNavigator } from "@react-navigation/stack"
 import CollectionScreen from "./CollectionScreen/CollectionScreen";
 import CollectionHeaderButtons from "./components/CollectionHeaderButtons";
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditCollection from "../../components/EditCollection";
 import Learn from "./Learn/Learn";
 import Profiles from "../../components/Profiles";
@@ -25,6 +25,9 @@ import Search from "@components/Search";
 import SearchResults from "./components/SearchResults";
 import Edit from "./Edit/Edit";
 import Description from "./Learn/Description/Description";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import CollectionsTutorial from "./components/CollectionsTutorial";
+import AutoCollectionsTutorial from "./components/AutoCollectionsTutorial";
 
 export type StackNavigatorParams = {
 	Collections: undefined,
@@ -66,13 +69,40 @@ const Collections = observer(function ({ navigation }: Props) {
 	const [ autoCollectionsError, setAutoCollectionsError ] = useState<any>("");
 	const [ searchQuery, setSearchQuery ] = useState("");
 
-	if(loading) return <Loader />
+	const [ showTutorial, setShowTutorial ] = useState(false);
+	const [ showAutoCollectionsTutorial, setShowAutoCollectionsTutorial ] = useState(false);
 
-	if(error) return <ErrorComponent message="Failed to load collections"/>
+	useEffect(() => {
+		(async () => {
+			const tutorialPassed = await AsyncStorage.getItem("collectionsTutorialPassed");
+			if(tutorialPassed !== "true") setShowTutorial(true);
+		})();
+	}, []);
 
+	useEffect(() => {
+		(async () => {
+			const tutorialPassed = await AsyncStorage.getItem("autoCollectionsTutorialPassed");
+			if(tutorialPassed !== "true") setShowAutoCollectionsTutorial(true);
+		})();
+	}, []);
+	
 	function autoCollectionsErrorHandler(e: any) {
 		setAutoCollectionsError(e);
 	}
+
+	async function setTutorialPassed() {
+		setShowTutorial(false);
+		await AsyncStorage.setItem("collectionsTutorialPassed", "true");
+	}
+
+	async function setAutoCollectionsTutorialPassed() {
+		setShowAutoCollectionsTutorial(false);
+		await AsyncStorage.setItem("autoCollectionsTutorialPassed", "true");
+	}
+
+	if(loading) return <Loader />
+
+	if(error) return <ErrorComponent message="Failed to load collections"/>
 
 	if(searchQuery) return (
 		<View style={styles.container}>
@@ -91,6 +121,12 @@ const Collections = observer(function ({ navigation }: Props) {
 		<View style={styles.container}>
 			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
 				<EditCollection onReady={() => setDisplayModal(false)} />
+			</ModalWithBody>
+			<ModalWithBody visible={showTutorial} onClose={setTutorialPassed}>
+				<CollectionsTutorial onClose={setTutorialPassed} />
+			</ModalWithBody>
+			<ModalWithBody visible={showAutoCollectionsTutorial && !showTutorial} onClose={setAutoCollectionsTutorialPassed}>
+				<AutoCollectionsTutorial onClose={setAutoCollectionsTutorialPassed} />
 			</ModalWithBody>
 			<Search placeholder="Search collections, phrases..." initialState="" onChange={setSearchQuery} />
 			<ScrollView>
