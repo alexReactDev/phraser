@@ -10,13 +10,15 @@ import Loader from "@components/Loaders/Loader";
 import { ProgressData } from "@ts-frontend/learn";
 import { Description as DescriptionController, IValue } from "src/classes/Description";
 import ProgressBar from "../components/ProgressBar";
-import phraseEditorStyles from "@styles/phraseEditorStyles";
 import { Ionicons } from '@expo/vector-icons';
-import { faintBlue, fontColor, nondescriptColor } from "@styles/variables";
+import { fontColor, nondescriptColor } from "@styles/variables";
 import settings from "@store/settings";
 import { observer } from "mobx-react-lite";
 import { IRepetitionInput } from "@ts/repetitions";
 import Result from "../components/Result";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import ModalWithBody from "@components/ModalWithBody";
+import DescriptionTutorial from "./components/DescriptionTutorial";
 
 type Props = StackScreenProps<StackNavigatorParams, "Description", "collectionsNavigator">;
 
@@ -43,6 +45,15 @@ const Description = observer(function({ route, navigation }: Props) {
 	const [ result, setResult ] = useState<IRepetitionInput | null>(null);
 
 	const [ showPhrase, setShowPhrase ] = useState(false);
+
+	const [ showTutorial, setShowTutorial ] = useState(false);
+
+	useEffect(() => {
+		(async () => {
+			const tutorialPassed = await AsyncStorage.getItem("descriptionTutorialPassed");
+			if(tutorialPassed !== "true") setShowTutorial(true);
+		})();
+	}, [])
 
 	useEffect(() => {
 		if(!data || !colData) return;
@@ -109,6 +120,11 @@ const Description = observer(function({ route, navigation }: Props) {
 		setLoading(false);
 	}
 
+	async function setTutorialPassed() {
+		setShowTutorial(false);
+		await AsyncStorage.setItem("descriptionTutorialPassed", "true");
+	}
+
 	if(generalError) return <ErrorComponent message={generalError} />
 	if(colDataLoadError) return <ErrorComponent message="Failed to load collection data" />
 	if(phrasesLoadError) return <ErrorComponent message="Failed to load collection phrases" />
@@ -119,6 +135,9 @@ const Description = observer(function({ route, navigation }: Props) {
 
 	return (
 		<View style={styles.container}>
+			<ModalWithBody visible={showTutorial} onClose={setTutorialPassed}>
+				<DescriptionTutorial onClose={setTutorialPassed} />
+			</ModalWithBody>
 			<View style={styles.topIndicator}>
 				<ProgressBar progress={progress.progress} total={progress.total} />
 			</View>

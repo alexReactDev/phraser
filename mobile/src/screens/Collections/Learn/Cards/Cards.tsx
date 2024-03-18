@@ -16,6 +16,9 @@ import { IRepetition, IRepetitionInput } from "@ts/repetitions";
 import Result from "../components/Result";
 import ProgressBar from "../components/ProgressBar";
 import { ProgressData } from "@ts-frontend/learn";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import ModalWithBody from "@components/ModalWithBody";
+import CardsTutorial from "./components/CardsTutorial";
 
 interface PhraseData {
 	value: string,
@@ -47,6 +50,15 @@ const Learn = observer(function ({ route, navigation }: Props) {
 	const [ finished, setFinished ] = useState(false);
 	const [ result, setResult ] = useState<IRepetitionInput | null>(null);
 
+	const [ showTutorial, setShowTutorial ] = useState(false);
+
+	useEffect(() => {
+		(async () => {
+			const tutorialPassed = await AsyncStorage.getItem("cardsTutorialPassed");
+			if(tutorialPassed !== "true") setShowTutorial(true);
+		})();
+	}, []);
+
 	useEffect(() => {
 		if(!data || !colData) return;
 		
@@ -76,6 +88,11 @@ const Learn = observer(function ({ route, navigation }: Props) {
 		setShowTranslation(false);
 	}
 
+	async function setTutorialPassed() {
+		setShowTutorial(false);
+		await AsyncStorage.setItem("cardsTutorialPassed", "true");
+	}
+
 	if (!started) return <Loader />
 	if (error) return <ErrorComponent message="Failed to load collection data" />
 
@@ -85,6 +102,9 @@ const Learn = observer(function ({ route, navigation }: Props) {
 		<View
 			style={style.container}
 		>
+			<ModalWithBody visible={showTutorial} onClose={setTutorialPassed}>
+				<CardsTutorial onClose={setTutorialPassed} />
+			</ModalWithBody>
 			<View
 				style={style.adjacentPhrasesContainer}
 			>

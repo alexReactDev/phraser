@@ -20,6 +20,9 @@ import Result from "../components/Result";
 import { faintBlue } from "@styles/variables";
 import ShowHidePhrase from "./components/ShowHidePhrase";
 import { ProgressData } from "@ts-frontend/learn";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import ModalWithBody from "@components/ModalWithBody";
+import AITextTutorial from "./components/AITextTutorial";
 
 type Props = StackScreenProps<StackNavigatorParams, "AIGeneratedText", "collectionsNavigator">;
 
@@ -47,6 +50,15 @@ const AIGeneratedText = observer(function ({ route, navigation }: Props) {
 
 	const [ stepResults, setStepResults ] = useState<IRemembered>({});
 	const [ result, setResult ] = useState<IRepetitionInput | null>(null);
+
+	const [ showTutorial, setShowTutorial ] = useState(false);
+
+	useEffect(() => {
+		(async () => {
+			const tutorialPassed = await AsyncStorage.getItem("AIGeneratedTextTutorialPassed");
+			if(tutorialPassed !== "true") setShowTutorial(true);
+		})();
+	}, []);
 
 	useEffect(() => {
 		if(!data || !colData) return;
@@ -139,6 +151,11 @@ const AIGeneratedText = observer(function ({ route, navigation }: Props) {
 		return false;
 	}
 
+	async function setTutorialPassed() {
+		setShowTutorial(false);
+		await AsyncStorage.setItem("AIGeneratedTextTutorialPassed", "true");
+	}
+
 	if(generalError) return <ErrorComponent message={generalError} />
 	if(colDataLoadError) return <ErrorComponent message="Failed to load collection data" />
 	if(phrasesLoadError) return <ErrorComponent message="Failed to load collection phrases" />
@@ -149,6 +166,9 @@ const AIGeneratedText = observer(function ({ route, navigation }: Props) {
 
 	return (
 		<View>
+			<ModalWithBody visible={showTutorial} onClose={setTutorialPassed}>
+				<AITextTutorial onClose={setTutorialPassed} />
+			</ModalWithBody>
 			<View style={styles.topIndicatorContainer}>
 				<ProgressBar progress={progress.progress} total={progress.total} />
 			</View>
