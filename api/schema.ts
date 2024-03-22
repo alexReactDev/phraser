@@ -68,7 +68,8 @@ const schema = buildSchema(`
 
 	type Repetition {
 		id: ID,
-		userId: ID,
+		userId: String,
+		profileId: String,
 		phrasesCount: Int,
 		totalForgotten: Int,
 		collectionName: String,
@@ -129,15 +130,68 @@ const schema = buildSchema(`
 		hasPremium: Boolean
 	}
 
+	type StatsItem {
+		date: Float,
+		profileId: String,
+		createdCollections: Int,
+		createdPhrases: Int
+	}
+
+	type LearningMethods {
+		cards: Int,
+		aiGeneratedText: Int,
+		description: Int
+	}
+
+	type RepetitionStatsItem {
+		date: Float,
+		repeatedCollections: Int,
+		repeatedPhrases: Int,
+		learningMethods: LearningMethods 
+	}
+	
+	type StatsDate {
+		from: Float,
+		to: Float
+	}
+
+	type StatsByPeriod {
+		date: StatsDate,
+		dailyStats: [StatsItem],
+		createdPhrasesTotal: Int,
+		createdCollectionsTotal: Int,
+		createdPhrasesAverage: Float,
+		createdCollectionsAverage: Float,
+		dailyRepetitions: [RepetitionStatsItem],
+		repeatedPhrasesTotal: Int,
+		repeatedCollectionsTotal: Int,
+		repeatedPhrasesAverage: Float,
+		repeatedCollectionsAverage: Float,
+		rightAnswersAveragePercentage: Float,
+		favoriteLearningMethod: String,
+		visitedDays: Int,
+		visitedPercentage: Int
+	}
+
+	type User {
+		id: ID,
+		email: String,
+		isVerified: Boolean,
+		created: Float
+	}
+
 	type Query {
+		getUser(id: ID!): User,
 		getCollection(id: ID!): Collection,
 		getProfileCollections(id: ID!): [Collection],
+		getProfileCollectionsCount(profileId: ID!): Int,
+		getProfilePhrasesCount(profileId: ID!): Int,
 		getCollectionPhrases(id: ID!): [Phrase],
 		getPhrase(id: ID!): Phrase,
 		getUserProfiles(id: ID!): [Profile],
 		getSession: Session,
 		getUserSettings(id: ID!): UserSettings,
-		getUserRepetitions(userId: ID!): [Repetition],
+		getProfileRepetitions(profileId: String!): [Repetition],
 		getGeneratedText(phrases: [String]!): String,
 		getGeneratedSentences(phrases: [String]!): [String],
 		getGeneratedDescription(phrase: String!): String,
@@ -149,7 +203,8 @@ const schema = buildSchema(`
 		searchCollectionPhrases(pattern: String!, colId: ID!): [Phrase],
 		searchProfilePhrases(pattern: String!, profile: ID!): [Phrase],
 		searchProfileCollections(pattern: String!, profile: ID!): [Collection],
-		getPremiumData(userId: ID!): PremiumData
+		getPremiumData(userId: ID!): PremiumData,
+		getStatsByPeriod(period: String!, profileId: String!): StatsByPeriod
 	}
 
 	input ProfileInput {
@@ -293,7 +348,8 @@ const schema = buildSchema(`
 		sendVerificationCode(email: String!): String,
 		resetPassword(input: resetPasswordInput!): TokenData,
 		verifyEmail(userId: String!): String,
-		continueWithGoogle(token: String!): TokenData
+		continueWithGoogle(token: String!): TokenData,
+		reportVisit(userId: String!): String
 	}
 `);
 

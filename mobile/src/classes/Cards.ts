@@ -4,6 +4,7 @@ import { TPhrasesOrder } from "@ts/settings";
 import Learner from "./Learner";
 import Repetition from "./RepetitionCreator";
 import session from "@store/session";
+import settings from "@store/settings";
 
 interface IPhraseData {
 	phrase: IPhrase,
@@ -98,6 +99,7 @@ class Cards extends Learner {
 	finish() {
 		const repetition = new Repetition({
 			userId: (session.data.userId!),
+			profileId: settings.settings.activeProfile!,
 			phrasesCount: this.phrases.length,
 			totalForgotten: this.phrases.reduce((total, phrase: IPhraseData) => phrase.forgotten + total, 0),
 			collectionName: this.collection.name,

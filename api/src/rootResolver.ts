@@ -20,6 +20,8 @@ import { ISettings } from "@ts/settings";
 import { IntervalRepetitionDatesValues, PhrasesOrderValues, TextDifficultyValues } from "./types/settingsValues";
 import { IContext } from "@ts-backend/context";
 import PremiumController from "./controller/Premium";
+import StatsController from "./controller/Stats";
+import { statsPeriodType } from "@ts/stats";
 
 const root = {
 	login: authController.login.bind(authController),
@@ -206,6 +208,26 @@ const root = {
 		if(profile.userId !== context.auth.userId) throw new Error("403. Access denied");
 
 		return collectionsController.getCollectionsByProfile(params);
+	},
+
+	getProfileCollectionsCount: async (params: { profileId: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		let profile = await profilesController.getProfile({ id: params.profileId });
+
+		if(profile.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		return collectionsController.getProfileCollectionsCount(params);
+	},
+
+	getProfilePhrasesCount: async (params: { profileId: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		let profile = await profilesController.getProfile({ id: params.profileId });
+
+		if(profile.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		return phrasesController.getProfilePhrasesCount(params);
 	},
 	
 	deleteCollection: async (params: { id: string }, context: IContext) => {
@@ -398,12 +420,14 @@ const root = {
 		return await repetitionsController.createRepetition(params);
 	},
 
-	getUserRepetitions: async (params: { userId: string }, context: IContext) => {
+	getProfileRepetitions: async (params: { profileId: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
-		if(params.userId !== context.auth.userId) throw new Error("403. Access denied");
+		const profile = await profilesController.getProfile({ id: params.profileId });
 
-		return await repetitionsController.getUserRepetitions(params);
+		if(profile.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		return await repetitionsController.getProfileRepetitions(params);
 	},
 
 	getGeneratedText: async (params: { phrases: string[] }, context: IContext) => {
@@ -545,6 +569,24 @@ const root = {
 		if(params.userId !== context.auth.userId) throw new Error("403. Access denied");
 
 		return await PremiumController.getPremiumData(params);
+	},
+
+	reportVisit: async (params: { userId: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		if(params.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		return await StatsController.reportVisit(params);
+	},
+
+	getStatsByPeriod: async (params: { period: statsPeriodType, profileId: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		const profile = await profilesController.getProfile({ id: params.profileId });
+
+		if(profile.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		return await StatsController.getStatsByPeriod(params, context);
 	}
 }
 

@@ -7,6 +7,8 @@ import settingsController from "./Settings";
 import { IContext } from "@ts-backend/context";
 import collectionsController from "./Collections";
 import { IAutoCollection } from "@ts/collections";
+import StatsItem from "../Classes/StatsItem";
+import CustomDate from "../Classes/CustomDate";
 
 class PhrasesController {
 	async getPhrase({ id }: { id: string }) {
@@ -52,6 +54,26 @@ class PhrasesController {
 		return phrases;
 	}
 
+	async getProfilePhrasesCount({ profileId }: { profileId: string }) {
+		const collections = await collectionsController.getCollectionsByProfile({ id: profileId });
+		let count = 0;
+
+		for(let col of collections) {
+			try {
+				const cursor = await db.collection("phrases").find({
+					collection: col.id
+				});
+
+				count += await cursor.count();
+			} catch (e) {
+				globalErrorHandler(e);
+				throw new Error(`Server error. Failed to get phrases ${e}`);
+			}
+		}
+
+		return count;
+	}
+
 	async createPhrase({ input, collection }: { input: IPhraseInput, collection: string }, context: IContext) {
 		const col = await collectionsController.getCollection({ id: collection });
 
@@ -95,6 +117,8 @@ class PhrasesController {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to update collection. ${e}`);
 		}
+
+		await this._updateStats(col.profile);
 
 		return phrase;
 	}
@@ -303,6 +327,35 @@ class PhrasesController {
 		}
 
 		return "OK";
+	}
+
+	async _updateStats(profile: string) {
+		let todayStats;
+
+		try {
+			todayStats = await db.collection("stats").findOne({ profileId: profile, date: new CustomDate().resetDay().getTime() });
+		} catch(e) {
+			globalErrorHandler(e);
+			throw new Error(`Failed to obtain stats for update ${e}`);
+		}
+
+		try {
+			if(!todayStats) {
+				const stats = new StatsItem(profile);
+				stats.createdPhrases++;
+	
+				await db.collection("stats").insertOne(stats);
+			} else {
+				await db.collection("stats").updateOne({ _id: todayStats._id }, {
+					$set: {
+						createdPhrases: todayStats.createdPhrases + 1
+					}
+				})
+			}
+		} catch(e) {
+			globalErrorHandler(e);
+			throw new Error(`Failed to update stats ${e}`);
+		}
 	}
 }
 

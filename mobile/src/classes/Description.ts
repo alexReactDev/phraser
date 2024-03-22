@@ -6,6 +6,7 @@ import { client } from "src/apollo";
 import { GET_GENERATED_DESCRIPTION, GET_GENERATED_HINT_SENTENCE } from "@query/ai";
 import Repetition from "./RepetitionCreator";
 import session from "@store/session";
+import settings from "@store/settings";
 
 export interface IValue {
 	hint: string,
@@ -90,6 +91,7 @@ export class Description extends Learner {
 	finish() {
 		const repetition = new Repetition({
 			userId: (session.data.userId!),
+			profileId: settings.settings.activeProfile!,
 			phrasesCount: this.phrases.length,
 			totalForgotten: this.phrases.reduce((total, phrase: IPhraseData) => phrase.forgotten + total, 0),
 			collectionName: this.collection.name,

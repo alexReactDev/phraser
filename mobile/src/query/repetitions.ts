@@ -5,3 +5,17 @@ export const CREATE_REPETITION = gql`
 		createRepetition(input: $input)
 	}
 `;
+
+export const GET_PROFILE_REPETITIONS = gql`
+	query getProfileRepetitions($profileId: String!) {
+		getProfileRepetitions(profileId: $profileId) {
+			id,
+			phrasesCount,
+			totalForgotten,
+			collectionName,
+			repetitionType,
+			repetitionsAmount,
+			created
+		}
+	}
+`;

@@ -27,7 +27,7 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 	if(!profile) return "";
 
 	async function deleteHandler() {
-		Alert.alert(`Delete profile "${profile.name}" ?`, "The profile will be deleted with all it's collections", [
+		Alert.alert(`Delete profile "${profile.name}" ?`, "The profile will be deleted with all its collections and stats", [
 			{
 				text: "Cancel",
 				style: "cancel"

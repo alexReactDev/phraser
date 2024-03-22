@@ -5,6 +5,23 @@ import generateId from "../misc/generateId";
 import globalErrorHandler from "../misc/globalErrorHandler";
 
 class RepetitionsController {
+	async getProfileRepetitions({ profileId }: { profileId: string }) {
+		let repetitions;
+
+		try {
+			const cursor = await db.collection("repetitions").find({
+				profileId
+			});
+
+			repetitions = await cursor.sort({ created: -1 }).toArray();
+		} catch(e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to get repetitions ${e}`)
+		}
+
+		return repetitions;
+	}
+
 	async createRepetition({ input }: { input: IRepetitionInput }) {
 		try {
 			const id = generateId();
@@ -19,23 +36,6 @@ class RepetitionsController {
 		}
 
 		return "OK"
-	}
-
-	async getUserRepetitions({ userId }: { userId: string }) {
-		let repetitions;
-
-		try {
-			const cursor = await db.collection("repetitions").find({
-				userId
-			})
-
-			repetitions = await cursor.toArray();
-		} catch (e) {
-			globalErrorHandler(e);
-			throw new Error(`Error! Failed to create repetition.\n${e}`);
-		}
-
-		return repetitions;
 	}
 }
 

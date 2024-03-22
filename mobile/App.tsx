@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import * as Sentry from '@sentry/react-native';
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme } from "react-native";
+import Stats from "src/screens/Stats/Stats";
 
 Sentry.init({
   dsn: 'https://b2d6cb5760f1c202f6e86948d4378569@o4506399434080256.ingest.sentry.io/4506399492341760',
@@ -26,8 +27,9 @@ Sentry.init({
 });
 
 export type NavigatorParams = {
-  Add: { mutateId: number | undefined } | undefined,
+  Add: undefined,
   Collections: undefined,
+  Stats: undefined,
   Settings: undefined
 }
 
@@ -70,6 +72,10 @@ function App() {
                     <Navigator.Screen name="Collections" component={Collections} options={{
                       tabBarIcon: ({ focused }) => <Ionicons name="copy" size={24} color={focused ? "black" : "gray"} />,
                       headerShown: false
+                    }}></Navigator.Screen>
+                    <Navigator.Screen name="Stats" component={Stats} options={{
+                      tabBarIcon: ({ focused }) => <Ionicons name="stats-chart" size={24} color={focused ? "black" : "gray"}  />,
+                      headerRight: () => <Profiles />
                     }}></Navigator.Screen>
                     <Navigator.Screen name="Settings" component={Settings} options={{
                       tabBarIcon: ({ focused }) => <Ionicons name="settings-sharp" size={24} color={focused ? "black" : "gray"}  />,

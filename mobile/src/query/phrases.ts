@@ -11,6 +11,12 @@ export const GET_COLLECTION_PHRASES = gql`
 	}
 `;
 
+export const GET_PROFILE_PHRASES_COUNT = gql`
+	query getProfilePhrasesCount($profileId: ID!) {
+		getProfilePhrasesCount(profileId: $profileId)
+	}
+`;
+
 export const GET_PHRASE = gql`
 	query getPhrase($id: ID!) {
 		getPhrase(id: $id) {

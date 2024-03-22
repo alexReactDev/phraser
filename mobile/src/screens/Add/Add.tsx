@@ -164,12 +164,6 @@ const Add = observer(function ({ route, navigation }: Props) {
 		formik.resetForm();
 		selectRef?.current?.reset();
 
-		if(route.params?.mutateId) {
-			navigation.setParams({ mutateId: undefined });
-			navigation.setOptions({
-				title: "Add"
-			});
-		};
 	}
 
 	async function setTutorialPassed() {

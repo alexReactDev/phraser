@@ -6,6 +6,7 @@ import Repetition from "./RepetitionCreator";
 import session from "@store/session";
 import { client } from "src/apollo";
 import { IPhraseData } from "@ts-frontend/learn";
+import settings from "@store/settings";
 
 export interface IValue {
 	phrases: IPhrase[],
@@ -112,7 +113,8 @@ class AIGeneratedText extends Learner {
 
 	finish() {
 		const repetition = new Repetition({
-			userId: (session.data.userId!),
+			userId: session.data.userId!,
+			profileId: settings.settings.activeProfile!,
 			phrasesCount: this.phrases.length,
 			totalForgotten: this.phrases.reduce((total, phrase: IPhraseData) => phrase.forgotten + total, 0),
 			collectionName: this.collection.name,

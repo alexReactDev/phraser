@@ -1,3 +1,5 @@
+export type repetitionType = "Cards" | "AI generated text" | "Description"
+
 export interface PhraseRepetition {
 	id: string,
 	guessed: number,
@@ -7,10 +9,11 @@ export interface PhraseRepetition {
 export interface IRepetition {
 	id: string,
 	userId: string,
+	profileId: string,
 	phrasesCount: number,
 	totalForgotten: number,
 	collectionName: string,
-	repetitionType: string,
+	repetitionType: repetitionType,
 	repetitionsAmount: number,
 	phrasesRepetitions: PhraseRepetition[],
 	created: BigInt | number
