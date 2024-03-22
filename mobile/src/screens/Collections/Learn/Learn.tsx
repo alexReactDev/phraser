@@ -52,6 +52,7 @@ function Learn({ route, navigation }: Props) {
 					onPress={() => navigation.navigate("Cards", { colId })}
 				>
 					<View style={styles.cardIconContainer}>
+					<View style={styles.cardIconContainer}>
 						<Ionicons name="copy" size={16} color="darkgrey" />
 						<Text style={styles.cardTitle}>
 							Cards
