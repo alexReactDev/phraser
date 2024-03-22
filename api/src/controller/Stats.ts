@@ -122,8 +122,8 @@ class Stats {
 			totalCollections: 0
 		});
 
-		const averagePhrases = total.totalPhrases / stats.length;
-		const averageCollections = total.totalCollections / stats.length;
+		const averagePhrases = (total.totalPhrases / stats.length) || 0;
+		const averageCollections = (total.totalCollections / stats.length) || 0;
 
 		return {
 			createdPhrasesTotal: total.totalPhrases,
@@ -169,9 +169,9 @@ class Stats {
 			dailyRepetition.learningMethods[learningMethodAliases[repetition.repetitionType]]++;
 		});
 
-		const repeatedCollectionsAverage = repeatedCollectionsTotal / dailyRepetitions.length;
-		const repeatedPhrasesAverage = repeatedPhrasesTotal / dailyRepetitions.length;
-		const rightAnswersAveragePercentage = totalPercentage / repeatedCollectionsTotal;
+		const repeatedCollectionsAverage = (repeatedCollectionsTotal / dailyRepetitions.length) || 0;
+		const repeatedPhrasesAverage = (repeatedPhrasesTotal / dailyRepetitions.length) || 0;
+		const rightAnswersAveragePercentage = (totalPercentage / repeatedCollectionsTotal) || 0;
 
 		return {
 			dailyRepetitions,
