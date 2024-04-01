@@ -37,14 +37,11 @@ function RepeatedCollectionsDiagram({ dailyRepetitions, date, period }: IProps) 
 
 	function renderColumns() {
 		const columns = [];
-		let columnDate = +date.from;
-
-
-		console.log(JSON.stringify(dailyRepetitions, null, 2));
+		let columnDay = date.from;
 
 		if(period === "week") {
 			for(let i = 0; i < 7; i++) {
-				const columnData = dailyRepetitions.find((rep) => rep.date === columnDate);
+				const columnData = dailyRepetitions.find((rep) => rep.day === columnDay);
 
 				if(columnData) {
 					const items = [];
@@ -52,16 +49,16 @@ function RepeatedCollectionsDiagram({ dailyRepetitions, date, period }: IProps) 
 					if(columnData.learningMethods.aiGeneratedText) items.push({ value: columnData.learningMethods.aiGeneratedText, color: "#f46256" });
 					if(columnData.learningMethods.description) items.push({ value: columnData.learningMethods.description, color: "#71b671" });
 
-					columns.push(<ColumnIncrement key={columnData.date} items={items} itemHeight={itemHeight} width={18} />);
+					columns.push(<ColumnIncrement key={columnDay} items={items} itemHeight={itemHeight} width={18} />);
 				} else {
-					columns.push(<EmptyColumn key={columnDate} width={18} />)
+					columns.push(<EmptyColumn key={columnDay} width={18} />)
 				}
 
-				columnDate += 1000 * 60 * 60 * 24;
+				columnDay++;
 			}
 		} else if (period = "month") {
 			for(let i = 0; i < 30; i++) {
-				const columnData = dailyRepetitions.find((rep) => rep.date === columnDate);
+				const columnData = dailyRepetitions.find((rep) => rep.day === columnDay);
 
 				if(columnData) {
 					const items = [];
@@ -69,12 +66,12 @@ function RepeatedCollectionsDiagram({ dailyRepetitions, date, period }: IProps) 
 					if(columnData.learningMethods.aiGeneratedText) items.push({ value: columnData.learningMethods.aiGeneratedText, color: "#f46256" });
 					if(columnData.learningMethods.description) items.push({ value: columnData.learningMethods.description, color: "#71b671" });
 
-					columns.push(<ColumnIncrement key={columnData.date} items={items} itemHeight={itemHeight} />);
+					columns.push(<ColumnIncrement key={columnDay} items={items} itemHeight={itemHeight} />);
 				} else {
-					columns.push(<EmptyColumn key={columnDate} />)
+					columns.push(<EmptyColumn key={columnDay} />)
 				}
 
-				columnDate += 1000 * 60 * 60 * 24;
+				columnDay++;
 			}
 		}
 
@@ -115,13 +112,13 @@ function RepeatedCollectionsDiagram({ dailyRepetitions, date, period }: IProps) 
 			</View>
 			<View style={styles.bottomScale}>
 				<Text style={styles.bottomScaleItem}>
-					{moment(date.from).format("D MMM")}
+					{moment(date.from * 86400000).format("D MMM")}
 				</Text>
 				<Text style={styles.bottomScaleItem}>
 					→
 				</Text>
 				<Text style={styles.bottomScaleItem}>
-					{moment(date.to).format("D MMM")}
+					{moment(date.to * 86400000).format("D MMM")}
 				</Text>
 			</View>
 		</View>

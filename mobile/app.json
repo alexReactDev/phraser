@@ -16,6 +16,14 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "88bf46ea-bb07-401a-9956-a56f5f943cba"
+      }
+    },
+    "android": {
+      "package": "com.alexreactdev.vocabulary"
     }
   }
 }

@@ -1,4 +1,4 @@
-import { ILearningMethods, ILearningMethodsValues, IRepetitionStatsItem, IStatsItem, statsPeriodType } from "@ts/stats";
+import { ILearningMethods, ILearningMethodsValues, IRepetitionStatsItem, IStatsItem } from "@ts/stats";
 import CustomDate from "../Classes/CustomDate";
 import globalErrorHandler from "../misc/globalErrorHandler";
 import db from "../model/db";
@@ -15,64 +15,15 @@ export const learningMethodAliases: ILearningMethods = {
 };
 
 class Stats {
-	async getStatsByPeriod({ period, profileId }: { period: statsPeriodType, profileId: string }, context: IContext) {
-		let agoMS;
-		let todayMS = new CustomDate().resetDay().getTime();
-
-		switch(period) {
-			case "week": agoMS = 1000 * 60 * 60 * 24 * 7; //7 days
-			break;
-			case "month": agoMS = 1000 * 60 * 60 * 24 * 30; //30 days
-		}
-
-		const timestamp = new CustomDate(new Date().getTime() - agoMS).resetDay().getTime();
-
-		let stats: StatsItem[];
-
-		try {
-			const cursor = await db.collection("stats").find({
-				profileId,
-				date: {
-					$gte: timestamp,
-					$lt: todayMS
-				}
-			});
-
-			stats = await cursor.toArray();
-		} catch(e: any) {
-			globalErrorHandler(e);
-			throw new Error(`Failed to get stats ${e}`);
-		}
-		
-		const creationStats = this._getCreationStats(stats);
-
-		let repetitions;
-
-		try {
-			const cursor = await db.collection("repetitions").find({
-				profileId,
-				created: {
-					$gte: timestamp,
-					$lt: todayMS
-				}
-			})
-
-			repetitions = await cursor.toArray();
-		} catch(e: any) {
-			globalErrorHandler(e);
-			throw new Error(`Failed to get repetitions data ${e}`);
-		}
-
-		const repetitionStats = this._getRepetitionStats(repetitions);
-
+	async getStatsByPeriod({ from, to, profileId }: { from: number, to: number, profileId: string }, context: IContext) {
 		let visitedDays;
 
 		try {
 			const cursor = await db.collection("visits").find({
 				userId: context.auth.userId,
-				date: {
-					$gte: timestamp,
-					$lt: todayMS
+				day: {
+					$gte: from,
+					$lt: to
 				}
 			})
 
@@ -82,36 +33,72 @@ class Stats {
 			throw new Error(`Failed to get visits data ${e}`);
 		}
 
-		const visitedPercentage = visitedDays / (period === "week" ? 7 : 30) * 100;
+		let stats: StatsItem[];
+
+		try {
+			const cursor = await db.collection("stats").find({
+				profileId,
+				day: {
+					$gte: from,
+					$lt: to
+				}
+			});
+
+			stats = await cursor.toArray();
+		} catch(e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Failed to get stats ${e}`);
+		}
+		
+		const creationStats = this._getCreationStats(stats, visitedDays);
+
+		let repetitions;
+
+		try {
+			const cursor = await db.collection("repetitions").find({
+				profileId,
+				day: {
+					$gte: from,
+					$lt: to
+				}
+			})
+
+			repetitions = await cursor.toArray();
+		} catch(e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Failed to get repetitions data ${e}`);
+		}
+
+		const repetitionStats = this._getRepetitionStats(repetitions, visitedDays);
 		
 		return {
 			dailyStats: stats,
 			...creationStats,
 			...repetitionStats,
 			visitedDays,
-			visitedPercentage: +visitedPercentage.toFixed(0),
 			date: {
-				from: timestamp,
-				to: todayMS - 1000 * 60 * 60 * 24
+				from,
+				to
 			}
 		};
 	}
 
-	async reportVisit({ userId }: { userId: string }) {
-		const todaysDay = new CustomDate().resetDay().getTime();
-		const todaysVisit = await db.collection("visits").findOne({ userId, date: todaysDay });
+	async reportVisit({ userId, day }: { userId: string, day: number }) {
+		const todaysVisit = await db.collection("visits").findOne({ userId, day });
 
-		if(todaysVisit) return "Already reported";
+		if(!todaysVisit) {
+			await db.collection("visits").insertOne({
+				userId,
+				day,
+				recordCreated: new Date().getTime()
+			});
+		}
 
-		await db.collection("visits").insertOne({
-			userId,
-			date: todaysDay
-		})
-
-		return "OK"
+		if(todaysVisit) return "Already reported"
+		return "OK";
 	}
 
-	_getCreationStats(stats: IStatsItem[]) {
+	_getCreationStats(stats: IStatsItem[], visitedDays: number) {
 		const total = stats.reduce((total, item) => {
 			return {
 				totalPhrases: total.totalPhrases + item.createdPhrases,
@@ -122,8 +109,8 @@ class Stats {
 			totalCollections: 0
 		});
 
-		const averagePhrases = (total.totalPhrases / stats.length) || 0;
-		const averageCollections = (total.totalCollections / stats.length) || 0;
+		const averagePhrases = (total.totalPhrases / visitedDays) || 0;
+		const averageCollections = (total.totalCollections / visitedDays) || 0;
 
 		return {
 			createdPhrasesTotal: total.totalPhrases,
@@ -133,7 +120,7 @@ class Stats {
 		}
 	}
 
-	_getRepetitionStats(repetitions: IRepetition[]) {
+	_getRepetitionStats(repetitions: IRepetition[], visitedDays: number) {
 		const dailyRepetitions: IRepetitionStatsItem[] = [];
 		let repeatedCollectionsTotal = 0;
 		let repeatedPhrasesTotal = 0;
@@ -156,11 +143,10 @@ class Stats {
 
 			totalLearningMethods[learningMethodAliases[repetition.repetitionType]]++;
 
-			const date = new CustomDate((repetition.created as number)).resetDay().getTime();
-			let dailyRepetition = dailyRepetitions.find((item) => item.date === date);
+			let dailyRepetition = dailyRepetitions.find((item) => item.day === repetition.day);
 
 			if(!dailyRepetition) {
-				dailyRepetition = new RepetitionStatsItem(date);
+				dailyRepetition = new RepetitionStatsItem(repetition.day);
 				dailyRepetitions.push(dailyRepetition);
 			}
 
@@ -169,8 +155,8 @@ class Stats {
 			dailyRepetition.learningMethods[learningMethodAliases[repetition.repetitionType]]++;
 		});
 
-		const repeatedCollectionsAverage = (repeatedCollectionsTotal / dailyRepetitions.length) || 0;
-		const repeatedPhrasesAverage = (repeatedPhrasesTotal / dailyRepetitions.length) || 0;
+		const repeatedCollectionsAverage = (repeatedCollectionsTotal / visitedDays) || 0;
+		const repeatedPhrasesAverage = (repeatedPhrasesTotal / visitedDays) || 0;
 		const rightAnswersAveragePercentage = (totalPercentage / repeatedCollectionsTotal) || 0;
 
 		return {

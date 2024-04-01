@@ -13,7 +13,14 @@ import RepeatedCollectionsDiagram from "./RepeatedCollectionsDiagram";
 import CreatedDiagram from "./CreatedDiagram";
 
 const StatsByPeriod = observer(function({ period }: { period: statsPeriodType }) {
-	const { data, loading, error } = useQuery(GET_STATS_BY_PERIOD, { variables: { period, profileId: settings.settings.activeProfile }});
+	const to = Math.trunc(new Date().getTime() / 86400000);
+	const from = period === "week" ? to - 7 : to - 30;
+
+	const { data, loading, error } = useQuery(GET_STATS_BY_PERIOD, { variables: { 
+		profileId: settings.settings.activeProfile,
+		from,
+		to
+	}});
 	
 	if(loading) return <Loader />
 	if(error) return <ErrorComponent message="Failed to load data for the period" />
@@ -52,7 +59,7 @@ const StatsByPeriod = observer(function({ period }: { period: statsPeriodType })
 							Average per day:
 						</Text>
 						<Text style={styles.rowValue}>
-							{stats.createdPhrasesAverage}
+							{stats.createdPhrasesAverage > 0 ? stats.createdPhrasesAverage : "less than one"}
 						</Text>
 					</View>
 					<View style={styles.row}>
@@ -68,7 +75,7 @@ const StatsByPeriod = observer(function({ period }: { period: statsPeriodType })
 							Average per day:
 						</Text>
 						<Text style={styles.rowValue}>
-							{stats.createdCollectionsAverage}
+							{stats.createdCollectionsAverage > 0 ? stats.createdCollectionsAverage : "less than one"}
 						</Text>
 					</View>
 				</View>
@@ -94,7 +101,7 @@ const StatsByPeriod = observer(function({ period }: { period: statsPeriodType })
 							Average per day:
 						</Text>
 						<Text style={styles.rowValue}>
-							{stats.repeatedPhrasesAverage}
+							{stats.repeatedPhrasesAverage > 0 ? stats.repeatedPhrasesAverage : "less than one"}
 						</Text>
 					</View>
 				</View>
@@ -120,7 +127,7 @@ const StatsByPeriod = observer(function({ period }: { period: statsPeriodType })
 							Average per day:
 						</Text>
 						<Text style={styles.rowValue}>
-							less than one
+							{stats.repeatedCollectionsAverage > 0 ? stats.repeatedCollectionsAverage : "less than one"}
 						</Text>
 					</View>
 					<View style={styles.row}>
@@ -151,7 +158,7 @@ const StatsByPeriod = observer(function({ period }: { period: statsPeriodType })
 							Visited:
 						</Text>
 						<Text style={styles.rowValue}>
-							{`${stats.visitedDays} day(s) / ${stats.visitedPercentage}%`}
+							{`${stats.visitedDays} day(s) / ${period === "week" ? (stats.visitedDays / 7 * 100).toFixed(2) : (stats.visitedDays / 30 * 100).toFixed(2)}%`}
 						</Text>
 					</View>
 				</View>

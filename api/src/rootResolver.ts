@@ -21,7 +21,6 @@ import { IntervalRepetitionDatesValues, PhrasesOrderValues, TextDifficultyValues
 import { IContext } from "@ts-backend/context";
 import PremiumController from "./controller/Premium";
 import StatsController from "./controller/Stats";
-import { statsPeriodType } from "@ts/stats";
 
 const root = {
 	login: authController.login.bind(authController),
@@ -407,6 +406,7 @@ const root = {
 	},
 
 	createRepetition: async (params: { input: IRepetitionInput }, context: IContext) => {
+		console.log("TEST");
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.input.userId !== context.auth.userId) throw new Error("403. Access denied");
@@ -571,7 +571,7 @@ const root = {
 		return await PremiumController.getPremiumData(params);
 	},
 
-	reportVisit: async (params: { userId: string }, context: IContext) => {
+	reportVisit: async (params: { userId: string, day: number }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		if(params.userId !== context.auth.userId) throw new Error("403. Access denied");
@@ -579,7 +579,7 @@ const root = {
 		return await StatsController.reportVisit(params);
 	},
 
-	getStatsByPeriod: async (params: { period: statsPeriodType, profileId: string }, context: IContext) => {
+	getStatsByPeriod: async (params: { from: number, to: number, profileId: string }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
 		const profile = await profilesController.getProfile({ id: params.profileId });

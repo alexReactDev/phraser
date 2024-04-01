@@ -16,7 +16,8 @@ export interface IRepetition {
 	repetitionType: repetitionType,
 	repetitionsAmount: number,
 	phrasesRepetitions: PhraseRepetition[],
-	created: BigInt | number
+	created: BigInt | number,
+	day: number
 }
 
 export type IRepetitionInput = Omit<IRepetition, "id">

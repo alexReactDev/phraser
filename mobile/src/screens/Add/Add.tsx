@@ -83,7 +83,8 @@ const Add = observer(function ({ route, navigation }: Props) {
 
 			const data = {
 				value: input.value.trim(),
-				translation: input.translation.trim()
+				translation: input.translation.trim(),
+				day: Math.trunc(new Date().getTime() / 86400000)
 			};
 
 			loadingSpinner.setLoading();

@@ -110,6 +110,7 @@ class Cards extends Learner {
 				guessed: phrase.guessed,
 				forgotten: phrase.forgotten
 			})),
+			day: Math.trunc(new Date().getTime() / 86400000)
 		});
 
 		this._createRepetition(repetition);

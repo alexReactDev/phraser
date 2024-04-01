@@ -79,8 +79,8 @@ class PhrasesController {
 
 		if(col.isLocked) throw new Error("400. Bad request - collection is locked");
 
-		const timestamp = new Date().getTime();
 		const id = generateId();
+		const timestamp = new Date().getTime();
 
  		const userSettings = await settingsController.getUserSettings({ id: context.auth.userId });
 
@@ -118,7 +118,7 @@ class PhrasesController {
 			throw new Error(`Server error. Failed to update collection. ${e}`);
 		}
 
-		await this._updateStats(col.profile);
+		await this._updateStats(col.profile, input.day);
 
 		return phrase;
 	}
@@ -329,11 +329,11 @@ class PhrasesController {
 		return "OK";
 	}
 
-	async _updateStats(profile: string) {
+	async _updateStats(profile: string, day: number) {
 		let todayStats;
 
 		try {
-			todayStats = await db.collection("stats").findOne({ profileId: profile, date: new CustomDate().resetDay().getTime() });
+			todayStats = await db.collection("stats").findOne({ profileId: profile, day });
 		} catch(e) {
 			globalErrorHandler(e);
 			throw new Error(`Failed to obtain stats for update ${e}`);
@@ -341,7 +341,7 @@ class PhrasesController {
 
 		try {
 			if(!todayStats) {
-				const stats = new StatsItem(profile);
+				const stats = new StatsItem(profile, day);
 				stats.createdPhrases++;
 	
 				await db.collection("stats").insertOne(stats);

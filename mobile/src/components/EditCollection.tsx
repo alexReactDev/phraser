@@ -64,7 +64,8 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 						input: {
 							name,
 							color,
-							profile: settings.settings.activeProfile
+							profile: settings.settings.activeProfile,
+							day: Math.trunc(new Date().getTime() / 86400000)
 						}
 					},
 					update: (cache, { data: { createCollection } }) => {

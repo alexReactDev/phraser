@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { statsPeriodType } from "@ts/stats";
 import StatsByPeriod from "./components/StatsByPeriod";
 import OtherStats from "./components/OtherStats";
 import RepetitionsHistory from "./components/ReptitionsHistory";
 import SelectDropdown from "react-native-select-dropdown";
 import { Ionicons } from '@expo/vector-icons';
-import { fontColor, fontColorFaint } from "@styles/variables";
+import { fontColorFaint } from "@styles/variables";
+import { statsPeriodType } from "@ts/stats";
 
 const statsPeriods = [
 	{ name: "Weekly", value: "week" },

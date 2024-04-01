@@ -1,10 +1,10 @@
 export type statsPeriodType = "week" | "month";
-
 export interface IStatsItem {
-	date: number,
+	day: number,
 	profileId: string,
 	createdPhrases: number,
-	createdCollections: number
+	createdCollections: number,
+	recordCreated: number
 }
 
 export interface ILearningMethods {
@@ -17,7 +17,7 @@ export interface ILearningMethodsValues {
 
 
 export interface IRepetitionStatsItem {
-	date: number,
+	day: number,
 	repeatedPhrases: number,
 	repeatedCollections: number,
 	learningMethods: ILearningMethodsValues

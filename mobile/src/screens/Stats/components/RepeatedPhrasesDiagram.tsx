@@ -37,29 +37,29 @@ function RepeatedPhrasesDiagram({ dailyRepetitions, date, period }: IProps) {
 
 	function renderColumns() {
 		const columns = [];
-		let columnDate = +date.from;
+		let columnDay = date.from;
 
 		if(period === "week") {
 			for(let i = 0; i < 7; i++) {
-				const columnData = dailyRepetitions.find((rep) => rep.date === columnDate);
+				const columnData = dailyRepetitions.find((rep) => rep.day === columnDay);
 				if(columnData) {
-					columns.push(<Column key={columnDate} value={columnData.repeatedPhrases} itemHeight={itemHeight} color="#e74c40" width={18} />)
+					columns.push(<Column key={columnDay} value={columnData.repeatedPhrases} itemHeight={itemHeight} color="#e74c40" width={18} />)
 				} else {
-					columns.push(<EmptyColumn key={columnDate} width={18} />)
+					columns.push(<EmptyColumn key={columnDay} width={18} />)
 				}
 
-				columnDate += 1000 * 60 * 60 * 24;
+				columnDay++;
 			}			
 		} else if (period === "month") {
 			for(let i = 0; i < 30; i++) {
-				const columnData = dailyRepetitions.find((rep) => rep.date === columnDate);
+				const columnData = dailyRepetitions.find((rep) => rep.day === columnDay);
 				if(columnData) {
-					columns.push(<Column key={columnDate} value={columnData.repeatedPhrases} itemHeight={itemHeight} color="#e74c40" />)
+					columns.push(<Column key={columnDay} value={columnData.repeatedPhrases} itemHeight={itemHeight} color="#e74c40" />)
 				} else {
-					columns.push(<EmptyColumn key={columnDate} />)
+					columns.push(<EmptyColumn key={columnDay} />)
 				}
 
-				columnDate += 1000 * 60 * 60 * 24;
+				columnDay++;
 			}
 		}
 
@@ -80,13 +80,13 @@ function RepeatedPhrasesDiagram({ dailyRepetitions, date, period }: IProps) {
 			</View>
 			<View style={styles.bottomScale}>
 				<Text style={styles.bottomScaleItem}>
-					{moment(date.from).format("D MMM")}
+					{moment(date.from * 86400000).format("D MMM")}
 				</Text>
 				<Text style={styles.bottomScaleItem}>
 					→
 				</Text>
 				<Text style={styles.bottomScaleItem}>
-					{moment(date.to).format("D MMM")}
+					{moment(date.to * 86400000).format("D MMM")}
 				</Text>
 			</View>
 		</View>

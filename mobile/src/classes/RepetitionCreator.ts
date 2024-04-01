@@ -12,6 +12,7 @@ export default class Repetition implements Omit<IRepetition, "id"> {
 	repetitionsAmount: number;
 	phrasesRepetitions: PhraseRepetition[];
 	created: number | BigInt;
+	day: number;
 
 	constructor(props: TProps) {
 		this.profileId = props.profileId;
@@ -22,6 +23,7 @@ export default class Repetition implements Omit<IRepetition, "id"> {
 		this.repetitionType = props.repetitionType;
 		this.repetitionsAmount = props.repetitionsAmount;
 		this.phrasesRepetitions = props.phrasesRepetitions;
-		this.created = new Date().getTime()
+		this.created = new Date().getTime();
+		this.day = props.day;
 	}
 }

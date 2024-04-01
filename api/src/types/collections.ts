@@ -1,7 +1,8 @@
 export interface ICollectionInput {
 	name: string,
 	color: string,
-	profile: string
+	profile: string,
+	day: number
 }
 
 export interface ICollectionMetaInput {

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { getAuthToken, setAuthToken } from "../utils/authToken";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_SESSION } from "../query/authorization";
 import Welcome from "../screens/Welcome/Welcome";
 import { IAuthData } from "../types/authorization";
@@ -10,16 +10,24 @@ import ErrorComponent from "./Errors/ErrorComponent";
 import { GET_USER_SETTING } from "../query/settings";
 import settings from "../store/settings";
 import LoadingScreen from "./Loaders/LoadingScreen";
+import { REPORT_VISIT } from "@query/stats";
 
 const AuthorizationChecker = observer(function ({ children }: any) {
-	const { data, error } = useQuery(GET_SESSION, { 
-		context: {
-			headers: {
-				"Authorization": `Bearer ${session.data.token}`
-			}
-		}, 
-		skip: !session.data.token  || !!session.data.sid
-	});
+	const { data, error } = useQuery(GET_SESSION, { skip: !session.data.token  || !!session.data.sid });
+	const [ reportVisit ] = useMutation(REPORT_VISIT);
+
+	useEffect(() => {
+		if(!session.data.userId) return;
+
+		(async () => {
+			await reportVisit({
+				variables: {
+					userId: session.data.userId,
+					day: Math.trunc(new Date().getTime() / 86400000) //Days from 1 jan 1970
+				}
+			})
+		})();
+	}, [session.data.userId]);
 
 	useEffect(() => {
 		session.loadingStart();

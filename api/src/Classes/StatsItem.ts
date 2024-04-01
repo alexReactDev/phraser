@@ -1,17 +1,18 @@
 import { IStatsItem } from "@ts/stats";
-import CustomDate from "./CustomDate";
 
 class StatsItem implements IStatsItem {
-	date: number;
+	day: number;
 	profileId: string;
 	createdCollections: number;
 	createdPhrases: number;
+	recordCreated: number;
 
-	constructor(profileId: string) {
+	constructor(profileId: string, day: number) {
 		this.profileId = profileId;
-		this.date = new CustomDate().resetDay().getTime();
+		this.day = day;
 		this.createdCollections = 0;
 		this.createdPhrases = 0;
+		this.recordCreated = new Date().getTime()
 	}
 }
 

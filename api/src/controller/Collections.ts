@@ -64,8 +64,8 @@ class CollectionsController {
 		return result;
 	}
 
-	async createCollection({ input }: {input: ICollectionInput}, context: IContext) {
-		const collection: Partial<ICollection> = new Collection(input.name, input.color, input.profile, context.auth.userId);
+	async createCollection({ input }: { input: ICollectionInput }, context: IContext) {
+		const collection: Partial<ICollection> = new Collection(input, context.auth.userId);
 		collection.userId = context.auth.userId;
 
 		try {
@@ -75,7 +75,7 @@ class CollectionsController {
 			throw new Error(`Server error. Failed to create collection. ${e}`);
 		}
 
-		await this._updateStats(input.profile);
+		await this._updateStats(input.profile, input.day);
 
 		return collection;
 	}
@@ -160,11 +160,11 @@ class CollectionsController {
 		return "OK";
 	}
 
-	async _updateStats(profile: string) {
+	async _updateStats(profile: string, day: number) {
 		let todayStats;
 
 		try {
-			todayStats = await db.collection("stats").findOne({ profileId: profile, date: new CustomDate().resetDay().getTime() });
+			todayStats = await db.collection("stats").findOne({ profileId: profile, day });
 		} catch(e) {
 			globalErrorHandler(e);
 			throw new Error(`Failed to obtain stats for update ${e}`);
@@ -172,14 +172,14 @@ class CollectionsController {
 
 		try {
 			if(!todayStats) {
-				const stats = new StatsItem(profile);
+				const stats = new StatsItem(profile, day);
 				stats.createdCollections++;
 	
 				await db.collection("stats").insertOne(stats);
 			} else {
 				await db.collection("stats").updateOne({ _id: todayStats._id }, {
 					$set: {
-						createdCollections: todayStats.createdCollections + 1
+						createdCollections: todayStats.createdCollections + 1,
 					}
 				})
 			}

@@ -33,10 +33,23 @@ class Learner {
 	}
 
 	async _createRepetition(repetition: IRepetitionInput) {
-		await client.mutate({
-			mutation: CREATE_REPETITION,
-			variables: { input: repetition }
-		})
+		try {
+			await client.mutate({
+				mutation: CREATE_REPETITION,
+				variables: { input: repetition }
+			})
+		} catch(e: any) {
+			console.log(`Failed to save repetition data ${e}`);
+			for(let key in e) {
+				console.log(key);
+				console.log(e[key]);
+			}
+			console.log(e.networkError)
+			for(let key in e.networkError) {
+				console.log(key);
+				console.log(e[key]);
+			}
+		}
 	}
 }
 

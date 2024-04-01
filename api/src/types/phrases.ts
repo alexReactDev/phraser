@@ -1,8 +1,7 @@
-import { IPhraseMeta } from "@ts/phrases"
-
 export interface IPhraseInput {
 	value: string,
-	translation: string
+	translation: string,
+	day: number
 }
 
 export interface IPhraseRepetitionInput {
