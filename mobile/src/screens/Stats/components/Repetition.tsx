@@ -134,7 +134,8 @@ const styles = {
 		rowValue: {
 			...commonStyles.rowValue,
 			width: "20%",
-			fontSize: 14
+			fontSize: 14,
+			textAlign: "center"
 		}
 	})
 }

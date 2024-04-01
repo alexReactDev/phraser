@@ -135,7 +135,7 @@ const StatsByPeriod = observer(function({ period }: { period: statsPeriodType })
 						<Text style={styles.rowName}>
 							Favorite learning method:
 						</Text>
-						<Text style={{ ...styles.rowValue, width: "50%", textAlign: "right" }}>
+						<Text style={styles.rowValue}>
 							{stats.favoriteLearningMethod}
 						</Text>
 					</View>
@@ -150,7 +150,7 @@ const StatsByPeriod = observer(function({ period }: { period: statsPeriodType })
 						<Text style={styles.rowName}>
 							Visited:
 						</Text>
-						<Text style={{...styles.rowValue, width: "50%", textAlign: "right" }}>
+						<Text style={styles.rowValue}>
 							{`${stats.visitedDays} day(s) / ${stats.visitedPercentage}%`}
 						</Text>
 					</View>

@@ -21,9 +21,10 @@ export default StyleSheet.create({
 		fontSize: 15
 	},
 	rowValue: {
-		width: "25%",
+		minWidth: "22.5%",
 		textAlign: "center",
 		color: fontColor,
-		fontSize: 15
+		fontSize: 15,
+		lineHeight: 21
 	}
 })

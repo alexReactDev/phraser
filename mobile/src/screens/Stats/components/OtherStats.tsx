@@ -59,8 +59,8 @@ const OtherStats = observer(function () {
 						<Text style={styles.rowName}>
 							Joined:
 						</Text>
-						<Text style={{...styles.rowValue, width: "50%", textAlign: "right"}}>
-							{`${joinDate} (${daysAgo} days ago)`}
+						<Text style={styles.rowValue}>
+							{`${joinDate} (${daysAgo} day(s) ago)`}
 						</Text>
 					</View>
 				</View>

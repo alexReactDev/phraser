@@ -48,8 +48,8 @@ function RepeatedCollectionsDiagram({ dailyRepetitions, date, period }: IProps) 
 
 				if(columnData) {
 					const items = [];
-					if(columnData.learningMethods.cards) items.push({ value: columnData.learningMethods.cards, color: "#f46256" });
-					if(columnData.learningMethods.aiGeneratedText) items.push({ value: columnData.learningMethods.aiGeneratedText, color: "#799dea" });
+					if(columnData.learningMethods.cards) items.push({ value: columnData.learningMethods.cards, color: "#799dea" });
+					if(columnData.learningMethods.aiGeneratedText) items.push({ value: columnData.learningMethods.aiGeneratedText, color: "#f46256" });
 					if(columnData.learningMethods.description) items.push({ value: columnData.learningMethods.description, color: "#71b671" });
 
 					columns.push(<ColumnIncrement key={columnData.date} items={items} itemHeight={itemHeight} width={18} />);
