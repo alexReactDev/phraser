@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useMutation, useQuery } from "@apollo/client";
 import { DELETE_PHRASES_MANY, GET_COLLECTION_PHRASES, GET_PHRASE } from "../../../query/phrases";
 import Loader from "../../../components/Loaders/Loader";
@@ -70,38 +70,52 @@ const CollectionScreen = observer(function({ route, navigation }: Props) {
 	}, [selectionEnabled, selectedItems])
 
 	async function deleteManyHandler() {
-		loadingSpinner.setLoading();
+		Alert.alert(`Are you sure you want to delete all selected phrases?`, "They will be deleted permanently", [
+			{
+				text: "Cancel",
+				style: "cancel"
+			},
+			{
+				text: "Delete",
+				style: "destructive",
+				onPress: async () => {
+					loadingSpinner.setLoading();
 
-		try {
-			await deleteMany({
-				variables: {
-					ids: selectedItems
-				},
-				update: (cache) => {
-					cache.modify({
-						id: `Collection:${colId}`,
-						fields: {
-							lastUpdate: () => new Date().getTime(),
-							//@ts-ignore Meta is not a reference
-							meta: (oldMeta: ICollectionMeta) => ({
-								...oldMeta,
-								phrasesCount: oldMeta.phrasesCount - selectedItems.length
-							})
-						}
-					});
-					selectedItems.forEach((id) => {
-						cache.evict({ id: `Phrase:${id}` });
-					});
+					try {
+						await deleteMany({
+							variables: {
+								ids: selectedItems
+							},
+							update: (cache) => {
+								cache.modify({
+									id: `Collection:${colId}`,
+									fields: {
+										lastUpdate: () => new Date().getTime(),
+										//@ts-ignore Meta is not a reference
+										meta: (oldMeta: ICollectionMeta) => ({
+											...oldMeta,
+											phrasesCount: oldMeta.phrasesCount - selectedItems.length
+										})
+									}
+								});
+								selectedItems.forEach((id) => {
+									cache.evict({ id: `Phrase:${id}` });
+								});
+							}
+						});
+					} catch (e: any) {
+						console.log(e);
+						errorMessage.setErrorMessage(`Failed to delete phrases ${e.toString()}`);
+						loadingSpinner.dismissLoading();
+						return;
+					}
+			
+					loadingSpinner.dismissLoading();
+					setSelectedItems([]);
+					setSelectionEnabled(false);
 				}
-			});
-		} catch (e: any) {
-			console.log(e);
-			errorMessage.setErrorMessage(`Failed to delete phrases ${e.toString()}`);
-		}
-
-		loadingSpinner.dismissLoading();
-		setSelectedItems([]);
-		setSelectionEnabled(false);
+			}
+		]);
 	}
 
 	function renderSelectionInfo() {
