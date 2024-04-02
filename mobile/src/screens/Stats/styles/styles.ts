@@ -21,6 +21,7 @@ export default StyleSheet.create({
 		fontSize: 15
 	},
 	rowValue: {
+		maxWidth: "50%",
 		minWidth: "22.5%",
 		textAlign: "center",
 		color: fontColor,
