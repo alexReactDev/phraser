@@ -20,7 +20,10 @@ class SettingsController {
 				useGPT3: false,
 				textDifficulty: "default",
 				disableSuggestions: false,
-				suggestionsLanguage: "en"
+				suggestionsLanguage: "en",
+				statsReminderEnabled: true,
+				phraseOfTheDayReminderEnabled: true,
+				studyReminderFrequency: "daily"
 			}
 		}
 

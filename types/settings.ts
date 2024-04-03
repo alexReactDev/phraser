@@ -8,6 +8,7 @@ export interface IUserSettings {
 	settings: ISettings
 }
 
+export type studyReminderFrequency = "disabled" | "weekly-multiple" | "daily" | "daily-multiple"
 export interface ISettings {
 	theme: string,
 	phrasesOrder: TPhrasesOrder,
@@ -19,5 +20,8 @@ export interface ISettings {
 	useGPT3: boolean,
 	textDifficulty: TTextDifficulty,
 	disableSuggestions: boolean,
-	suggestionsLanguage: string
+	suggestionsLanguage: string,
+	statsReminderEnabled: boolean,
+	phraseOfTheDayReminderEnabled: boolean,
+	studyReminderFrequency: studyReminderFrequency
 }

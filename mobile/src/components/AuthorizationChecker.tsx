@@ -11,6 +11,9 @@ import { GET_USER_SETTING } from "../query/settings";
 import settings from "../store/settings";
 import LoadingScreen from "./Loaders/LoadingScreen";
 import { REPORT_VISIT } from "@query/stats";
+import * as Notifications from 'expo-notifications';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { updateStatsReminderNotification, updateStudyReminderNotification } from "@utils/notifications";
 
 const AuthorizationChecker = observer(function ({ children }: any) {
 	const { data, error } = useQuery(GET_SESSION, { skip: !session.data.token  || !!session.data.sid });
@@ -61,6 +64,29 @@ const AuthorizationChecker = observer(function ({ children }: any) {
 		if(!settingsError) return;
 		settings.loadError(error);
 	}, [error]);
+
+	useEffect(() => {
+		if(!settingsData) return;
+
+		const settings = settingsData.getUserSettings;
+		
+		(async () => {
+			const status = await Notifications.getPermissionsAsync();
+			if(status.status !== "granted") return;
+
+			const statsReminderIdentifier = await AsyncStorage.getItem("statsReminderIdentifier");
+
+			if(!!statsReminderIdentifier !== settings.settings.statsReminderEnabled) {
+				await updateStatsReminderNotification(settings.settings.statsReminderEnabled);
+			}
+
+			const studyReminderFrequency = await AsyncStorage.getItem("studyReminderFrequency");
+
+			if(studyReminderFrequency !== settings.settings.studyReminderFrequency) {
+				await updateStudyReminderNotification(settings.settings.studyReminderFrequency);
+			}
+		})();
+	}, [settingsData]);
 
 	async function updateCredentials(data: IAuthData) {
 		let savedToken;

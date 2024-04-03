@@ -14,6 +14,7 @@ import { observer } from "mobx-react-lite";
 import session from "@store/session";
 import { useEffect, useState } from "react";
 import OtherSettings from "./components/OtherSettings";
+import NotificationSettings from "./components/NotificationSettings";
 
 export type SettingsNavigatorParams = {
 	Settings: undefined,
@@ -71,6 +72,7 @@ const Settings = observer(function() {
 			<AutoCollectionsSettings />
 			<LearnModeSettings />
 			<AISettings />
+			<NotificationSettings />
 			<OtherSettings />
 			<AccountManagement />
 		</ScrollView>

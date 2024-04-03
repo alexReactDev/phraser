@@ -98,7 +98,10 @@ const schema = buildSchema(`
 		useGPT3: Boolean,
 		textDifficulty: String,
 		disableSuggestions: Boolean,
-		suggestionsLanguage: String
+		suggestionsLanguage: String,
+		statsReminderEnabled: Boolean,
+		phraseOfTheDayReminderEnabled: Boolean,
+		studyReminderFrequency: String
 	}
 
 	type UserSettings {
@@ -268,7 +271,10 @@ const schema = buildSchema(`
 		textDifficulty: String!,
 		useGPT3: Boolean!,
 		disableSuggestions: Boolean!,
-		suggestionsLanguage: String!
+		suggestionsLanguage: String!,
+		statsReminderEnabled: Boolean!,
+		phraseOfTheDayReminderEnabled: Boolean!,
+		studyReminderFrequency: String!
 	}
 
 	input PartialSettingsInput {
@@ -282,7 +288,10 @@ const schema = buildSchema(`
 		textDifficulty: String,
 		useGPT3: Boolean,
 		disableSuggestions: Boolean,
-		suggestionsLanguage: String
+		suggestionsLanguage: String,
+		statsReminderEnabled: Boolean,
+		phraseOfTheDayReminderEnabled: Boolean,
+		studyReminderFrequency: String
 	}
 
 	input LoginInput {

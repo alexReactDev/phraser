@@ -31,7 +31,10 @@ export const GET_USER_SETTING = gql`
 				useGPT3,
 				textDifficulty,
 				disableSuggestions,
-				suggestionsLanguage
+				suggestionsLanguage,
+				statsReminderEnabled,
+				phraseOfTheDayReminderEnabled,
+				studyReminderFrequency
 			}
 		}
 	}
