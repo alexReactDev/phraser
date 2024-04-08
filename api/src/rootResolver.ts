@@ -21,6 +21,7 @@ import { IntervalRepetitionDatesValues, PhrasesOrderValues, TextDifficultyValues
 import { IContext } from "@ts-backend/context";
 import PremiumController from "./controller/Premium";
 import StatsController from "./controller/Stats";
+import notificationsController from "./controller/Notifications";
 
 const root = {
 	login: authController.login.bind(authController),
@@ -587,6 +588,14 @@ const root = {
 		if(profile.userId !== context.auth.userId) throw new Error("403. Access denied");
 
 		return await StatsController.getStatsByPeriod(params, context);
+	},
+
+	updateNotificationsToken: async (params: { userId: string, token: string }, context: IContext ) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		if(params.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		return await notificationsController.updateNotificationsToken(params);
 	}
 }
 

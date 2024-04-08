@@ -9,6 +9,7 @@ import collectionsController from "./Collections";
 import { IAutoCollection } from "@ts/collections";
 import StatsItem from "../Classes/StatsItem";
 import CustomDate from "../Classes/CustomDate";
+import { IPhrase } from "@ts/phrases";
 
 class PhrasesController {
 	async getPhrase({ id }: { id: string }) {
@@ -24,6 +25,34 @@ class PhrasesController {
 		if(!phrase) throw new Error("404. Phrase not found");
 
 		return phrase;
+	}
+
+	async getPhraseOfTheDay({ userId }: { userId: string }) {
+		let phrases;
+
+		try {
+			const cursor = await db.collection("phrases").find({ userId });
+			phrases = await cursor.toArray();
+		}
+		catch(e: any) {
+			globalErrorHandler(e);
+			throw new Error("Server error. Failed to get phrases");
+		}
+
+		interface IPhraseWithScore {
+			phrase: IPhrase,
+			score: number
+		}
+
+		const phrasesWithScore = phrases.map((phrase: IPhrase) => ({
+			phrase,
+			score: phrase.meta.forgotten - phrase.meta.guessed
+		}));
+
+		const selectedPhrases = phrasesWithScore.concat().sort((a: IPhraseWithScore, b: IPhraseWithScore) => b.score - a.score).slice(0, 20);
+		const index = Math.trunc(Math.random() * selectedPhrases.length);
+
+		return selectedPhrases[index].phrase;
 	}
 
 	async getPhrasesByCollection({ id }: { id: string }) {
