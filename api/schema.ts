@@ -364,7 +364,8 @@ const schema = buildSchema(`
 		resetPassword(input: resetPasswordInput!): TokenData,
 		verifyEmail(userId: String!): String,
 		continueWithGoogle(token: String!): TokenData,
-		reportVisit(userId: String!, day: Int!): String
+		reportVisit(userId: String!, day: Int!): String,
+		updateNotificationsToken(userId: String!, token: String!): String
 	}
 `);
 

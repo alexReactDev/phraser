@@ -1,0 +1,44 @@
+{
+	"cli": {
+	  "version": ">= 5.9.1"
+	},
+	"build": {
+	  "development": {
+		"developmentClient": true,
+		"distribution": "internal",
+		"env": {
+		  "EXPO_PUBLIC_API_URL": "http://10.0.2.2:4000",
+		  "EXPO_PUBLIC_WEB_CLIENT_ID": "751314240555-ifljpu16tlh0qgth3h6du8r2rhn05q51.apps.googleusercontent.com",
+		  "EXPO_PUBLIC_PROJECT_ID": "88bf46ea-bb07-401a-9956-a56f5f943cba",
+		  "EXPO_PUBLIC_PACKAGE_NAME": "com.alexreactdev.vocabulary"
+		},
+		"android": {
+		  "buildType": "apk",
+		  "gradleCommand": ":app:assembleRelease"
+		}
+	  },
+	  "preview": {
+		"developmentClient": true,
+		"distribution": "internal",
+		"env": {
+		  "EXPO_PUBLIC_API_URL": "https://vocabulary.alexander-portfolio-and-cv.com/graphql",
+		  "EXPO_PUBLIC_WEB_CLIENT_ID": "751314240555-ifljpu16tlh0qgth3h6du8r2rhn05q51.apps.googleusercontent.com",
+		  "EXPO_PUBLIC_PROJECT_ID": "88bf46ea-bb07-401a-9956-a56f5f943cba",
+		  "EXPO_PUBLIC_PACKAGE_NAME": "com.alexreactdev.vocabulary"
+		},
+		"android": {
+		  "buildType": "apk",
+		  "gradleCommand": ":app:assembleRelease"
+		}
+	  },
+	  "production": {
+		"env": {
+		  "EXPO_PUBLIC_API_URL": "https://vocabulary.alexander-portfolio-and-cv.com/graphql"
+		}
+	  }
+	},
+	"submit": {
+	  "production": {}
+	}
+}
+  

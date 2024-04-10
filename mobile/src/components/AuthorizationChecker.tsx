@@ -14,10 +14,71 @@ import { REPORT_VISIT } from "@query/stats";
 import * as Notifications from 'expo-notifications';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updateStatsReminderNotification, updateStudyReminderNotification } from "@utils/notifications";
+import { UPDATE_NOTIFICATIONS_TOKEN } from "@query/notifications";
+import * as TaskManager from "expo-task-manager";
 
 const AuthorizationChecker = observer(function ({ children }: any) {
 	const { data, error } = useQuery(GET_SESSION, { skip: !session.data.token  || !!session.data.sid });
 	const [ reportVisit ] = useMutation(REPORT_VISIT);
+	const [ updateNotificationsToken ] = useMutation(UPDATE_NOTIFICATIONS_TOKEN);
+
+	useEffect(() => {
+		if(!session.data.userId) return;
+
+		(async () => {
+			try {
+				const tokenSent = await AsyncStorage.getItem("notificationsTokenSent");
+				if(tokenSent) return;
+	
+				const expoToken = await Notifications.getExpoPushTokenAsync({
+					projectId: process.env.EXPO_PUBLIC_PROJECT_ID
+				});
+
+				await updateNotificationsToken({
+					variables: {
+						userId: session.data.userId,
+						token: expoToken.data
+					}
+				});
+			} catch (e: any) {
+				console.log(`Failed to obtain and send notifications token ${e}`);
+				return;
+			}
+
+			await AsyncStorage.setItem("notificationsTokenSent", "true");
+		})();
+	}, [session.data.userId]);
+
+	useEffect(() => {
+		(async () => {
+			const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
+
+			TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async ({ data }: any) => {
+				if(!data) return;
+
+				let date = new Date();
+
+				if(date.getHours() > 17) {
+					date.setTime(date.getTime() + 86400000);
+				}
+	
+				date.setHours(17);
+				date.setMinutes(15);
+
+				await Notifications.scheduleNotificationAsync({
+					content: {
+						title: `Do you remember what does: ${JSON.parse(data.notification.data.body).value} mean?`,
+						body: `It's "${JSON.parse(data.notification.data.body).translation}". Don't forget to repeat your saved phrases regularly.`
+					},
+					trigger: {
+						date: date
+					}
+				});
+			});
+
+			await Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
+		})();
+	}, [])
 
 	useEffect(() => {
 		if(!session.data.userId) return;
