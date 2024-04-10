@@ -13,7 +13,8 @@ export const LOGIN = gql`
 		login(input: $input) {
 			token,
 			sid,
-			userId
+			userId,
+			type
 		}
 	}
 `;
@@ -73,5 +74,16 @@ export const GET_VERIFICATION_STATUS = gql`
 export const VERIFY_EMAIL = gql`
 	mutation verifyEmail($userId: String!) {
 		verifyEmail(userId: $userId)
+	}
+`;
+
+export const CONTINUE_WITH_GOOGLE = gql`
+	mutation continueWithGoogle($token: String!) {
+		continueWithGoogle(token: $token) {
+			token,
+			sid,
+			userId,
+			type
+		}
 	}
 `;

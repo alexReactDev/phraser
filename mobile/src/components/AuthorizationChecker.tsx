@@ -16,6 +16,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updateStatsReminderNotification, updateStudyReminderNotification } from "@utils/notifications";
 import { UPDATE_NOTIFICATIONS_TOKEN } from "@query/notifications";
 import * as TaskManager from "expo-task-manager";
+import { Alert } from "react-native";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 const AuthorizationChecker = observer(function ({ children }: any) {
 	const { data, error } = useQuery(GET_SESSION, { skip: !session.data.token  || !!session.data.sid });
@@ -98,7 +100,20 @@ const AuthorizationChecker = observer(function ({ children }: any) {
 		settings.loadingStart();
 
 		getAuthToken().then((res) => {
-			session.tokenLoaded(res);
+			if(res?.type === "google") {
+				GoogleSignin.getTokens().then((oldTokens) => {
+					GoogleSignin.clearCachedAccessToken(oldTokens.accessToken).then(() => {
+						GoogleSignin.getTokens().then((googleTokens) => {
+							session.tokenLoaded({
+								...res,
+								oauthToken: googleTokens.idToken
+							});
+						});
+					});
+				})
+			} else {
+				session.tokenLoaded(res);
+			}
 		}).catch((err) => {
 			session.sessionError(err);
 		})
@@ -153,9 +168,10 @@ const AuthorizationChecker = observer(function ({ children }: any) {
 		let savedToken;
 
 		try {
-			savedToken = await setAuthToken(data.token);
+			savedToken = await setAuthToken(data.token, data.type);
 		} catch (e) {
-			console.log(e);
+			Alert.alert("Authorization error", "Something went wrong during authorization. Try again later");
+			return;
 		}
 
 		session.dataLoaded(data);

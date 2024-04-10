@@ -3,6 +3,7 @@ export default {
 	  "name": "vocabulary",
 	  "slug": "vocabulary",
 	  "version": "1.0.0",
+	  "scheme": "com.alexreactdev.vocabulary",
 	  "orientation": "portrait",
 	  "icon": "./assets/icon.png",
 	  "userInterfaceStyle": "light",

@@ -1,27 +1,28 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthType } from '@ts/authorization';
 
 export async function getAuthToken() {
-	let token;
+	const token = await AsyncStorage.getItem("token");
+	const type =  await AsyncStorage.getItem("authType");
 
-	try {
-		token = await AsyncStorage.getItem("token");
-	} catch (e) {
-		console.log(e);
-	}
+	if(token && type) return {
+		token,
+		type: type as AuthType
+	};
 
-	if(token) return token;
-
-	return "";
+	return null;
 }
 
-export async function setAuthToken(token: string) {
-	let result;
+export async function setAuthToken(token: string, type: AuthType = "default") {
+	await AsyncStorage.setItem("token", token);
+	await AsyncStorage.setItem("authType", type);
 
-	try {
-		await AsyncStorage.setItem("token", token);
-		result = await AsyncStorage.getItem("token");
-	} catch (e) {
-		console.log(e);
+	const savedToken = await AsyncStorage.getItem("token");
+	const authType = await AsyncStorage.getItem("authType");
+
+	const result = {
+		token: savedToken,
+		type: authType
 	}
 
 	return result;

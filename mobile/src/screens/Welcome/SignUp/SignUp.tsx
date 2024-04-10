@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import WelcomeWrapper from "../components/WelcomeWrapper";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
 import SecureTextInput from "@components/Inputs/SecureTextInput";
+import ContinueWithGoogle from "../components/GontinueWithGoogle";
 
 type NavigationProp = StackNavigationProp<WelcomeNavigatorParams, "Sign up", "WelcomeNavigator">;
 
@@ -122,6 +123,7 @@ const SignUp = observer(function({ updateCredentials }: { updateCredentials: (da
 				/>
 				<Button title="Sign up" onPress={signUpHandler}></Button>
 				<Button title="Login" onPress={() => navigation.navigate("Login")} color={faintBlue}></Button>
+				<ContinueWithGoogle onError={(e) => setErrorMessage(`Google authorization failed. ${e.toString()}`)} onSuccess={updateCredentials} />
 			</View>
 		</WelcomeWrapper>
 	)

@@ -21,6 +21,7 @@ import { StatusBar } from "expo-status-bar";
 import { Platform, useColorScheme } from "react-native";
 import Stats from "src/screens/Stats/Stats";
 import * as Notifications from 'expo-notifications';
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 Notifications.setNotificationHandler({
   handleNotification: async (notification) => {
@@ -40,6 +41,10 @@ Notifications.setNotificationHandler({
     }
 
   },
+});
+
+GoogleSignin.configure({
+	webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID
 });
 
 Sentry.init({

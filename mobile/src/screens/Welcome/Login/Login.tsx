@@ -15,13 +15,14 @@ import WelcomeWrapper from "../components/WelcomeWrapper";
 import { StyleSheet } from "react-native";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
 import SecureTextInput from "@components/Inputs/SecureTextInput";
+import ContinueWithGoogle from "../components/GontinueWithGoogle";
 
 type NavigationProp = StackNavigationProp<WelcomeNavigatorParams, "Login", "WelcomeNavigator">;
 
 const Login = observer(function({ updateCredentials }: { updateCredentials: (data: IAuthData) => void }) {
 	const navigation = useNavigation<NavigationProp>();
 	const passwordRef = useRef<any>(null);
-
+	
 	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 
@@ -101,6 +102,7 @@ const Login = observer(function({ updateCredentials }: { updateCredentials: (dat
 				/>
 				<Button title="Login" onPress={loginHandler}></Button>
 				<Button title="Sign up" onPress={() => navigation.navigate("Sign up")} color={faintBlue}></Button>
+				<ContinueWithGoogle onError={(e) => setErrorMessage(`Google authorization failed. ${e.toString()}`)} onSuccess={updateCredentials} />
 				<TouchableOpacity
 					style={style.forgotButton}
 					activeOpacity={0.5}
