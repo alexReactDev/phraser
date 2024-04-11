@@ -1,8 +1,9 @@
 export default {
 	"expo": {
-	  "name": "vocabulary",
-	  "slug": "vocabulary",
+	  "name": "Phraser",
+	  "slug": "phraser",
 	  "version": "1.0.0",
+	  "scheme": "com.alexreactdev.phraser",
 	  "orientation": "portrait",
 	  "icon": "./assets/icon.png",
 	  "userInterfaceStyle": "light",
@@ -19,11 +20,11 @@ export default {
 	  },
 	  "extra": {
 		"eas": {
-		  "projectId": "88bf46ea-bb07-401a-9956-a56f5f943cba"
+			"projectId": "f5e88cd4-a385-47cd-b2ae-9ede5a6d171d"
 		}
 	  },
 	  "android": {
-		"package": "com.alexreactdev.vocabulary",
+		"package": "com.alexreactdev.phraser",
 		"googleServicesFile": process.env.GOOGLE_SERVICES_JSON
 	  }
 	}
