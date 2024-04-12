@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { enableTutorial } from "@utils/tutorial";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { NavigatorParams } from "../../../../App";
+import { NavigatorParams } from "../../../Navigation";
 
 type NavigationProp = BottomTabNavigationProp<NavigatorParams, "Settings", "MainNavigator">
 

@@ -89,7 +89,8 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		textAlign: "center",
-		color: fontColor
+		color: fontColor,
+		lineHeight: 20
 	},
 	buttonContainer: {
 		width: "30%",

@@ -1,13 +1,7 @@
 import "react-native-gesture-handler";
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons'; 
-import Add from './src/screens/Add/Add';
-import Collections from './src/screens/Collections/Collections';
-import Settings from "./src/screens/Settings/Settings";
 import { ApolloProvider } from '@apollo/client';
 import AuthorizationChecker from "./src/components/AuthorizationChecker";
-import Profiles from "./src/components/Profiles";
 import { ClickOutsideProvider } from "react-native-click-outside";
 import { client } from "src/apollo";
 import ErrorMessageToast from "@components/Errors/ToastMessage";
@@ -19,8 +13,8 @@ import { useEffect, useState } from "react";
 import * as Sentry from '@sentry/react-native';
 import { StatusBar } from "expo-status-bar";
 import { Platform, useColorScheme } from "react-native";
-import Stats from "src/screens/Stats/Stats";
 import * as Notifications from 'expo-notifications';
+import Navigation from "src/Navigation";
 
 Notifications.setNotificationHandler({
   handleNotification: async (notification) => {
@@ -47,19 +41,10 @@ Sentry.init({
   debug: true
 });
 
-export type NavigatorParams = {
-  Add: undefined,
-  Collections: undefined,
-  Stats: undefined,
-  Settings: undefined
-}
-
-const Navigator = createBottomTabNavigator<NavigatorParams>();
-
 function App() {
   const [ error, setError ] = useState<any>(null);
   const theme = useColorScheme();
-  const barColor = theme === "dark" ? "#333" : "#fff";
+	const barColor = theme === "dark" ? "#333" : "#fff";
 
   useEffect(() => {
     setJSExceptionHandler((error, isFatal) => {
@@ -110,29 +95,7 @@ function App() {
               <LoaderToast />
               <StatusBar translucent={true} hidden={false} backgroundColor={barColor} />
               <AuthorizationChecker>
-                <Navigator.Navigator 
-                  id="MainNavigator" 
-                  screenOptions={{
-                    tabBarActiveTintColor: "black",
-                    tabBarInactiveTintColor: "gray"
-                  }}>
-                    <Navigator.Screen name="Add" component={Add} options={{
-                      tabBarIcon: ({ focused }) => <Ionicons name="language" size={24} color={focused ? "black" : "gray"} />,
-                      headerRight: () => <Profiles />
-                    }}></Navigator.Screen>
-                    <Navigator.Screen name="Collections" component={Collections} options={{
-                      tabBarIcon: ({ focused }) => <Ionicons name="copy" size={24} color={focused ? "black" : "gray"} />,
-                      headerShown: false
-                    }}></Navigator.Screen>
-                    <Navigator.Screen name="Stats" component={Stats} options={{
-                      tabBarIcon: ({ focused }) => <Ionicons name="stats-chart" size={24} color={focused ? "black" : "gray"}  />,
-                      headerRight: () => <Profiles />
-                    }}></Navigator.Screen>
-                    <Navigator.Screen name="Settings" component={Settings} options={{
-                      tabBarIcon: ({ focused }) => <Ionicons name="settings-sharp" size={24} color={focused ? "black" : "gray"}  />,
-                      headerShown: false
-                    }}></Navigator.Screen>
-                </Navigator.Navigator>
+                  <Navigation />
               </AuthorizationChecker>
             </>
           </NavigationContainer>

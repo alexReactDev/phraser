@@ -572,6 +572,14 @@ const root = {
 		return await PremiumController.getPremiumData(params);
 	},
 
+	cancelSubscription: async (params: { userId: string, password: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		if(params.userId !== context.auth.userId) throw new Error("403. Access denied");
+
+		return await PremiumController.cancelSubscription(params);
+	},
+
 	reportVisit: async (params: { userId: string, day: number }, context: IContext) => {
 		if(!context.auth) throw new Error("401. Authorization required");
 
