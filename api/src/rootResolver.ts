@@ -22,6 +22,7 @@ import { IContext } from "@ts-backend/context";
 import PremiumController from "./controller/Premium";
 import StatsController from "./controller/Stats";
 import notificationsController from "./controller/Notifications";
+import AIGeneratedImagesController from "./controller/AIGeneratedImages";
 
 const root = {
 	login: authController.login.bind(authController),
@@ -509,6 +510,25 @@ const root = {
 		if(!premium) throw new Error("403. Access denied - premium subscription is required");
 
 		return await AIGeneratedTextController.generateHintSentence(params, context);
+	},
+
+	getAIGeneratedImage: async (params: { phrase: string }, context: IContext) => {
+		if(!context.auth) throw new Error("401. Authorization required");
+
+		let premium;
+
+		try {
+			premium = await db.collection("premium").findOne({
+				userId: context.auth.userId
+			})
+		} catch (e: any) {
+			globalErrorHandler(e);
+			throw new Error(`Server error. Failed to get premium information ${e.toString()}`);
+		}
+
+		if(!premium) throw new Error("403. Access denied - premium subscription is required");
+
+		return await AIGeneratedImagesController.getAIGeneratedImage(params);
 	},
 
 	getTranslatedText: async (params: { input: string }, context: IContext) => {

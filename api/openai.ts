@@ -6,5 +6,7 @@ export const openai = new OpenAI({
 
 export const models = {
 	gpt3: "gpt-3.5-turbo",
-	gpt4: "gpt-4"
+	gpt4: "gpt-4",
+	dalle2: "dall-e-2",
+	dalle3: "dall-e-3"
 }

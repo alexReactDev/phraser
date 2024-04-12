@@ -202,6 +202,10 @@ const schema = buildSchema(`
 		created: Float
 	}
 
+	type AIGeneratedImage {
+		url: String
+	}
+
 	type Query {
 		getUser(id: ID!): User,
 		getCollection(id: ID!): Collection,
@@ -218,6 +222,7 @@ const schema = buildSchema(`
 		getGeneratedSentences(phrases: [String]!): [String],
 		getGeneratedDescription(phrase: String!): String,
 		getGeneratedHintSentence(phrase: String!): String,
+		getAIGeneratedImage(phrase: String!): AIGeneratedImage,
 		getTranslatedText(input: String!): String,
 		getSupportedLanguages: [Language],
 		checkVerificationCode(email: String!, code: String!): String,

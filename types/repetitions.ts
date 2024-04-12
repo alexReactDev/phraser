@@ -1,4 +1,4 @@
-export type repetitionType = "Cards" | "AI generated text" | "Description"
+export type repetitionType = "Cards" | "AI generated text" | "Description" | "AI generated image"
 
 export interface PhraseRepetition {
 	id: string,

@@ -25,6 +25,7 @@ import Search from "@components/Search";
 import SearchResults from "./components/SearchResults";
 import Edit from "./Edit/Edit";
 import Description from "./Learn/Description/Description";
+import AssociativePictures from "./Learn/AssociativePictures/AssociativePictures";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CollectionsTutorial from "./components/CollectionsTutorial";
 import AutoCollectionsTutorial from "./components/AutoCollectionsTutorial";
@@ -37,6 +38,7 @@ export type StackNavigatorParams = {
 	Cards: { colId: string },
 	AIGeneratedText: { colId: string },
 	Description: { colId: string },
+	AssociativePictures: { colId: string },
 	Edit: { mutateId: string }
 }
 
@@ -57,6 +59,7 @@ function CollectionsNavigation() {
 			<StackNavigator.Screen name="Cards" component={Cards}/>
 			<StackNavigator.Screen name="AIGeneratedText" component={AIGeneratedText} />
 			<StackNavigator.Screen name="Description" component={Description} />
+			<StackNavigator.Screen name="AssociativePictures" component={AssociativePictures} />
 			<StackNavigator.Screen name="Edit" component={Edit} />
 		</StackNavigator.Navigator>
 	)

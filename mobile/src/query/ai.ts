@@ -23,3 +23,11 @@ export const GET_GENERATED_HINT_SENTENCE = gql`
 		getGeneratedHintSentence(phrase: $phrase)
 	}
 `;
+
+export const GET_AI_GENERATED_IMAGE = gql`
+	query getAIGeneratedImage($phrase: String!) {
+		getAIGeneratedImage(phrase: $phrase) {
+			url
+		}
+	}
+`;

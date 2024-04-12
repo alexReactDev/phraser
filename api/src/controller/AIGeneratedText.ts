@@ -1,5 +1,4 @@
 import { IUserSettings } from "@ts/settings";
-
 import { openai, models } from "../../openai";
 import globalErrorHandler from "../misc/globalErrorHandler";
 import settingsController from "./Settings";

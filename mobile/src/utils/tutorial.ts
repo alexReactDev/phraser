@@ -10,6 +10,7 @@ export async function skipTutorial() {
 	await AsyncStorage.setItem("cardsTutorialPassed", "true");
 	await AsyncStorage.setItem("AIGeneratedTextTutorialPassed", "true");
 	await AsyncStorage.setItem("descriptionTutorialPassed", "true");
+	await AsyncStorage.setItem("associativePicturesTutorialPassed", "true");
 
 	toastMessage.setInfoMessage("You can enable tutorial again anytime in the app settings");
 }
@@ -23,4 +24,5 @@ export async function enableTutorial() {
 	await AsyncStorage.setItem("cardsTutorialPassed", "false");
 	await AsyncStorage.setItem("AIGeneratedTextTutorialPassed", "false");
 	await AsyncStorage.setItem("descriptionTutorialPassed", "false");
+	await AsyncStorage.setItem("associativePicturesTutorialPassed", "false");
 }
