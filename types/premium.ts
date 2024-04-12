@@ -1,0 +1,1 @@
+export type TSubscriptionPlans = "standard-yearly" | "standard-monthly";

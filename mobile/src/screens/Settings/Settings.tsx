@@ -15,10 +15,13 @@ import session from "@store/session";
 import { useEffect, useState } from "react";
 import OtherSettings from "./components/OtherSettings";
 import NotificationSettings from "./components/NotificationSettings";
+import PremiumSettings from "./components/PremiumSettings";
+import SubscriptionInfo from "./components/SubscriptionInfo";
 
 export type SettingsNavigatorParams = {
 	Settings: undefined,
-	"Change password": undefined
+	"Change password": undefined,
+	"Subscription info": undefined
 }
 
 const Navigator = createStackNavigator<SettingsNavigatorParams>();
@@ -28,6 +31,7 @@ function SettingsNavigation() {
 		<Navigator.Navigator id="SettingsNavigator">
 			<Navigator.Screen name="Settings" component={Settings} />
 			<Navigator.Screen name="Change password" component={ChangePassword} />
+			<Navigator.Screen name="Subscription info" component={SubscriptionInfo} />
 		</Navigator.Navigator>
 	)
 }
@@ -73,6 +77,7 @@ const Settings = observer(function() {
 			<LearnModeSettings />
 			<AISettings />
 			<NotificationSettings />
+			<PremiumSettings />
 			<OtherSettings />
 			<AccountManagement />
 		</ScrollView>

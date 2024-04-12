@@ -8,7 +8,7 @@ import { GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "../../query/collections";
 import { CREATE_PHRASE, GET_COLLECTION_PHRASES } from "../../query/phrases";
 import { ICollection, ICollectionMeta } from "@ts/collections";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { NavigatorParams } from "../../../App";
+import { NavigatorParams } from "../../Navigation";
 import settings from "../../store/settings";
 import { observer } from "mobx-react-lite";
 import loadingSpinner from "@store/loadingSpinner";

@@ -131,8 +131,25 @@ const schema = buildSchema(`
 		isVerified: Boolean
 	}
 
+	type TransactionData {
+		paid: Int
+	}
+
+	type TrialData {
+		started: Float,
+		ends: Float
+	}
+
 	type PremiumData {
-		hasPremium: Boolean
+		userId: ID,
+		hasPremium: Boolean,
+		created: Float,
+		expires: Float,
+		plan: String,
+		status: String,
+		isTrial: Boolean,
+		transaction: TransactionData,
+		trialData: TrialData
 	}
 
 	type StatsItem {
@@ -365,7 +382,8 @@ const schema = buildSchema(`
 		verifyEmail(userId: String!): String,
 		continueWithGoogle(token: String!): TokenData,
 		reportVisit(userId: String!, day: Int!): String,
-		updateNotificationsToken(userId: String!, token: String!): String
+		updateNotificationsToken(userId: String!, token: String!): String,
+		cancelSubscription(userId: ID!, password: String!): String
 	}
 `);
 
