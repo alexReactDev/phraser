@@ -25,7 +25,8 @@ export default {
 	  },
 	  "android": {
 		"package": "com.alexreactdev.phraser",
-		"googleServicesFile": process.env.GOOGLE_SERVICES_JSON
+		"googleServicesFile": process.env.GOOGLE_SERVICES_JSON,
+		"versionCode": "1.0.0"
 	  }
 	}
   }

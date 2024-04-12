@@ -31,7 +31,9 @@
 	  },
 	  "production": {
 		"env": {
-		  "EXPO_PUBLIC_API_URL": "https://vocabulary.alexander-portfolio-and-cv.com/graphql"
+			"EXPO_PUBLIC_API_URL": "https://vocabulary.alexander-portfolio-and-cv.com",
+			"EXPO_PUBLIC_WEB_CLIENT_ID": "751314240555-rn1rjuamfs835dhlo31qg9robkn3er0p.apps.googleusercontent.com",
+			"EXPO_PUBLIC_PROJECT_ID": "f5e88cd4-a385-47cd-b2ae-9ede5a6d171d"
 		}
 	  }
 	},
