@@ -14,6 +14,9 @@ import { observer } from "mobx-react-lite";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { NavigatorParams, PremiumNavigatorParams } from "src/Navigation";
+import PremiumBadge from "./components/PremiumBadge";
+import BetaBadge from "./components/BetaBadge";
+import ComingSoonBadge from "./components/ComingSoonBadge";
 
 type Props = CompositeScreenProps<
 	StackScreenProps<StackNavigatorParams, "Learn">,
@@ -84,12 +87,7 @@ const Learn = observer(function({ route, navigation }: Props) {
 				>
 					{
 						!hasPremium &&
-						<View style={styles.badge}>
-							<Text style={styles.badgeText}>
-								PREMIUM
-							</Text>
-							<Ionicons name="star" size={13} color="#f1b51b" />
-						</View>
+						<PremiumBadge style={{ bottom: 8, right: -4 }} />
 					}
 					<View style={styles.cardIconContainer}>
 						<Ionicons name="text" size={16} color="grey" />
@@ -108,12 +106,7 @@ const Learn = observer(function({ route, navigation }: Props) {
 				>
 					{
 						!hasPremium &&
-						<View style={styles.badge}>
-							<Text style={styles.badgeText}>
-								PREMIUM
-							</Text>
-							<Ionicons name="star" size={13} color="#f1b51b" />
-						</View>
+						<PremiumBadge style={{ bottom: 8, right: -4 }} />
 					}
 					<View style={styles.cardIconContainer}>
 						<Ionicons name="reader" size={16} color="grey" />
@@ -131,13 +124,11 @@ const Learn = observer(function({ route, navigation }: Props) {
 					onPress={() => hasPremium ? navigation.navigate("AssociativePictures", { colId }) : navigation.navigate("Premium")}
 				>
 					{
-						!hasPremium &&
-						<View style={styles.badge}>
-							<Text style={styles.badgeText}>
-								PREMIUM
-							</Text>
-							<Ionicons name="star" size={13} color="#f1b51b" />
-						</View>
+						!hasPremium
+						?
+						<PremiumBadge style={{ bottom: 8, right: -4 }} />
+						:
+						<BetaBadge style={{ bottom: 8, right: -4 }} />
 					}
 					<View style={styles.cardIconContainer}>
 						<Ionicons name="images" size={16} color="grey" />
@@ -212,25 +203,6 @@ const styles = StyleSheet.create({
 		color: fontColorFaint,
 		fontSize: 12,
 		lineHeight: 17
-	},
-	badge: {
-		position: "absolute",
-		bottom: 6,
-		right: -4,
-		height: 17,
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		gap: 4,
-		borderTopLeftRadius: 5,
-		borderBottomRightRadius: 5,
-		paddingHorizontal: 3,
-		backgroundColor: "#799dea"
-	},
-	badgeText: {
-		color: "white",
-		fontSize: 10,
-		fontWeight: "bold"
 	}
 })
 
