@@ -17,6 +17,7 @@ __Used technologies:__
 - MongoDB
 - ChatGPT, DALL-E (openAI api)
 - Bing translator api
+- Firebase PUSH notifications
 
 <br>
 
