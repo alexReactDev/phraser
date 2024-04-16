@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import db from "../model/db";
 import globalErrorHandler from "./globalErrorHandler";
 import MailService from "../controller/MailService";
+import getMailHTML from "./getMailHTML";
 
 export default async function verificationHandler(req: Request, res: Response) {
 	const link = req.params.link;
@@ -33,7 +34,7 @@ export default async function verificationHandler(req: Request, res: Response) {
 		await MailService.sendTo({
 			userId: verificationLink.userId,
 			subject: "Welcome",
-			html: "Thanks for your time. Your email was successfully verified and now you can use all application features. Enjoy!"
+			html: getMailHTML("Thanks for your time. Your email was successfully verified.")
 		})
 	} catch (e: any) {
 		globalErrorHandler(e);

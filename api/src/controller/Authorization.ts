@@ -12,6 +12,8 @@ import mailService from "./MailService";
 import { v4 } from "uuid";
 import MailService from "./MailService";
 import { AuthType } from "@ts/authorization"
+import moment from "moment";
+import getMailHTML from "../misc/getMailHTML";
 
 class AuthorizationController {
 	async login({ input }: { input: ILoginInput }, context: IContext) {
@@ -29,10 +31,19 @@ class AuthorizationController {
 
 		if(!bcrypt.compareSync(input.password, user.password)) throw new Error(`403. Wrong password`);
 
+		const ip = context.req.headers["x-real-ip"] || context.req.ip || "unknown";
+		const userAgent = context.req.headers["user-agent"] || "unknown";
+		const date = new Date();
+
 		mailService.sendTo({ 
 			userId: user.id, 
 			subject: "New login", 
-			html: `New successful login from ip ${context.req.ip}. If it wasn't you, please consider changing your password.`
+			html: getMailHTML(`New successful login from ip ${context.req.ip} at ${moment(date).format("HH:MM DD/MM/YYYY")}. If it wasn't you, please consider changing your password.`, {
+				action: "Successful login",
+				date: date.toString(),
+				ip: ip as string,
+				userAgent
+			})
 		});
 
 		const session = await this._createSession({ userId: user.id });
@@ -128,7 +139,7 @@ class AuthorizationController {
 		await mailService.sendTo({ 
 			userId, 
 			subject: "Please, verify your email", 
-			html: `Please, follow this link in order to verify your email: ${process.env.HOST}/verify/${link}. If you didn't request verification, just ignore this mail.`,
+			html: getMailHTML(`Please, follow this link in order to verify your email: ${process.env.HOST}/verify/${link}. If you didn't request verification, just ignore this mail.`),
 		})
 	}
 
@@ -180,16 +191,25 @@ class AuthorizationController {
 			throw new Error(`Server error. Failed to clear sessions ${e}`)
 		}
 
+		const ip = context.req.headers["x-real-ip"] || context.req.ip || "unknown";
+		const userAgent = context.req.headers["user-agent"] || "unknown";
+		const date = new Date();
+
 		MailService.sendTo({
 			userId,
 			subject: "Password changed",
-			html: `Your password had been changed from ip: ${context.req.ip}. If it wasn't you, please consider resetting your password.`
+			html: getMailHTML(`Your password had been changed from ip: ${ip} at ${moment(date).format("HH:MM DD/MM/YYYY")}. If it wasn't you, please consider resetting your password.`, {
+				action: "Password change",
+				date: date.toString(),
+				ip: ip as string,
+				userAgent
+			})
 		})
 		
 		return "OK"
 	}
 
-	async resetPassword({ input }: { input: IResetPasswordInput }) {
+	async resetPassword({ input }: { input: IResetPasswordInput }, context: IContext) {
 		const { email, code, newPassword } = input;
 
 		let user;
@@ -222,10 +242,20 @@ class AuthorizationController {
 
 		this._cleanVerificationCodes({ email });
 
+		
+		const ip = context.req.headers["x-real-ip"] || context.req.ip || "unknown";
+		const userAgent = context.req.headers["user-agent"] || "unknown";
+		const date = new Date();
+
 		MailService.sendTo({
 			userId: user.id,
 			subject: "Password reset",
-			html: `Your password was successfully reset`
+			html: getMailHTML(`Your password was successfully reset`, {
+				action: "Password reset",
+				date: date.toString(),
+				ip: ip as string,
+				userAgent
+			})
 		})
 
 		const session = await this._createSession({ userId: user.id });
@@ -268,10 +298,12 @@ class AuthorizationController {
 			throw new Error(`Server error. Failed to create verification code. ${e}`);
 		}
 
+		const ip = context.req.headers["x-real-ip"] || context.req.ip || "unknown";
+
 		MailService.sendTo({
 			userId: user.id,
 			subject: "Password reset",
-			html: `Password reset attempt from ip: ${context.req.ip}. This is your verification code ${code}. If you didn't request password reset, just ignore this mail.`
+			html: getMailHTML(`Password reset attempt from ip: ${ip}. This is your verification code ${code}. If you didn't request password reset, just ignore this mail.`)
 		})
 		
 		return "OK";
@@ -337,7 +369,7 @@ class AuthorizationController {
 			MailService.sendTo({
 				userId,
 				subject: "Welcome",
-				html: `You've successfully created phraser account via google.`
+				html: getMailHTML(`You phraser account was created via google. Welcome!`)
 			});
 			emailSent = true;
 		} else {
@@ -361,10 +393,19 @@ class AuthorizationController {
 		});
 
 		if(!emailSent) {
+			const ip = context.req.headers["x-real-ip"] || context.req.ip || "unknown";
+			const userAgent = context.req.headers["user-agent"] || "unknown";
+			const date = new Date();
+
 			mailService.sendTo({ 
 				userId: user.id, 
 				subject: "New login", 
-				html: `New successful login via google from ip ${context.req.ip}. If it wasn't you, consider changing your <b>google account</b> password.`
+				html: getMailHTML(`New successful login via google from ip ${ip} at ${moment(date).format("HH:MM DD/MM/YYYY")}. If it wasn't you, consider changing your <b>google account</b> password.`, {
+					action: "Successful login",
+					date: date.toString(),
+					ip: ip as string,
+					userAgent: userAgent
+				})
 			});
 		}
 
