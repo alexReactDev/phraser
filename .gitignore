@@ -39,3 +39,6 @@ _dev
 
 #Google services
 /mobile/google-services.json
+
+#logs
+/api/log

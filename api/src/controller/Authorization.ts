@@ -14,6 +14,7 @@ import MailService from "./MailService";
 import { AuthType } from "@ts/authorization"
 import moment from "moment";
 import getMailHTML from "../misc/getMailHTML";
+import logAccountSecurityEvent from "../misc/logAccountSecurityEven";
 
 class AuthorizationController {
 	async login({ input }: { input: ILoginInput }, context: IContext) {
@@ -35,10 +36,17 @@ class AuthorizationController {
 		const userAgent = context.req.headers["user-agent"] || "unknown";
 		const date = new Date();
 
+		logAccountSecurityEvent({
+			date: new Date().toString(),
+			type: "Login",
+			ip: ip as string,
+			user: user.id
+		});
+
 		mailService.sendTo({ 
 			userId: user.id, 
 			subject: "New login", 
-			html: getMailHTML(`New successful login from ip ${context.req.ip} at ${moment(date).format("HH:MM DD/MM/YYYY")}. If it wasn't you, please consider changing your password.`, {
+			html: getMailHTML(`New successful login from ip ${ip} at ${moment(date).format("HH:MM DD/MM/YYYY")}. If it wasn't you, please consider changing your password.`, {
 				action: "Successful login",
 				date: date.toString(),
 				ip: ip as string,
@@ -71,7 +79,8 @@ class AuthorizationController {
 		return "OK";
 	}
 
-	async signUp({ input }: { input: IUserInput }) {
+	async signUp({ input }: { input: IUserInput }, context: IContext) {
+		const ip = context.req.headers["x-real-ip"] || context.req.ip || "unknown";
 		let userId;
 		
 		try {
@@ -81,6 +90,13 @@ class AuthorizationController {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to create user. ${e}`);
 		}
+
+		logAccountSecurityEvent({
+			date: new Date().toString(),
+			type: "Account created",
+			ip: ip as string,
+			user: userId
+		});
 
 		this.verifyEmail({ userId });
 
@@ -195,6 +211,13 @@ class AuthorizationController {
 		const userAgent = context.req.headers["user-agent"] || "unknown";
 		const date = new Date();
 
+		logAccountSecurityEvent({
+			date: new Date().toString(),
+			type: "Password changed",
+			ip: ip as string,
+			user: userId
+		});
+
 		MailService.sendTo({
 			userId,
 			subject: "Password changed",
@@ -246,6 +269,13 @@ class AuthorizationController {
 		const ip = context.req.headers["x-real-ip"] || context.req.ip || "unknown";
 		const userAgent = context.req.headers["user-agent"] || "unknown";
 		const date = new Date();
+
+		logAccountSecurityEvent({
+			date: new Date().toString(),
+			type: "Password reset",
+			ip: ip as string,
+			user: user.id
+		});
 
 		MailService.sendTo({
 			userId: user.id,
@@ -365,6 +395,14 @@ class AuthorizationController {
 
 		if(!user) {
 			userId = await usersController.createUser({ input: { email }, type: "oauth" });
+			const ip = context.req.headers["x-real-ip"] || context.req.ip || "unknown";
+
+			logAccountSecurityEvent({
+				date: new Date().toString(),
+				type: "Account created",
+				ip: ip as string,
+				user: userId
+			});
 
 			MailService.sendTo({
 				userId,
@@ -396,6 +434,13 @@ class AuthorizationController {
 			const ip = context.req.headers["x-real-ip"] || context.req.ip || "unknown";
 			const userAgent = context.req.headers["user-agent"] || "unknown";
 			const date = new Date();
+
+			logAccountSecurityEvent({
+				date: new Date().toString(),
+				type: "Login",
+				ip: ip as string,
+				user: user.id
+			});
 
 			mailService.sendTo({ 
 				userId: user.id, 

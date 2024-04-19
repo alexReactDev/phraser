@@ -2,12 +2,12 @@ import { IUserInput } from "../types/users";
 
 import db from "../model/db";
 import settingsController from "./Settings";
-import generateId from "../misc/generateId";
 import globalErrorHandler from "../misc/globalErrorHandler";
 import profilesController from "./Profiles";
 import { IContext } from "@ts-backend/context";
 import bcrypt from "bcrypt";
 import { User } from "../Classes/User";
+import logAccountSecurityEvent from "../misc/logAccountSecurityEven";
 
 class UsersController {
 	async getUser({ id }: { id: string }) {
@@ -103,6 +103,15 @@ class UsersController {
 			globalErrorHandler(e);
 			throw new Error(`Server error. Failed to delete user. ${e}`);
 		}
+
+		const ip = context.req.headers["x-real-ip"] || context.req.ip || "unknown";
+
+		logAccountSecurityEvent({
+			date: new Date().toString(),
+			type: "Account deleted",
+			ip: ip as string,
+			user: id
+		});
 
 		return "OK";
 	}
