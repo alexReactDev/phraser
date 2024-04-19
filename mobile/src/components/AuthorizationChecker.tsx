@@ -56,6 +56,12 @@ const AuthorizationChecker = observer(function ({ children }: any) {
 			TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async ({ data }: any) => {
 				if(!data) return;
 
+				const oldIdentifier = await AsyncStorage.getItem("phraseOfTheDayReminderIdentifier");
+
+				if(oldIdentifier) {
+					await Notifications.cancelScheduledNotificationAsync(oldIdentifier);
+				}
+
 				let date = new Date();
 
 				if(date.getHours() > 17) {
@@ -65,7 +71,7 @@ const AuthorizationChecker = observer(function ({ children }: any) {
 				date.setHours(17);
 				date.setMinutes(15);
 
-				await Notifications.scheduleNotificationAsync({
+				const newIdentifier = await Notifications.scheduleNotificationAsync({
 					content: {
 						title: `Do you remember what does: ${JSON.parse(data.notification.data.body).value} mean?`,
 						body: `It's "${JSON.parse(data.notification.data.body).translation}". Don't forget to repeat your saved phrases regularly.`
@@ -74,6 +80,8 @@ const AuthorizationChecker = observer(function ({ children }: any) {
 						date: date
 					}
 				});
+
+				await AsyncStorage.setItem("phraseOfTheDayReminderIdentifier", newIdentifier);
 			});
 
 			await Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
