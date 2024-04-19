@@ -17,6 +17,7 @@ import OtherSettings from "./components/OtherSettings";
 import NotificationSettings from "./components/NotificationSettings";
 import PremiumSettings from "./components/PremiumSettings";
 import SubscriptionInfo from "./components/SubscriptionInfo";
+import { GET_PREMIUM_DATA } from "@query/premium";
 
 export type SettingsNavigatorParams = {
 	Settings: undefined,
@@ -39,6 +40,7 @@ function SettingsNavigation() {
 const Settings = observer(function() {
 	const [ emailVerified, setEmailVerified ] = useState<null | boolean>(null);
 	const [ getVerificationStatus ] = useLazyQuery(GET_VERIFICATION_STATUS);
+	const { data: premiumData } = useQuery(GET_PREMIUM_DATA, { variables: { userId: session.data.userId } });
 
 	useEffect(() => {
 		if(emailVerified) return;
@@ -72,12 +74,17 @@ const Settings = observer(function() {
 				<VerifyEmail />
 			}
 			<ProfilesSettings />
-			<SuggestionsSettings />
 			<AutoCollectionsSettings />
 			<LearnModeSettings />
-			<AISettings />
 			<NotificationSettings />
 			<PremiumSettings />
+			{
+				premiumData?.getPremiumData?.hasPremium && 
+				<>				
+					<SuggestionsSettings />
+					<AISettings />
+				</>
+			}
 			<OtherSettings />
 			<AccountManagement />
 		</ScrollView>
