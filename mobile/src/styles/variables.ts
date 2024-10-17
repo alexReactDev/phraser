@@ -1,4 +1,4 @@
-export const fontColor = "#333";
+export const fontColor = "#555";
 export const fontColorLight = "#f0f0f0";
 export const fontColorFaint = "#555555a0";
 export const fontColorFaintLight = "#dddddd";
@@ -18,5 +18,5 @@ export const violet = "#9949ce";
 
 export const faintBlue = "#71bfff"
 
-export const bgColor = "#eee";
+export const bgColor = "#fff";
 export const bgColorAccent = "#f9f9f9"

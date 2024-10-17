@@ -3,20 +3,20 @@ import { fontColor } from "./variables";
 
 export default StyleSheet.create({
 	input: {
-		height: 120,
+		height: 130,
 		borderWidth: 1,
 		borderStyle: "solid",
-		borderColor: "gray",
-		borderRadius: 4,
-		padding: 7,
-		backgroundColor: "white",
+		borderColor: "#ddd",
+		borderRadius: 15,
+		padding: 10,
+		backgroundColor: "#ffffffe5",
 		textAlignVertical: "top",
 		fontSize: 16,
 		lineHeight: 24,
 		color: fontColor
 	},
 	inputLabel: {
-		fontSize: 18,
+		fontSize: 17,
 		color: fontColor
 	}
 });

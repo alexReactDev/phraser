@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { TouchableOpacity, View, TextInput, StyleSheet, Text, ActivityIndicator } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import { fontColorFaint,} from "../../styles/variables";
+import { fontColor, fontColorFaint,} from "../../styles/variables";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "../../query/collections";
 import { CREATE_PHRASE, GET_COLLECTION_PHRASES } from "../../query/phrases";
@@ -213,7 +213,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 						<Text style={styles.closeText}>
 							CLEAR
 						</Text>
-						<Ionicons name="close-outline" size={21} color={fontColorFaint} />
+						<Ionicons name="close-outline" size={21} color={fontColor} />
 					</TouchableOpacity>
 					:
 					null
@@ -232,7 +232,7 @@ const Add = observer(function ({ route, navigation }: Props) {
 				autoFocus
 				blurOnSubmit
 			/>
-			<Ionicons name="arrow-down" size={24} color="gray" style={styles.icon} />
+			<Ionicons name="arrow-down" size={24} color="#555" style={styles.icon} />
 			<Text style={{...styles.inputLabel, marginBottom: 6 }}>
 				Translation
 			</Text>
@@ -353,7 +353,7 @@ const styles = {
 			paddingRight: 1
 		},
 		closeText: {
-			color: fontColorFaint,
+			color: fontColor,
 			textTransform: "uppercase",
 			fontSize: 13
 		}

@@ -9,6 +9,8 @@ import Stats from "src/screens/Stats/Stats";
 import { createStackNavigator } from "@react-navigation/stack";
 import Premium from "./screens/Premium/Premium";
 import Plans from "./screens/Premium/Plans/Plans";
+import Wallpaper from "@components/Wallpaper";
+
 
 export type NavigatorParams = {
 	Add: undefined,
@@ -38,46 +40,56 @@ function Navigation() {
 
 function AppNavigation() {
 	return (
-		<Navigator.Navigator 
-			id="MainNavigator" 
-			screenOptions={{
-				tabBarActiveTintColor: "black",
-				tabBarInactiveTintColor: "gray"
-			}}
-		>
-			<Navigator.Screen 
-				name="Add" 
-				component={Add} 
-				options={{
-				tabBarIcon: ({ focused }) => <Ionicons name="language" size={24} color={focused ? "black" : "gray"} />,
-				headerRight: () => <Profiles />
+		<Wallpaper>
+			<Navigator.Navigator 
+				id="MainNavigator" 
+				screenOptions={{
+					tabBarActiveTintColor: "black",
+					tabBarInactiveTintColor: "#888",
+					tabBarStyle: {
+						height: 55,
+						paddingBottom: 4,
+						paddingTop: 5
+					},
+					tabBarLabelStyle: {
+						fontSize: 11
+					}
 				}}
-			></Navigator.Screen>
-			<Navigator.Screen 
-				name="Collections" 
-				component={Collections} 
-				options={{
-				tabBarIcon: ({ focused }) => <Ionicons name="copy" size={24} color={focused ? "black" : "gray"} />,
-				headerShown: false
-				}}
-			></Navigator.Screen>
-			<Navigator.Screen 
-				name="Stats" 
-				component={Stats} 
-				options={{
-				tabBarIcon: ({ focused }) => <Ionicons name="stats-chart" size={24} color={focused ? "black" : "gray"}  />,
-				headerRight: () => <Profiles />
-				}}
-			></Navigator.Screen>
-			<Navigator.Screen 
-				name="Settings" 
-				component={Settings} 
-				options={{
-				tabBarIcon: ({ focused }) => <Ionicons name="settings-sharp" size={24} color={focused ? "black" : "gray"}  />,
-				headerShown: false
-				}}
-			></Navigator.Screen>
-		</Navigator.Navigator>
+			>
+				<Navigator.Screen 
+					name="Add" 
+					component={Add} 
+					options={{
+					tabBarIcon: ({ focused }) => <Ionicons name="language" size={24} color={focused ? "black" : "#888"} />,
+					headerRight: () => <Profiles />
+					}}
+				></Navigator.Screen>
+				<Navigator.Screen 
+					name="Collections" 
+					component={Collections} 
+					options={{
+					tabBarIcon: ({ focused }) => <Ionicons name="copy" size={24} color={focused ? "black" : "#888"} />,
+					headerShown: false
+					}}
+				></Navigator.Screen>
+				<Navigator.Screen 
+					name="Stats" 
+					component={Stats} 
+					options={{
+					tabBarIcon: ({ focused }) => <Ionicons name="stats-chart" size={24} color={focused ? "black" : "#888"}  />,
+					headerRight: () => <Profiles />
+					}}
+				></Navigator.Screen>
+				<Navigator.Screen 
+					name="Settings" 
+					component={Settings} 
+					options={{
+					tabBarIcon: ({ focused }) => <Ionicons name="settings-sharp" size={24} color={focused ? "black" : "#888"}  />,
+					headerShown: false
+					}}
+				></Navigator.Screen>
+			</Navigator.Navigator>
+		</Wallpaper>
 	);
 }
 

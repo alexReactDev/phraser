@@ -23,5 +23,6 @@ export interface ISettings {
 	suggestionsLanguage: string,
 	statsReminderEnabled: boolean,
 	phraseOfTheDayReminderEnabled: boolean,
-	studyReminderFrequency: studyReminderFrequency
+	studyReminderFrequency: studyReminderFrequency,
+	wallpaper: string
 }

@@ -23,7 +23,8 @@ class SettingsController {
 				suggestionsLanguage: "en",
 				statsReminderEnabled: true,
 				phraseOfTheDayReminderEnabled: true,
-				studyReminderFrequency: "daily"
+				studyReminderFrequency: "daily",
+				wallpaper: "none"
 			}
 		}
 

@@ -34,7 +34,8 @@ export const GET_USER_SETTING = gql`
 				suggestionsLanguage,
 				statsReminderEnabled,
 				phraseOfTheDayReminderEnabled,
-				studyReminderFrequency
+				studyReminderFrequency,
+				wallpaper
 			}
 		}
 	}

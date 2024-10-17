@@ -58,11 +58,11 @@ const styles = StyleSheet.create({
 		width: "100%",
 		borderStyle: "solid",
 		borderWidth: 1,
-		borderColor: "gray",
+		borderColor: "#bbb",
 		marginTop: 15,
-		borderRadius: 4,
-		height: 45,
-		backgroundColor: "#f9f9f9"
+		borderRadius: 12,
+		height: 47,
+		backgroundColor: "#f9f9f9f5"
 	},
 	selectText: {
 		color: "gray"

@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { ApolloProvider } from '@apollo/client';
 import AuthorizationChecker from "./src/components/AuthorizationChecker";
 import { ClickOutsideProvider } from "react-native-click-outside";
@@ -12,9 +12,21 @@ import { setJSExceptionHandler } from "react-native-exception-handler";
 import { useEffect, useState } from "react";
 import * as Sentry from '@sentry/react-native';
 import { StatusBar } from "expo-status-bar";
-import { Platform, useColorScheme } from "react-native";
+import { Platform, useColorScheme, View } from "react-native";
 import * as Notifications from 'expo-notifications';
 import Navigation from "src/Navigation";
+import { bgColor } from "@styles/variables"
+
+const Theme = {
+	...DefaultTheme,
+	colors: {
+		...DefaultTheme.colors,
+		background: "rgba(175, 175, 175, 0.25)",
+    text: "rgb(70, 70, 70)",
+    border: "rgb(30, 30, 30)",
+    card: "rgba(255, 255, 255, 0.92)",
+	}
+};
 
 Notifications.setNotificationHandler({
   handleNotification: async (notification) => {
@@ -89,15 +101,21 @@ function App() {
     <ErrorBoundary fallback={<ErrorComponent message="Fatal error. Try restarting the app" />} onError={(e: any) => Sentry.captureException(e)}>
       <ClickOutsideProvider>
         <ApolloProvider client={client}>
-          <NavigationContainer>
-            <>
+          <NavigationContainer theme={Theme}>
+            <View
+              style={{
+                width: "100%",
+                height: "100%",
+                backgroundColor: bgColor
+              }}
+            >
               <ErrorMessageToast />
               <LoaderToast />
               <StatusBar translucent={true} hidden={false} backgroundColor={barColor} />
               <AuthorizationChecker>
                   <Navigation />
               </AuthorizationChecker>
-            </>
+            </View>
           </NavigationContainer>
         </ApolloProvider>
       </ClickOutsideProvider>

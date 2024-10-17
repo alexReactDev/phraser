@@ -7,7 +7,7 @@ function SaveBtn({ onPress }: { onPress: () => void }) {
 		onPress={onPress}
 		style={styles.button}
 	>
-		<Ionicons name="save" size={24} color="gray" />
+		<Ionicons name="save" size={26} color="#888" />
 	</TouchableOpacity>
 	)
 }
@@ -15,16 +15,16 @@ function SaveBtn({ onPress }: { onPress: () => void }) {
 const styles = StyleSheet.create({
 	button: {
 		position: "absolute",
-		bottom: 10,
-		right: 10,
-		borderRadius: 12,
-		backgroundColor: "#f9f9f9",
-		width: 45,
-		height: 45,
+		bottom: 18,
+		right: 12,
+		borderRadius: 15,
+		backgroundColor: "#f9f9f9ee",
+		width: 47,
+		height: 47,
 		justifyContent: "center",
 		alignItems: "center",
 		borderStyle: "solid",
-		borderColor: "gray",
+		borderColor: "#aaa",
 		borderWidth: 1,
 		flexDirection: "row",
 		gap: 5
