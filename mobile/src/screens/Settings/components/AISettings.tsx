@@ -5,13 +5,13 @@ import settings from "@store/settings";
 import { borderColor, fontColor, nondescriptColor } from "@styles/variables";
 import { TTextDifficulty } from "@ts/settings";
 import { StyleSheet, Switch, Text, View } from "react-native";
-import SelectDropdown from "react-native-select-dropdown";
 import { Ionicons } from '@expo/vector-icons';
 import session from "@store/session";
 import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import { observer } from "mobx-react-lite";
 import SettingsGroup from "./SettingsGroup";
+import StyledSelect from "@components/StyledSelect";
 
 const textDifficultyValues = [{ text: "Not specified", value: "default"}, { text: "Simple", value: "simple"}, { text: "Average", value: "average"}, { text: "Advanced", value: "advanced" }];
 
@@ -76,7 +76,7 @@ const AISettings = observer(function () {
 				<Text style={styles.optionTitle}>
 					AI generated text difficulty:
 				</Text>
-				<SelectDropdown
+				<StyledSelect
 					disabled={settings.settings.disableAutoCollections}
 					data={textDifficultyValues}
 					defaultValueByIndex={textDifficultyValues.findIndex((item) => item.value === settings.settings.textDifficulty)}
@@ -86,7 +86,7 @@ const AISettings = observer(function () {
 					buttonStyle={styles.button}
 					buttonTextStyle={styles.buttonText}
 					renderDropdownIcon={() => <Ionicons name="caret-down" size={20} color={nondescriptColor} />}
-				></SelectDropdown>
+				></StyledSelect>
 			</View>
 		</SettingsGroup>
 	)
@@ -110,9 +110,7 @@ const styles = StyleSheet.create({
 	button: {
 		width: 150,
 		height: 40,
-		borderWidth: 1,
-		borderColor: borderColor,
-		borderStyle: "solid"
+		borderRadius: 7
 	},
 	buttonText: {
 		fontSize: 15,

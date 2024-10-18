@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View, TextInput } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import ErrorComponent from "../../../components/Errors/ErrorComponent";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_PROFILE, GET_USER_PROFILES } from "../../../query/profiles";
@@ -12,18 +12,18 @@ import { useState } from "react";
 import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import SettingsGroup from "./SettingsGroup";
-import StyledTextInput from "@components/Inputs/StyledTextInput";
 import ModalWithBody from "@components/ModalWithBody";
+import Button from "@components/Button";
+import EditProfile from "./EditProfile";
 
 const ProfilesSettings = observer(function() {
 	const [ displayModal, setDisplayModal ] = useState(false);
-	const [ input, setInput ] = useState("");
 	const [ loading, setLoading ] = useState(false);
 
 	const { data: { getUserProfiles: profiles = []} = {}, error } = useQuery(GET_USER_PROFILES, { variables: { id: session.data.userId }});
 	const [ createProfile ] = useMutation(CREATE_PROFILE);
 
-	async function createProfileHandler() {
+	async function createProfileHandler(input: string) {
 		if(loading) return;
 
 		loadingSpinner.setLoading();
@@ -44,7 +44,6 @@ const ProfilesSettings = observer(function() {
 			errorMessage.setErrorMessage(e.toString());
 		}
 
-		setInput("");
 		setDisplayModal(false);
 		loadingSpinner.dismissLoading();
 		setLoading(false);
@@ -55,22 +54,7 @@ const ProfilesSettings = observer(function() {
 	return (
 		<SettingsGroup title="Profiles">
 			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
-				<View style={styles.modalBody}>
-					<Text style={styles.modalTitle}>
-						Profile name
-					</Text>
-					<StyledTextInput
-						autoFocus
-						value={input}
-						onChangeText={(t: string) => setInput(t)}
-						style={styles.modalInput}
-						placeholder="Nice name..."
-					/>
-					<Button
-						title="Confirm"
-						onPress={createProfileHandler}
-					></Button>
-				</View>
+				<EditProfile onInput={createProfileHandler} />
 			</ModalWithBody>
 			<View>
 				<Text style={styles.subtitle}>
@@ -88,6 +72,7 @@ const ProfilesSettings = observer(function() {
 				<Button
 					title="Create profile"
 					onPress={() => setDisplayModal(true)}
+					style={styles.button}
 				></Button>
 			</View>
 		</SettingsGroup>
@@ -98,28 +83,10 @@ const styles = StyleSheet.create({
 	subtitle: {
 		fontSize: 17,
 		color: fontColor,
-		marginBottom: 5
+		marginBottom: 8
 	},
-	modalContainer: {
-		position: "relative",
-		width: "100%",
-		height: "100%",
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "#ffffff88"
-	},
-	modalBody: {},
-	modalCross: {
-		position: "absolute",
-		top: 0,
-		right: 10
-	},
-	modalTitle: {
-		fontSize: 18,
-		marginBottom: 15
-	},
-	modalInput: {
-		marginBottom: 15
+	button: {
+		marginTop: 4
 	}
 })
 

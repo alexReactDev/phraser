@@ -1,4 +1,4 @@
-import { fontColor } from "@styles/variables";
+import { borderColor, fontColor } from "@styles/variables";
 import React from "react";
 import { StyleSheet, TextInput } from "react-native";
 
@@ -19,9 +19,10 @@ const styles = StyleSheet.create({
 	input: {
 		borderWidth: 1,
 		borderStyle: "solid",
-		borderColor: "gray",
-		borderRadius: 2,
-		padding: 7,
+		borderColor: borderColor,
+		borderRadius: 10,
+		paddingVertical: 7,
+		paddingHorizontal: 10,
 		backgroundColor: "white",
 		fontSize: 16,
 		lineHeight: 24,

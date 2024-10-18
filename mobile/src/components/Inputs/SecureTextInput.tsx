@@ -16,7 +16,7 @@ const SecureTextInput = React.forwardRef<any, any>(function ({ containerStyle = 
 				activeOpacity={0.7}
 				onPress={() => setShowPassword(!showPassword)}
 			>
-				<Ionicons name={showPassword ? "eye" : "eye-off"} size={24} color="grey" />
+				<Ionicons name={showPassword ? "eye" : "eye-off"} size={24} color="#888" />
 			</TouchableOpacity>
 			<StyledTextInput
 				style={{

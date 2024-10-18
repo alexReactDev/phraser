@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import SelectDropdown from "react-native-select-dropdown";
 import colors from "../Colors";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_COLLECTION, GET_COLLECTION, GET_PROFILE_COLLECTIONS, GET_PROFILE_COLLECTIONS_FOR_PHRASES, MUTATE_COLLECTION } from "../query/collections";
+import { CREATE_COLLECTION, GET_COLLECTION, MUTATE_COLLECTION } from "../query/collections";
 import settings from "../store/settings";
 import { observer } from "mobx-react-lite";
 import errorMessage from "@store/toastMessage";
@@ -11,6 +10,7 @@ import loadingSpinner from "@store/loadingSpinner";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
 import { borderColor } from "@styles/variables";
 import Button from "./Button";
+import StyledSelect from "./StyledSelect";
 
 interface IProps {
 	mutateId?: number,
@@ -108,7 +108,7 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 				value={name}
 				placeholder="Collection name..."
 			/>
-			<SelectDropdown
+			<StyledSelect
 				data={colors}
 				ref={selectRef as any}
 				onSelect={(selectedItem) => setColor(selectedItem.value)}
@@ -185,7 +185,7 @@ const EditCollection = observer(function ({ mutateId, onReady }: IProps) {
 						</View>
 					)
 				}}
-			></SelectDropdown>
+			></StyledSelect>
 			<View
 				style={styles.button}
 			>
@@ -213,11 +213,7 @@ const styles = StyleSheet.create({
 	},
 	select: {
 		width: "100%",
-		marginBottom: 20,
-		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: "#e5e5e5",
-		backgroundColor: "#f3f3f3aa"
+		marginBottom: 20
 	},
 	selectItem: {
 		flexDirection: "row"

@@ -1,4 +1,4 @@
-import { Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { IProfile } from "../../../types/profiles";
 import { borderColor } from "../../../styles/variables";
 import { Ionicons } from '@expo/vector-icons';
@@ -13,11 +13,11 @@ import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
 import ModalWithBody from "@components/ModalWithBody";
+import EditProfile from "./EditProfile";
 
 const Profile = observer(function({ profile }: { profile: IProfile}) {
 	const [ showButtons, setShowButtons ] = useState(false);
 	const [ displayModal, setDisplayModal ] = useState(false);
-	const [ input, setInput ] = useState("");
 	const [ loading, setLoading ] = useState(false);
 
 	const [ mutateProfile ] = useMutation(MUTATE_PROFILE);
@@ -60,7 +60,7 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 		])
 	}
 
-	async function mutateHandler() {
+	async function mutateHandler(input: string) {
 		if(loading) return;
 
 		loadingSpinner.setLoading();
@@ -112,22 +112,7 @@ const Profile = observer(function({ profile }: { profile: IProfile}) {
 	return (
 		<>
 			<ModalWithBody visible={displayModal} onClose={() => setDisplayModal(false)}>
-				<View style={styles.modalBody}>
-					<Text style={styles.modalTitle}>
-						Profile name
-					</Text>
-					<StyledTextInput
-						autoFocus
-						value={input}
-						onChangeText={(t: string) => setInput(t)}
-						style={styles.modalInput}
-						placeholder="Nice name..."
-					/>
-					<Button
-						title="Confirm"
-						onPress={mutateHandler}
-					></Button>
-				</View>
+				<EditProfile onInput={mutateHandler} />
 			</ModalWithBody>
 			<TouchableOpacity 
 				style={styles.container} 
@@ -181,27 +166,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		gap: 8,
 		height: 20,
-	},
-	modalContainer: {
-		position: "relative",
-		width: "100%",
-		height: "100%",
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "#ffffff88"
-	},
-	modalBody: {},
-	modalCross: {
-		position: "absolute",
-		top: 0,
-		right: 10
-	},
-	modalTitle: {
-		fontSize: 18,
-		marginBottom: 15
-	},
-	modalInput: {
-		marginBottom: 15
 	}
 })
 

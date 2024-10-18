@@ -2,7 +2,6 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "@query/collections";
 import settings from "@store/settings";
 import { StyleSheet, Text, View } from "react-native";
-import SelectDropdown from "react-native-select-dropdown";
 import { Ionicons } from '@expo/vector-icons';
 import { ICollection } from "@ts/collections";
 import { useState } from "react";
@@ -11,6 +10,7 @@ import { observer } from "mobx-react-lite";
 import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import Button from "@components/Button";
+import StyledSelect from "@components/StyledSelect";
 
 interface IProps {
 	id: string | string[],
@@ -124,7 +124,7 @@ const MovePhrase = observer(function({ id, currentColId, moveMany = false, onSuc
 					moveMany ? "Move phrases" : "Move phrase"
 				}
 			</Text>
-			<SelectDropdown
+			<StyledSelect
 				data={collections.filter((col: Partial<ICollection>) => !col.isLocked && !(col.id === currentColId))}
 				onSelect={(selectedItem) => setSelected(selectedItem.id)}
 				rowTextForSelection={(item) => item.name}
@@ -134,7 +134,7 @@ const MovePhrase = observer(function({ id, currentColId, moveMany = false, onSuc
 				buttonTextStyle={styles.selectText}
 				renderDropdownIcon={() => <Ionicons name="caret-down" size={20} color="gray" />}
 
-			></SelectDropdown>
+			></StyledSelect>
 			<View
 				style={styles.button}
 			>
@@ -156,11 +156,7 @@ const styles = StyleSheet.create({
 	},
 	select: {
 		width: "100%",
-		borderStyle: "solid",
-		borderWidth: 1,
-		borderColor: "#e5e5e5",
-		borderRadius: 8,
-		backgroundColor: "#f3f3f3aa"
+		borderStyle: "solid"
 	},
 	selectText: {
 		color: "gray"

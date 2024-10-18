@@ -20,11 +20,12 @@ function SettingsGroup({ title, children }: IProps) {
 const styles = StyleSheet.create({
 	container: {
 		margin: 10,
-		padding: 10,
+		paddingVertical: 12,
+		paddingHorizontal: 14,
 		borderStyle: "solid",
 		borderWidth: 1,
 		borderColor: borderColor,
-		borderRadius: 5,
+		borderRadius: 12,
 		backgroundColor: "#fefefe"
 	},
 	title: {

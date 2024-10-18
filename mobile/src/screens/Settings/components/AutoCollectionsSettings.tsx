@@ -1,9 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "@query/settings";
 import { borderColor, fontColor, nondescriptColor } from "@styles/variables";
-import { useState } from "react";
 import { StyleSheet, Switch, Text, View } from "react-native";
-import SelectDropdown from "react-native-select-dropdown";
 import { Ionicons } from '@expo/vector-icons';
 import settings from "@store/settings";
 import { observer } from "mobx-react-lite";
@@ -13,6 +11,7 @@ import { TIntervalRepetitionDates } from "@ts/settings";
 import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import SettingsGroup from "./SettingsGroup";
+import StyledSelect from "@components/StyledSelect";
 
 const autoCollectionSizeOptions = [{ text: "30 phrases", value: 30 }, { text: "50 phrases", value: 50 }, { text: "70 phrases", value: 70 }];
 const intervalRepetitionDatesOptions = ["auto", "exact", "extended"];
@@ -94,7 +93,7 @@ const AutoCollectionsSettings = observer(function() {
 				<Text style={styles.optionTitle}>
 					Auto collections size:
 				</Text>
-				<SelectDropdown
+				<StyledSelect
 					disabled={settings.settings.disableAutoCollections}
 					data={autoCollectionSizeOptions}
 					defaultValueByIndex={autoCollectionSizeOptions.findIndex((item) => item.value === settings.settings.autoCollectionsSize)}
@@ -104,7 +103,7 @@ const AutoCollectionsSettings = observer(function() {
 					buttonStyle={styles.button}
 					buttonTextStyle={styles.buttonText}
 					renderDropdownIcon={() => <Ionicons name="caret-down" size={20} color={nondescriptColor} />}
-				></SelectDropdown>
+				></StyledSelect>
 			</View>
 			<View style={styles.optionContainer}>
 				<View style={styles.optionTitleContainer}>
@@ -113,7 +112,7 @@ const AutoCollectionsSettings = observer(function() {
 					</Text>
 					<Tip text={"If \"exact\" is set, interval collection will only include words you saved 1, 7, 30 and 90 days ago.\n\nIf \"extended\", it will also include words from neighboring dates.\n\nIf \"auto\", exact will be used by default, but if amount of words is less than specified in auto collection size it will be switched to \"extended\"."} />
 				</View>
-				<SelectDropdown
+				<StyledSelect
 					disabled={settings.settings.disableAutoCollections}
 					data={intervalRepetitionDatesOptions}
 					defaultValue={settings.settings.intervalRepetitionDates}
@@ -123,7 +122,7 @@ const AutoCollectionsSettings = observer(function() {
 					buttonStyle={styles.button}
 					buttonTextStyle={styles.buttonText}
 					renderDropdownIcon={() => <Ionicons name="caret-down" size={20} color={nondescriptColor} />}
-				></SelectDropdown>
+				></StyledSelect>
 			</View>
 		</SettingsGroup>
 	)
@@ -147,9 +146,7 @@ const styles = StyleSheet.create({
 	button: {
 		width: 150,
 		height: 40,
-		borderWidth: 1,
-		borderColor: borderColor,
-		borderStyle: "solid"
+		borderRadius: 7
 	},
 	buttonText: {
 		fontSize: 15,

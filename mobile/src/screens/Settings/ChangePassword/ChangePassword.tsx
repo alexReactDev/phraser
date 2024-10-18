@@ -1,6 +1,6 @@
 import { fontColor, nondescriptColor } from "@styles/variables";
 import { useState, useRef } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useMutation } from "@apollo/client";
 import { CHANGE_PASSWORD } from "@query/authorization";
 import ErrorMessage from "@components/Errors/ErrorMessage";
@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { SettingsNavigatorParams } from "../Settings";
 import SecureTextInput from "@components/Inputs/SecureTextInput";
+import Button from "@components/Button";
 
 type NavigationProp = StackNavigationProp<SettingsNavigatorParams, "Settings", "SettingsNavigator">;
 
@@ -144,10 +145,10 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderStyle: "solid",
 		borderColor: nondescriptColor,
-		borderRadius: 10,
+		borderRadius: 15,
 		padding: 15,
 		gap: 12,
-		backgroundColor: "white"
+		backgroundColor: "#ffffffee"
 	},
 	inputLabel: {
 		marginBottom: -5,

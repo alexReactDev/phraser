@@ -3,7 +3,7 @@ export const fontColorLight = "#fafafa";
 export const fontColorFaint = "#444444a0";
 export const fontColorFaintLight = "#eeeeee";
 
-export const borderColor = "#d5d5d5";
+export const borderColor = "#ccc";
 
 export const nondescriptColor = "#bbbbbb";
 export const inactiveColor = "#bbbbbb";

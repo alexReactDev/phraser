@@ -110,11 +110,11 @@ const styles = StyleSheet.create({
 		margin: 10
 	},
 	body: {
-		padding: 12,
+		padding: 15,
 		borderStyle: "solid",
 		borderWidth: 1,
 		borderColor: borderColor,
-		borderRadius: 5,
+		borderRadius: 15,
 		gap: 12,
 		backgroundColor: "#fefefe"
 	},

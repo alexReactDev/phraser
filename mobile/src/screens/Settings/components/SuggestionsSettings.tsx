@@ -8,12 +8,12 @@ import loadingSpinner from "@store/loadingSpinner";
 import errorMessage from "@store/toastMessage";
 import session from "@store/session";
 import { GET_SUPPORTED_LANGUAGES } from "@query/translation";
-import SelectDropdown from "react-native-select-dropdown";
 import { borderColor, fontColor, nondescriptColor } from "@styles/variables";
 import { Ionicons } from '@expo/vector-icons';
 import Loader from "@components/Loaders/Loader";
 import WarningMessage from "@components/Errors/WarningMessage";
 import { ILanguage } from "@ts/suggestions";
+import StyledSelect from "@components/StyledSelect";
 
 const SuggestionsSettings = observer(function () {
 	const [ updateUserSettings ] = useMutation(UPDATE_USER_SETTINGS);
@@ -86,7 +86,7 @@ const SuggestionsSettings = observer(function () {
 						}
 						{
 							languagesData &&
-							<SelectDropdown
+							<StyledSelect
 								data={languagesData.getSupportedLanguages}
 								search
 								searchPlaceHolder="Language..."
@@ -98,7 +98,7 @@ const SuggestionsSettings = observer(function () {
 								rowTextForSelection={(item) => item.name}
 								defaultValue={languagesData.getSupportedLanguages.find((item: ILanguage) => item.value === settings.settings.suggestionsLanguage)}
 								renderDropdownIcon={() => <Ionicons name="caret-down" size={20} color={nondescriptColor} />}
-							></SelectDropdown>
+							></StyledSelect>
 						}
 					</>
 				}
@@ -120,9 +120,7 @@ const styles = StyleSheet.create({
 	button: {
 		width: 150,
 		height: 40,
-		borderWidth: 1,
-		borderColor: borderColor,
-		borderStyle: "solid"
+		borderRadius: 7
 	},
 	buttonText: {
 		fontSize: 15,
