@@ -1,6 +1,6 @@
-import { Text, View, Button, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
 import { useState, useRef } from "react";
-import { faintBlue, fontColorFaint } from "@styles/variables";
+import { bgColor, faintBlue, fontColorFaint } from "@styles/variables";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "@query/authorization";
 import { IAuthData } from "@ts-frontend/authorization";
@@ -15,6 +15,8 @@ import WelcomeWrapper from "../components/WelcomeWrapper";
 import { StyleSheet } from "react-native";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
 import SecureTextInput from "@components/Inputs/SecureTextInput";
+import Button from "@components/Button";
+import styles from "src/screens/Stats/styles/styles";
 
 type NavigationProp = StackNavigationProp<WelcomeNavigatorParams, "Login", "WelcomeNavigator">;
 
@@ -99,8 +101,16 @@ const Login = observer(function({ updateCredentials }: { updateCredentials: (dat
 					ref={passwordRef}
 					placeholder="Password"
 				/>
-				<Button title="Login" onPress={loginHandler}></Button>
-				<Button title="Sign up" onPress={() => navigation.navigate("Sign up")} color={faintBlue}></Button>
+				<Button 
+					title="Login" 
+					onPress={loginHandler}
+					style={style.button}
+				></Button>
+				<Button 
+					title="Sign up" 
+					onPress={() => navigation.navigate("Sign up")} 
+					style={{ ...style.button, backgroundColor: faintBlue }}
+				></Button>
 				<TouchableOpacity
 					style={style.forgotButton}
 					activeOpacity={0.5}
@@ -118,6 +128,11 @@ const Login = observer(function({ updateCredentials }: { updateCredentials: (dat
 const style = {
 	...commonStyle,
 	...StyleSheet.create({
+		button: {
+			paddingVertical: 10,
+			borderColor: "#bbb",
+			elevation: 1.5
+		},
 		forgotButton: {
 			paddingLeft: 2
 		},

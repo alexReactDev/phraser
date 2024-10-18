@@ -1,4 +1,4 @@
-import { Text, View, Button } from "react-native";
+import { Text, View } from "react-native";
 import { useState, useRef } from "react";
 import { faintBlue } from "@styles/variables";
 import { useMutation } from "@apollo/client";
@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import WelcomeWrapper from "../components/WelcomeWrapper";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
 import SecureTextInput from "@components/Inputs/SecureTextInput";
+import Button from "@components/Button";
 
 type NavigationProp = StackNavigationProp<WelcomeNavigatorParams, "Sign up", "WelcomeNavigator">;
 
@@ -121,7 +122,7 @@ const SignUp = observer(function({ updateCredentials }: { updateCredentials: (da
 					placeholder="Retype password"
 				/>
 				<Button title="Sign up" onPress={signUpHandler}></Button>
-				<Button title="Login" onPress={() => navigation.navigate("Login")} color={faintBlue}></Button>
+				<Button title="Login" onPress={() => navigation.navigate("Login")} style={{ backgroundColor: faintBlue }}></Button>
 			</View>
 		</WelcomeWrapper>
 	)

@@ -16,7 +16,7 @@ export const orange = "#e78d50";
 export const pink = "#da89ae";
 export const violet = "#9949ce";
 
-export const faintBlue = "#71bfff"
+export const faintBlue = "#7dbcf8"
 
 export const bgColor = "#fff";
 export const bgColorAccent = "#f9f9f9"

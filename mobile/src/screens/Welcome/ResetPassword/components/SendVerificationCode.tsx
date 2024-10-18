@@ -1,11 +1,12 @@
 import { useMutation } from "@apollo/client";
 import { SEND_VERIFICATION_CODE } from "@query/authorization";
-import { Button, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { styles } from "../styles/styles";
 import { useState } from "react";
 import { observer } from "mobx-react-lite";
 import loadingSpinner from "@store/loadingSpinner";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
+import Button from "@components/Button";
 
 const SendVerificationCode = observer(function ({ onSend, onError }: { onSend: (email: string) => void, onError: (e: string) => void}) {
 	const [ sendVerificationCode ] = useMutation(SEND_VERIFICATION_CODE);
@@ -57,7 +58,10 @@ const SendVerificationCode = observer(function ({ onSend, onError }: { onSend: (
 				autoFocus
 			/>
 			<View style={styles.btn}>
-				<Button title="Send code" onPress={sendCodeHandler} />
+				<Button 
+					title="Send code" 
+					onPress={sendCodeHandler}
+				/>
 			</View>
 		</View>
 	)

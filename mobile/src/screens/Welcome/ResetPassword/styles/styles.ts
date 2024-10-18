@@ -24,7 +24,7 @@ export const styles = {
 		},
 		btn: {
 			alignSelf: "center",
-			width: "30%"
+			width: "36%"
 		}
 	})
 }

@@ -1,13 +1,11 @@
 import { borderColor } from "@styles/variables";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, ViewStyle } from "react-native";
 import { TouchableOpacity } from "react-native";
 
 interface IProps {
 	onPress: () => void
 	title: string,
-	style?: {
-		[key: string]: string | number
-	}
+	style?: ViewStyle
 }
 
 function Button({ onPress, title, style }: IProps) {

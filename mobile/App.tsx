@@ -21,7 +21,7 @@ const Theme = {
 	...DefaultTheme,
 	colors: {
 		...DefaultTheme.colors,
-		background: "rgba(175, 175, 175, 0.25)",
+		background: "rgba(210, 210, 210, 0.25)",
     text: "rgb(90, 90, 90)",
     border: "rgb(30, 30, 30)",
     card: "rgba(255, 255, 255, 0.92)",

@@ -21,5 +21,10 @@ export const style = StyleSheet.create({
 		textAlign: "center",
 		fontSize: 21,
 		color: fontColor
+	},
+	button: {
+		paddingVertical: 10,
+		borderColor: "#bbb",
+		elevation: 1.5
 	}
 })

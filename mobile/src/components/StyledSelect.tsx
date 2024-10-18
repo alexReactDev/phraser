@@ -11,8 +11,11 @@ const StyledSelect = forwardRef(function StyledSelect({ disabled, ...props }: Se
 			ref={ref as LegacyRef<SelectDropdown>}
 			buttonStyle={{
 				...styles.select,
-				...receivedStyles
+				...receivedStyles,
+				backgroundColor: disabled ? "#d3d3d3aa" : "#f3f3f3aa",
+				borderWidth: disabled ? 0 : 1,
 			}}
+			disabled={disabled}
 		></SelectDropdown>
 	)
 })
@@ -20,9 +23,7 @@ const StyledSelect = forwardRef(function StyledSelect({ disabled, ...props }: Se
 const styles = StyleSheet.create({
 	select: {
 		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: "#e5e5e5",
-		backgroundColor: "#f3f3f3aa"
+		borderColor: "#e5e5e5"
 	}
 })
 

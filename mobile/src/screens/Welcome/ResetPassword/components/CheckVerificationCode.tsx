@@ -1,12 +1,13 @@
 import { observer } from "mobx-react-lite";
 import { styles as commonStyles } from "../styles/styles";
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {  StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { CHECK_VERIFICATION_CODE, SEND_VERIFICATION_CODE } from "@query/authorization";
 import { useEffect, useState } from "react";
 import loadingSpinner from "@store/loadingSpinner";
 import { fontColorFaint } from "@styles/variables";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
+import Button from "@components/Button";
 
 const CheckVerificationCode = observer(function({ email, onCheck, onError }: { email: string, onCheck: (code: string) => void, onError: (e: string) => void}) {
 	const [ checkVerificationCode ] = useLazyQuery(CHECK_VERIFICATION_CODE);

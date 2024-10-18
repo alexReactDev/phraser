@@ -2,11 +2,12 @@ import { useMutation } from "@apollo/client";
 import { RESET_PASSWORD } from "@query/authorization";
 import { IAuthData } from "@ts-frontend/authorization";
 import { observer } from "mobx-react-lite";
-import { Button, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { styles } from "../styles/styles";
 import { useState, useRef } from "react";
 import loadingSpinner from "@store/loadingSpinner";
 import SecureTextInput from "@components/Inputs/SecureTextInput";
+import Button from "@components/Button";
 
 interface IProps {
 	email: string, 
