@@ -21,7 +21,10 @@ function ErrorComponent({ message = "Unknown error" }) {
 const style = StyleSheet.create({
 	container: {
 		marginVertical: 32,
-		paddingHorizontal: 10
+		paddingHorizontal: 10,
+		padding: 10,
+		borderRadius: 10,
+		backgroundColor: "#ffffffaa"
 	},
 	icon: {
 		textAlign: "center",

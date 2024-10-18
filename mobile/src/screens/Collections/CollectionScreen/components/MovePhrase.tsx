@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_PROFILE_COLLECTIONS_FOR_PHRASES } from "@query/collections";
 import settings from "@store/settings";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import { Ionicons } from '@expo/vector-icons';
 import { ICollection } from "@ts/collections";
@@ -10,6 +10,7 @@ import { GET_COLLECTION_PHRASES, MOVE_PHRASE, MOVE_PHRASES_MANY } from "@query/p
 import { observer } from "mobx-react-lite";
 import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
+import Button from "@components/Button";
 
 interface IProps {
 	id: string | string[],
@@ -157,8 +158,9 @@ const styles = StyleSheet.create({
 		width: "100%",
 		borderStyle: "solid",
 		borderWidth: 1,
-		borderColor: "gray",
-		borderRadius: 2
+		borderColor: "#e5e5e5",
+		borderRadius: 8,
+		backgroundColor: "#f3f3f3aa"
 	},
 	selectText: {
 		color: "gray"

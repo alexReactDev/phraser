@@ -43,7 +43,7 @@ const AssociativePictures = observer(function ({ route, navigation }: Props) {
 
 	const [ showTranslation, setShowTranslation ] = useState(false);
 	
-	const [ previousPhrase, setPreviousPhrase ] = useState("");
+	const [ previousPhrase, setPreviousPhrase ] = useState("-");
 	const [ currentPhrase, setCurrentPhrase ] = useState<PhraseData | null>(null);
 	const [ loading, setLoading ] = useState(false);
 
@@ -146,7 +146,7 @@ const AssociativePictures = observer(function ({ route, navigation }: Props) {
 				<AssociativePicturesTutorial onClose={setTutorialPassed} />
 			</ModalWithBody>
 			<View
-				style={style.adjacentPhrasesContainer}
+				style={style.progressContainer}
 			>
 				<ProgressBar progress={progress.progress} total={progress.total} />
 			</View>
@@ -159,7 +159,7 @@ const AssociativePictures = observer(function ({ route, navigation }: Props) {
 					<ErrorComponent message={error} />
 					:
 					<TouchableOpacity
-						activeOpacity={0.8}
+						activeOpacity={0.9}
 						onPress={() => setShowTranslation(!showTranslation)}
 						style={style.currentPhraseCard}
 					>
@@ -197,6 +197,7 @@ const AssociativePictures = observer(function ({ route, navigation }: Props) {
 				<TouchableOpacity
 					onPress={() => nextHandler(false)}
 					style={style.button}
+					activeOpacity={0.5}
 				>
 					<Ionicons name="close" size={24} color="#e74c40" />
 					<Text
@@ -208,10 +209,11 @@ const AssociativePictures = observer(function ({ route, navigation }: Props) {
 				<TouchableOpacity
 					onPress={() => refreshHandler()}
 					style={{...style.button, width: "20%", marginLeft: -2 }}
+					activeOpacity={0.5}
 				>
-					<Ionicons name="refresh" size={24} color="#aaa" />
+					<Ionicons name="refresh" size={24} color="#888" />
 					<Text
-						style={{...style.buttonText, color: "#aaa"}}
+						style={{...style.buttonText, color: "#888"}}
 					>
 						Refresh
 					</Text>
@@ -219,6 +221,7 @@ const AssociativePictures = observer(function ({ route, navigation }: Props) {
 				<TouchableOpacity
 					onPress={() => nextHandler(true)}
 					style={style.button}
+					activeOpacity={0.5}
 				>
 					<Ionicons name="checkmark" size={24} color="green" />
 					<Text
@@ -236,21 +239,32 @@ const style = StyleSheet.create({
 	container: {
 		height: "100%"
 	},
-	adjacentPhrasesContainer: {
+	progressContainer: {
 		height: "10%",
 		justifyContent: "center",
 		alignItems: "center"
 	},
+	adjacentPhrasesContainer: {
+		height: "10%",
+		alignSelf: "center",
+		marginHorizontal: 10,
+		paddingVertical: 5,
+		paddingHorizontal: 8,
+		borderRadius: 10,
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "#ffffff99"
+	},
 	adjacentPhrasesTitle: {
 		marginBottom: 2,
 		lineHeight: 20,
-		color: fontColorFaint
+		color: fontColor
 	},
 	ajacentPhrases: {
 		paddingHorizontal: 10,
 		textAlign: "center",
 		lineHeight: 20,
-		color: fontColorFaint
+		color: fontColor
 	},
 	buttonsContainer: {
 		height: "30%",
@@ -280,9 +294,10 @@ const style = StyleSheet.create({
 		borderWidth: 1,
 		borderStyle: "solid",
 		borderColor: borderColor,
-		borderRadius: 10,
+		borderRadius: 15,
 		backgroundColor: "#fdfdfd",
-		overflow: "hidden"
+		overflow: "hidden",
+		elevation: 2
 	},
 	currentPhraseText: {
 		padding: 10,

@@ -1,18 +1,18 @@
 export const fontColor = "#555";
-export const fontColorLight = "#f0f0f0";
-export const fontColorFaint = "#555555a0";
-export const fontColorFaintLight = "#dddddd";
+export const fontColorLight = "#fafafa";
+export const fontColorFaint = "#444444a0";
+export const fontColorFaintLight = "#eeeeee";
 
-export const borderColor = "#dddddd";
+export const borderColor = "#d5d5d5";
 
 export const nondescriptColor = "#bbbbbb";
 export const inactiveColor = "#bbbbbb";
 
-export const blue = "#4a6bff";
-export const green = "#41c948";
-export const yellow = "#e6ca2e";
-export const red = "#e74747";
-export const orange = "#e78747";
+export const blue = "#6582ff";
+export const green = "#82d461";
+export const yellow = "#ebd368";
+export const red = "#f85656";
+export const orange = "#e78d50";
 export const pink = "#da89ae";
 export const violet = "#9949ce";
 

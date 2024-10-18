@@ -17,7 +17,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from '@expo/vector-icons';
 import { IRepetitionInput } from "@ts/repetitions";
 import Result from "../components/Result";
-import { faintBlue } from "@styles/variables";
+import { borderColor, faintBlue } from "@styles/variables";
 import ShowHidePhrase from "./components/ShowHidePhrase";
 import { ProgressData } from "@ts-frontend/learn";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -300,7 +300,8 @@ const styles = StyleSheet.create({
 	phrasesContainer: {
 		height: "40%",
 		borderTopWidth: 1,
-		borderTopColor: "lightgrey",
+		borderTopColor: borderColor,
+		backgroundColor: "#f7f7f7e5",
 		gap: 5
 	},
 	phraseContainer: {
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
 	phraseButtons: {
 		width: "35%",
 		flexDirection: "row",
-		gap: 20
+		gap: 20,
 	},
 	button: {
 		alignItems: "center"
@@ -327,11 +328,12 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		paddingHorizontal: 10
+		paddingHorizontal: 10,
+		backgroundColor: "#f7f7f7e5"
 	},
 	btnContainer: {
 		width: "33.333%",
-		paddingHorizontal: 5
+		paddingHorizontal: 5,
 	}
 })
 

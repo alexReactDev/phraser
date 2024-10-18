@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Button, StyleSheet, Text, View, TextInput } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import colors from "../Colors";
 import { useMutation, useQuery } from "@apollo/client";
@@ -9,6 +9,8 @@ import { observer } from "mobx-react-lite";
 import errorMessage from "@store/toastMessage";
 import loadingSpinner from "@store/loadingSpinner";
 import StyledTextInput from "@components/Inputs/StyledTextInput";
+import { borderColor } from "@styles/variables";
+import Button from "./Button";
 
 interface IProps {
 	mutateId?: number,
@@ -203,12 +205,19 @@ const styles = StyleSheet.create({
 		marginBottom: 15
 	},
 	input: {
-		marginBottom: 15
+		marginBottom: 15,
+		paddingVertical: 9,
+		paddingHorizontal: 12,
+		borderRadius: 10,
+		borderColor: borderColor
 	},
 	select: {
 		width: "100%",
 		marginBottom: 20,
-		borderRadius: 2
+		borderRadius: 8,
+		borderWidth: 1,
+		borderColor: "#e5e5e5",
+		backgroundColor: "#f3f3f3aa"
 	},
 	selectItem: {
 		flexDirection: "row"

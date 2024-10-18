@@ -53,6 +53,9 @@ function AppNavigation() {
 					},
 					tabBarLabelStyle: {
 						fontSize: 11
+					},
+					headerTitleStyle: {
+						fontSize: 17
 					}
 				}}
 			>

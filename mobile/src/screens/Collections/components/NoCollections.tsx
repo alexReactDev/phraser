@@ -6,7 +6,7 @@ function NoCollections() {
 	return (
 		<View style={style.container}>
 			<View style={style.iconContainer}>
-				<MaterialCommunityIcons name="folder-remove-outline" size={96} color={nondescriptColor} />
+				<MaterialCommunityIcons name="folder-remove-outline" size={96} color={"#888"} />
 			</View>
 			<Text style={style.text}>
 				No collections

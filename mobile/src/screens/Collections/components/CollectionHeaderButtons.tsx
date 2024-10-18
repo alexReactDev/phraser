@@ -162,9 +162,10 @@ const styles = StyleSheet.create({
 		right: 0,
 		width: 160,
 		padding: 12,
-		borderRadius: 4,
+		borderRadius: 8,
 		gap: 11,
-		backgroundColor: "white"
+		backgroundColor: "white",
+		elevation: 1
 	},
 	menuItem: {
 		flexDirection: "row",

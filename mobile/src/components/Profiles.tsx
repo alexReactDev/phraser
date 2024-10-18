@@ -63,7 +63,7 @@ const Profiles = observer(function () {
 				rowTextForSelection={(profile) => profile.name}
 				buttonTextAfterSelection={(profile) => profile.name}
 				defaultButtonText="Select profile"
-				renderDropdownIcon={() => <Ionicons name="caret-down" size={20} color={nondescriptColor} />}
+				renderDropdownIcon={() => <Ionicons name="caret-down" size={15} color={"gray"} />}
 				buttonStyle={styles.button}
 				buttonTextStyle={styles.buttonText}
 			></SelectDropdown>
@@ -79,8 +79,10 @@ const styles = StyleSheet.create({
 		width: 150,
 		height: 40,
 		borderWidth: 1,
-		borderColor: borderColor,
-		borderStyle: "solid"
+		borderRadius: 8,
+		borderColor: "#e5e5e5",
+		borderStyle: "solid",
+		backgroundColor: "#f3f3f3aa"
 	},
 	buttonText: {
 		fontSize: 15,

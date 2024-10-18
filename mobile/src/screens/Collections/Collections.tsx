@@ -30,6 +30,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import CollectionsTutorial from "./components/CollectionsTutorial";
 import AutoCollectionsTutorial from "./components/AutoCollectionsTutorial";
 import { skipTutorial } from "@utils/tutorial";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export type StackNavigatorParams = {
 	Collections: undefined,
@@ -48,6 +49,11 @@ function CollectionsNavigation() {
 	return (
 		<StackNavigator.Navigator
 			id="collectionsNavigator"
+			screenOptions={{
+				headerTitleStyle: {
+					fontSize: 17
+				}
+			}}
 		>
 			<StackNavigator.Screen name="Collections" component={Collections} options={{
 				headerRight: () => <Profiles />
@@ -162,8 +168,9 @@ const Collections = observer(function ({ navigation }: Props) {
 			<TouchableOpacity
 				onPress={() => setDisplayModal(true)}
 				style={styles.button}
+				activeOpacity={0.8}
 			>
-				<Ionicons name="add" size={28} color="gray" />
+				<MaterialCommunityIcons name="shape-square-rounded-plus" size={28} color="#777" />
 			</TouchableOpacity>
 		</View>
 	)
@@ -185,16 +192,16 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		position: "absolute",
-		bottom: 10,
-		right: 10,
-		borderRadius: 12,
-		backgroundColor: "white",
-		width: 45,
-		height: 45,
+		bottom: 18,
+		right: 12,
+		borderRadius: 15,
+		backgroundColor: "#f9f9f9ee",
+		width: 47,
+		height: 47,
 		justifyContent: "center",
 		alignItems: "center",
 		borderStyle: "solid",
-		borderColor: "gray",
+		borderColor: "#aaa",
 		borderWidth: 1
 	},
 	modalContainer: {

@@ -6,7 +6,7 @@ function NoPhrases() {
 	return (
 		<View style={style.container}>
 			<View style={style.iconContainer}>
-				<MaterialCommunityIcons name="file-document-multiple-outline" size={96} color={nondescriptColor} />
+				<MaterialCommunityIcons name="file-document-multiple-outline" size={96} color={"#888"} />
 			</View>
 			<Text style={style.text}>
 				No phrases

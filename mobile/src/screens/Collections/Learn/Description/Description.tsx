@@ -11,7 +11,7 @@ import { ProgressData } from "@ts-frontend/learn";
 import { Description as DescriptionController, IValue } from "src/classes/Description";
 import ProgressBar from "../components/ProgressBar";
 import { Ionicons } from '@expo/vector-icons';
-import { fontColor, nondescriptColor } from "@styles/variables";
+import { borderColor, fontColor, fontColorFaint, nondescriptColor } from "@styles/variables";
 import settings from "@store/settings";
 import { observer } from "mobx-react-lite";
 import { IRepetitionInput } from "@ts/repetitions";
@@ -159,7 +159,7 @@ const Description = observer(function({ route, navigation }: Props) {
 				</ScrollView>
 				<TouchableOpacity 
 					style={styles.refreshBtnContainer}
-					activeOpacity={0.5}
+					activeOpacity={0.8}
 					onPress={regenerateHandler}
 				>
 					<Text style={styles.refreshBtn}>
@@ -257,7 +257,8 @@ const styles = StyleSheet.create({
 	phraseContainer: {
 		height: "40%",
 		justifyContent: "center",
-		alignItems: "center"
+		alignItems: "center",
+		backgroundColor: "#f7f7f7e5"
 	},
 	phraseCard: {
 		position: "relative",
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
 		padding: 10,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "#f8f8f8"
+		backgroundColor: "#f8f8f8ee"
 	},
 	phraseCardIcon: {
 		position: "absolute",
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
 	phraseDivider: {
 		width: 80,
 		height: 1,
-		backgroundColor: "lightgrey"
+		backgroundColor: borderColor
 	},
 	phraseTranslation: {
 		textAlign: "center",
@@ -303,18 +304,20 @@ const styles = StyleSheet.create({
 	refreshBtnContainer: {
 		position: "absolute",
 		bottom: 12,
-		right: 12
+		right: 12,
+		paddingVertical: 5,
+		paddingHorizontal: 8,
+		borderRadius: 8,
+		backgroundColor: "#f7f7f7bb"
 	},
 	refreshBtn: {
-		borderStyle: "dashed",
-		borderBottomWidth: 1,
-		borderColor: nondescriptColor,
-		paddingBottom: 2.5,
-		color: "grey"
+		fontSize: 13,
+		color: "#6a6a6a"
 	},
 	buttonsContainer: {
 		height: "15%",
-		flexDirection: "row"
+		flexDirection: "row",
+		backgroundColor: "#f7f7f7e5"
 	},
 	button: {
 		width: "50%",

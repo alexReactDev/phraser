@@ -64,7 +64,10 @@ const CollectionScreen = observer(function({ route, navigation }: Props) {
 		} else {
 			navigation.setOptions({
 				headerRight: () => <CollectionHeaderButtons route={route} navigation={navigation} />,
-				title: colData.getCollection.name
+				title: colData.getCollection.name,
+				headerTitleStyle: {
+					fontSize: 17
+				}
 			})
 		}
 	}, [selectionEnabled, selectedItems])

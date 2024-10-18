@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
 		width: "47%",
 		height: 165,
 		justifyContent: "space-between",
-		borderRadius: 10
+		borderRadius: 10,
+		elevation: 1
 	},
 	title: {
 		marginBottom: 3,

@@ -20,13 +20,5 @@ export default [
 	{
 		name: "Orange",
 		value: orange
-	},
-	{
-		name: "Violet",
-		value: violet
-	},
-	{
-		name: "Pink",
-		value: pink
 	}
 ]

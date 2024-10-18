@@ -151,11 +151,12 @@ const styles = StyleSheet.create({
 		borderColor: "gray",
 		borderStyle: "solid",
 		borderRadius: 8,
-		backgroundColor: "#ededede"
+		backgroundColor: "#f1f1f1aa"
 	},
 	info: {
 		flex: 1,
-		padding: 5
+		paddingHorizontal: 8,
+		paddingVertical: 8.5
 	},
 	controls: {
 		width: "30%",

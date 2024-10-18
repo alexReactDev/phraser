@@ -41,7 +41,7 @@ const Learn = observer(function ({ route, navigation }: Props) {
 
 	const [ showTranslation, setShowTranslation ] = useState(false);
 	
-	const [ previousPhrase, setPreviousPhrase ] = useState("");
+	const [ previousPhrase, setPreviousPhrase ] = useState("-");
 	const [ currentPhrase, setCurrentPhrase ] = useState<PhraseData | null>(null);
 
 	const [ progress, setProgress ] = useState<ProgressData>({ progress: 0, total: 0});
@@ -106,7 +106,7 @@ const Learn = observer(function ({ route, navigation }: Props) {
 				<CardsTutorial onClose={setTutorialPassed} />
 			</ModalWithBody>
 			<View
-				style={style.adjacentPhrasesContainer}
+				style={style.progressContainer}
 			>
 				<ProgressBar progress={progress.progress} total={progress.total} />
 			</View>
@@ -114,7 +114,7 @@ const Learn = observer(function ({ route, navigation }: Props) {
 				style={style.currentPhraseContainer}
 			>
 				<TouchableOpacity
-					activeOpacity={0.8}
+					activeOpacity={0.9}
 					onPress={() => setShowTranslation(!showTranslation)}
 					style={style.currentPhraseCard}
 				>
@@ -192,21 +192,32 @@ const style = StyleSheet.create({
 	container: {
 		height: "100%"
 	},
-	adjacentPhrasesContainer: {
+	progressContainer: {
 		height: "10%",
 		justifyContent: "center",
-		alignItems: "center"
+		alignItems: "center",
+	},
+	adjacentPhrasesContainer: {
+		height: "10%",
+		alignSelf: "center",
+		marginHorizontal: 10,
+		paddingVertical: 5,
+		paddingHorizontal: 8,
+		borderRadius: 10,
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "#ffffff99"
 	},
 	adjacentPhrasesTitle: {
 		marginBottom: 2,
 		lineHeight: 20,
-		color: fontColorFaint
+		color: fontColor
 	},
 	ajacentPhrases: {
 		paddingHorizontal: 10,
 		textAlign: "center",
 		lineHeight: 20,
-		color: fontColorFaint
+		color: fontColor
 	},
 	buttonsContainer: {
 		height: "30%",
@@ -236,8 +247,9 @@ const style = StyleSheet.create({
 		borderWidth: 1,
 		borderStyle: "solid",
 		borderColor: borderColor,
-		borderRadius: 10,
-		backgroundColor: "#fdfdfd"
+		borderRadius: 15,
+		backgroundColor: "#fdfdfdf5",
+		elevation: 2
 	},
 	currentPhraseText: {
 		padding: 10,

@@ -6,6 +6,7 @@ function SaveBtn({ onPress }: { onPress: () => void }) {
 	<TouchableOpacity
 		onPress={onPress}
 		style={styles.button}
+		activeOpacity={0.8}
 	>
 		<Ionicons name="save" size={26} color="#888" />
 	</TouchableOpacity>

@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
 		height: "70%",
 		borderTopWidth: 1,
 		borderTopColor: "grey",
-		backgroundColor: "#f7f7f7"
+		backgroundColor: "#f7f7f7e5"
 	},
 	title: {
 		marginBottom: 4,
@@ -184,10 +184,11 @@ const styles = StyleSheet.create({
 		height: 155,
 		borderWidth: 1,
 		borderColor: borderColor,
-		borderRadius: 5,
+		borderRadius: 12,
 		paddingHorizontal: 5,
 		paddingVertical: 7,
-		backgroundColor: "#fcfcfc"
+		backgroundColor: "#fcfcfc",
+		elevation: 1
 	},
 	cardIconContainer: {
 		flexDirection: "row",
