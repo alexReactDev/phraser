@@ -17,8 +17,8 @@ const styles = StyleSheet.create({
 	body: {
 		zIndex: 99,
 		position: "absolute",
-		right: 15,
-		top: 30,
+		right: 10,
+		top: 55,
 		width: 40,
 		height: 40,
 		borderWidth: 1,
@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		alignItems: "center",
 		justifyContent: "center",
-		backgroundColor: bgColorAccent
+		backgroundColor: bgColorAccent,
+		elevation: 2
 	}
 })
 
