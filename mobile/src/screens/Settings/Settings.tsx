@@ -18,6 +18,7 @@ import NotificationSettings from "./components/NotificationSettings";
 import PremiumSettings from "./components/PremiumSettings";
 import SubscriptionInfo from "./components/SubscriptionInfo";
 import { GET_PREMIUM_DATA } from "@query/premium";
+import AppearanceSettings from "./components/Appearance";
 
 export type SettingsNavigatorParams = {
 	Settings: undefined,
@@ -85,6 +86,7 @@ const Settings = observer(function() {
 					<AISettings />
 				</>
 			}
+			<AppearanceSettings />
 			<OtherSettings />
 			<AccountManagement />
 		</ScrollView>

@@ -128,15 +128,29 @@ const Wallpaper = observer(function ({ children }: { children: React.ReactNode }
 					{children}
 				</ImageBackground>
 				:
-				<View
+				wallpaper === "10"
+				?
+				<ImageBackground
+					source={require("@assets/wallpapers/10.jpg")}
+					resizeMode="cover"
 					style={{
-						backgroundColor: "#fff",
 						width: "100%",
 						height: "100%"
 					}}
 				>
 					{children}
-				</View>
+				</ImageBackground>
+				:
+				<ImageBackground
+					source={require("@assets/wallpapers/0.jpg")}
+					resizeMode="cover"
+					style={{
+						width: "100%",
+						height: "100%"
+					}}
+				>
+					{children}
+				</ImageBackground>
 			}
 		</>
 	)

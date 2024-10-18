@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { GET_USER_SETTING, UPDATE_USER_SETTINGS } from "@query/settings";
-import { borderColor, fontColor, nondescriptColor } from "@styles/variables";
+import { fontColor, nondescriptColor } from "@styles/variables";
 import { StyleSheet, Switch, Text, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import settings from "@store/settings";

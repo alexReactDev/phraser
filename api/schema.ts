@@ -315,7 +315,8 @@ const schema = buildSchema(`
 		suggestionsLanguage: String,
 		statsReminderEnabled: Boolean,
 		phraseOfTheDayReminderEnabled: Boolean,
-		studyReminderFrequency: String
+		studyReminderFrequency: String,
+		wallpaper: String
 	}
 
 	input LoginInput {
