@@ -6,7 +6,7 @@ export default StyleSheet.create({
 		height: 130,
 		borderWidth: 1,
 		borderStyle: "solid",
-		borderColor: "#ddd",
+		borderColor: "#cacaca",
 		borderRadius: 15,
 		padding: 10,
 		backgroundColor: "#ffffffe5",
