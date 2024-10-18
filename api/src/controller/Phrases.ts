@@ -1,4 +1,4 @@
-import { IPhraseInput, IPhraseRepetitionInput } from "../types/phrases";
+import { IMutatePhraseInput, IPhraseInput, IPhraseRepetitionInput } from "../types/phrases";
 
 import db from "../model/db";
 import generateId from "../misc/generateId";
@@ -152,7 +152,7 @@ class PhrasesController {
 		return phrase;
 	}
 
-	async mutatePhrase({ id, input }: { id: string, input: IPhraseInput }) {
+	async mutatePhrase({ id, input }: { id: string, input: IMutatePhraseInput }) {
 		let updatedPhrase;
 
 		try {

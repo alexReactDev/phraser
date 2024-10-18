@@ -256,6 +256,11 @@ const schema = buildSchema(`
 		day: Int!
 	}
 
+	input MutatePhraseInput {
+		value: String!,
+		translation: String!
+	}
+
 	input CollectionInput {
 		name: String!,
 		color: String!,
@@ -363,7 +368,7 @@ const schema = buildSchema(`
 		deletePhrase(id: ID!): String,
 		deletePhrasesMany(ids: [ID]!): String,
 		deleteCollection(id: ID!): String,
-		mutatePhrase(id: ID!, input: PhraseInput!): Phrase,
+		mutatePhrase(id: ID!, input: MutatePhraseInput!): Phrase,
 		movePhrase(id: ID!, destId: ID!): Phrase,
 		movePhrasesMany(ids: [ID]!, destId: ID!): [Phrase],
 		mutatePhraseMeta(id: ID!, input: PhraseMetaInput!): String,

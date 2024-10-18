@@ -40,7 +40,7 @@ export const CREATE_PHRASE = gql`
 `;
 
 export const MUTATE_PHRASE = gql`
-	mutation mutatePhrase($id: ID!, $input: PhraseInput!) {
+	mutation mutatePhrase($id: ID!, $input: MutatePhraseInput!) {
 		mutatePhrase(id: $id, input: $input) {
 			id,
 			value,
