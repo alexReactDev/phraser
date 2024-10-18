@@ -5,7 +5,7 @@ import OtherStats from "./components/OtherStats";
 import RepetitionsHistory from "./components/ReptitionsHistory";
 import SelectDropdown from "react-native-select-dropdown";
 import { Ionicons } from '@expo/vector-icons';
-import { fontColorFaint } from "@styles/variables";
+import { borderColor, fontColorFaint } from "@styles/variables";
 import { statsPeriodType } from "@ts/stats";
 
 const statsPeriods = [
@@ -28,7 +28,7 @@ function Stats() {
 					rowTextForSelection={(item) => item.name}
 					buttonTextAfterSelection={(item) => item.name}
 					defaultValueByIndex={0}
-					renderDropdownIcon={() => <Ionicons name="caret-down" size={16} color="gray" />}
+					renderDropdownIcon={() => <Ionicons name="caret-down" size={14} color="gray" />}
 					buttonStyle={styles.select}
 					buttonTextStyle={styles.selectText}
 					rowStyle={styles.selectItem}
@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
 		width: 120,
 		borderStyle: "solid",
 		borderWidth: 1,
-		borderColor: "gray",
-		borderRadius: 4,
+		borderColor: borderColor,
+		borderRadius: 8,
 		backgroundColor: "#f9f9f9"
 	},
 	selectText: {

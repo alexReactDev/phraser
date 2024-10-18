@@ -179,7 +179,7 @@ const styles = {
 			borderStyle: "solid",
 			borderColor: nondescriptColor,
 			borderWidth: 1,
-			borderRadius: 5,
+			borderRadius: 12,
 			paddingVertical: 8,
 			backgroundColor: "#fefefe"
 		},
